@@ -5,12 +5,13 @@ import "./home.css"
 
 
 const Home = () => {
+    console.log("vite info:", import.meta.env.VITE_EXPRESS_URL);
     const [text, setText] = useState("");
     const navigate = useNavigate();
     let api_url = `/variants/${text}`;
 
     const search = async() => {
-        const res = await fetch(`http://localhost:5555${api_url}`, {
+        const res = await fetch(`${import.meta.env.VITE_EXPRESS_URL}${api_url}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         })
@@ -26,7 +27,7 @@ const Home = () => {
             <section className='home-page-section'>
                 <h1 className='home-page-h1'>Musculoskeletal 3D Epigenome Browser</h1>
                 <div>
-                    <img className='dna-img'src='../public/dna_whitesmoke_background.png' />
+                    <img className='dna-img' src='../public/dna_whitesmoke_background.png' />
                 </div>
                 <div className='home-page-search-container'>
                     <input className='search-input'

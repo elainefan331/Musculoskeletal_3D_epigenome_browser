@@ -8,7 +8,7 @@ const Variants = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const res = await fetch(`http://localhost:5555/variants/${Id}`, {
+            const res = await fetch(`${import.meta.env.VITE_EXPRESS_URL}/variants/${Id}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             })
