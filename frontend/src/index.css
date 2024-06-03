@@ -3,5 +3,8 @@
 /* @tailwind utilities; */
 
 body {
-    margin: 5px;
+    margin: 5vh 5vw;
+    background-color: rgb(249, 251, 251);
 }
+
+
