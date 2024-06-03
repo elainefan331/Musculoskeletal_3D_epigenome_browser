@@ -1,0 +1,48 @@
+.home-page-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-page-h1 {
+    color: rgb(34, 78, 115);
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.dna-img {
+    border-radius: 5%;
+    box-shadow: 0 0 10px rgb(249, 251, 251);
+}
+
+.home-page-search-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-input {
+    border-radius: 5px;
+    width: 400px;
+    height: 40px;
+    border: 2px solid rgb(216, 210, 210);
+    background-color: whitesmoke;
+}
+
+.home-page-select-container{
+    height: 45px;
+    border: 2px solid rgb(216, 210, 210);
+    background-color: whitesmoke;
+    border-radius: 5px;
+    color: rgb(112, 108, 108);
+}
+
+.home-page-search-button {
+    border: none;
+    border-radius: 5px;
+    padding: 15px 20px;
+    color: white;
+    background-color: rgb(34, 78, 115);
+    cursor: pointer;
+}
