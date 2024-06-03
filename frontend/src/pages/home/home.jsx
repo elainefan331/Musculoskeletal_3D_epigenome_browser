@@ -1,23 +1,23 @@
 import axios from 'axios';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import "./home.css"
 
 
 const Home = () => {
     const [text, setText] = useState("");
+    const navigate = useNavigate();
     let api_url = `/variants/${text}`;
 
     const search = async() => {
-        console.log("hi")
         const res = await fetch(`http://localhost:5555${api_url}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         })
-        // const res = await axios.get(api_url)
-        // let data = await res.data
         if(res.ok) {
             const data = await res.json();
-            console.log("data", data)
+            console.log("data", data);
+            navigate(api_url)
         }
     }
 
@@ -30,11 +30,17 @@ const Home = () => {
                 </div>
                 <div className='home-page-search-container'>
                     <input className='search-input'
-                        placeholder=' search by rsID, Gene or Disease trait'
+                        placeholder='Search by rsID, Gene or Disease trait'
                         type="text"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                     />
+                    <select className='home-page-select-container' defaultValue="">
+                        <option value="" disabled hidden>Select Cell-Type</option>
+                        <option value="a">a</option>
+                        <option value="b">b</option>
+                        <option value="c">c</option>
+                    </select>
                     <button className='home-page-search-button'
                         onClick={() => search()}
                     >
