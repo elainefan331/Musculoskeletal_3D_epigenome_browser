@@ -5,16 +5,19 @@ const router = express.Router();
 
 router.get("/:id", async(req, res) => {
     const id = req.params.id;
-    let query = {};
+    const { celltype } = req.query;
+    console.log("received celltype query parameter", req.query)
+    console.log("celltype", celltype); 
+    let variantQuery = {};
 
     if(id.startsWith("rs")) {
-        query = {"RSID": id}
+        variantQuery = {"RSID": id}
     } else {
-        query = {"variantID": id}
+        variantQuery = {"variantID": id}
     }
 
     try {
-        const variant = await VariantModel.find(query)
+        const variant = await VariantModel.find(variantQuery)
         if (variant) {
             return res.status(200).json(variant);
         } else {
