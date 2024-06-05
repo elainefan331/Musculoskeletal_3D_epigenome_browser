@@ -1,28 +1,35 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Autocomplete from '../autocomplete';
 import "./home.css"
 
 
 const Home = () => {
-    // console.log("vite info:", import.meta.env.VITE_EXPRESS_URL);
     const [text, setText] = useState("");
     const [celltype, setCelltype] = useState("");
-
     const navigate = useNavigate();
+    
     let api_url = `/variants/${text}`;
     let ui_url = `/variants/${text}?celltype=${celltype}`
 
-    const search = async() => {
-        const res = await fetch(`${import.meta.env.VITE_EXPRESS_URL}${api_url}`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        })
-        if(res.ok) {
-            const data = await res.json();
-            console.log("data", data);
-            navigate(ui_url)
-        }
+    // const search = async() => {
+    //     const res = await fetch(`${import.meta.env.VITE_EXPRESS_URL}${api_url}`, {
+    //         method: 'GET',
+    //         headers: { 'Content-Type': 'application/json' }
+    //     })
+    //     if(res.ok) {
+    //         const data = await res.json();
+    //         console.log("data", data);
+    //         navigate(ui_url)
+    //     }
+    // }
+    const search = () => {
+        navigate(ui_url)
+    }
+
+    const handleSelect = (value) => {
+        setText(value)
     }
 
     
@@ -34,6 +41,7 @@ const Home = () => {
                 <div>
                     <img className='dna-img' src='/dna_whitesmoke_background.png' />
                 </div>
+                <div>
                 <div className='home-page-search-container'>
                     <input className='search-input'
                         placeholder='Search by rsID, Gene or Disease trait'
@@ -53,7 +61,8 @@ const Home = () => {
                         Search
                     </button>
                 </div>
-
+                <Autocomplete query={text} onSelect={handleSelect}/>
+                </div>
             </section>
         </div>
     )

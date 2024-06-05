@@ -18,7 +18,10 @@ app.use("/variants", variantRouter);
 
 // connect app to mongoDB database
 mongoose
-    .connect(db_URI)
+    .connect(db_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true 
+    })
     .then(() => {
         console.log("App connected to database");
         app.listen(PORT, () => {
