@@ -1,5 +1,6 @@
 import express from "express";
 import VariantModel from "../models/variant.js";
+import Promoter_hMSC from "../models/promoter_hMSC.js";
 
 const router = express.Router();
 
@@ -33,12 +34,13 @@ router.get("/:id", async(req, res) => {
         if (SigHiCRowData !== "NA") {
             const regex = /RegulatoryBin:(\d+:\d+:\d+)/;
             const match = SigHiCRowData.match(regex)
-            let extractedPart = ""
-            if(match) {
-                extractedPart = match[1]
-            } else {
-                extractedPart = "no match found"
-            }
+            let extractedPart = match[1]
+            const promoter_hMSC = await Promoter_hMSC.find({HiC_Distal_bin: extractedPart})
+            // if(match) {
+            //     extractedPart = match[1]
+            // } else {
+            //     extractedPart = "no match found"
+            // }
             console.log("extractedPart", extractedPart)
         }
        
