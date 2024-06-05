@@ -17,7 +17,31 @@ router.get("/:id", async(req, res) => {
     }
 
     try {
-        const variant = await VariantModel.find(variantQuery)
+        let SigHiCRowData = "";
+        const variant = await VariantModel.find(variantQuery);
+        const obj = variant[0]._doc
+
+        if (celltype === "hMSC") {
+            SigHiCRowData = obj.SigHiC_hMSC
+        } else if(celltype === "Osteocyte") {
+            SigHiCRowData = obj.SigHiC_OC
+        } else if (celltype === "Osteoblast") {
+            SigHiCRowData = obj.SigHiC_OB13
+        }
+        console.log("SigHiCRowData", SigHiCRowData)
+        
+        if (SigHiCRowData !== "NA") {
+            const regex = /RegulatoryBin:(\d+:\d+:\d+)/;
+            const match = SigHiCRowData.match(regex)
+            let extractedPart = ""
+            if(match) {
+                extractedPart = match[1]
+            } else {
+                extractedPart = "no match found"
+            }
+            console.log("extractedPart", extractedPart)
+        }
+       
         if (variant) {
             return res.status(200).json(variant);
         } else {
