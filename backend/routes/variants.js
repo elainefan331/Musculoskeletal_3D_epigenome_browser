@@ -1,9 +1,28 @@
 import express from "express";
 import VariantModel from "../models/variant.js";
-import Promoter_hMSC from "../models/promoter_hMSC.js";
 import Api_category from "../models/api_category.js";
+import Promoter_hMSC from "../models/promoter_hMSC.js";
+import Promoter_OB from "../models/promoter_OB.js";
+import Promoter_OC from "../models/promoter_OC.js";
 
 const router = express.Router();
+
+// helper function
+const getPromoterData = async (celltype, extractedPart) => {
+    let promoterModel;
+
+    if (celltype === "hMSC") {
+        promoterModel = Promoter_hMSC
+    } else if (celltype === "Osteocyte") {
+        promoterModel = Promoter_OC
+    } else if (celltype === "Osteoblast") {
+        promoterModel = Promoter_OB
+    } else {
+        return null
+    }
+
+    return promoterModel.find({HiC_Distal_bin: extractedPart})
+}
 
 router.get('/autocomplete', async (req, res) => {
     const { query } = req.query;
@@ -58,12 +77,13 @@ router.get("/:id", async(req, res) => {
             SigHiCRowData = obj.SigHiC_OB13
         }
         console.log("SigHiCRowData", SigHiCRowData)
-        
+        let promoter;
         if (SigHiCRowData !== "NA") {
             const regex = /RegulatoryBin:(\d+:\d+:\d+)/;
             const match = SigHiCRowData.match(regex)
             let extractedPart = match[1]
-            const promoter_hMSC = await Promoter_hMSC.find({HiC_Distal_bin: extractedPart})
+            promoter = await getPromoterData(celltype, extractedPart)
+            console.log("promoter", promoter)
             // if(match) {
             //     extractedPart = match[1]
             // } else {
@@ -73,7 +93,7 @@ router.get("/:id", async(req, res) => {
         }
        
         if (variant) {
-            return res.status(200).json(variant);
+            return res.status(200).json({variant, promoter});
         } else {
             return res.status(404).send("Variant not found");
         }

@@ -5,7 +5,8 @@ import "./variants.css"
 const Variants = () => {
     const { Id } = useParams();
     const location = useLocation();
-    const[data, setData] = useState(null);
+    const[variantdata, setVariantdata] = useState(null);
+    const[promoterdata, setPromoterdata] = useState(null);
     const queryParams = new URLSearchParams(location.search)
     const celltype = queryParams.get('celltype');
    
@@ -21,7 +22,8 @@ const Variants = () => {
             })
             if(res.ok) {
                 const result = await res.json();
-                setData(result);
+                setVariantdata(result.variant);
+                setPromoterdata(result.promoter);
                 console.log("result", result);
             } else {
                 console.log(res.status)
@@ -33,7 +35,7 @@ const Variants = () => {
     return (
         <div>
             <h1>hello, variants</h1>
-            {data?.map((variant) => {
+            {variantdata?.map((variant) => {
                 return (
                     <div key={variant._id} className="table-wrapper">
                     <table className="table">

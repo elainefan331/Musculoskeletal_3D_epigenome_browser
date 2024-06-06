@@ -2,6 +2,7 @@ import express from "express";
 import { PORT, db_URI } from "./config.js";
 import mongoose from "mongoose";
 import variantRouter from "./routes/variants.js";
+import diseaseRouter from "./routes/diseases.js";
 import cors from "cors";
 import Api_category from "./models/api_category.js";
 
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 // routes
 app.use("/variants", variantRouter);
+app.use("/diseases", diseaseRouter);
 
 // app.get("/", (req, res) => {
 //     console.log(req)

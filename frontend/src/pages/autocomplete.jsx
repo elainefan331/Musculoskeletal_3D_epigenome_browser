@@ -36,7 +36,6 @@ const Autocomplete = ({ query, onSelect }) => {
             <ul className="autocomplete-list">
                 {suggestions.map((suggestion) => (
                     <li key={suggestion._id} onClick={() => onSelect(suggestion.name, suggestion.category)}>
-                        {/* {query.startsWith('r') ? suggestion.RSID : suggestion.variantID} */}
                         {suggestion.name}
                     </li>
                 ))}
