@@ -7,23 +7,32 @@ import "./home.css"
 
 const Home = () => {
     const [text, setText] = useState("");
+    const [category, setCategory] = useState("");
     const [celltype, setCelltype] = useState("");
     const [prompt, setPrompt] = useState("");
     const navigate = useNavigate();
-    
-    let ui_url = `/variants/${text}?celltype=${celltype}`
 
     const search = () => {
         if(celltype === "") {
             setPrompt("Please select a cell type")
         } else {
-            setPrompt("")
-            navigate(ui_url)
+            console.log("category", category)
+            setPrompt("");
+            let ui_url;
+            if (category === "variant") {
+                ui_url = `/variants/${text}?celltype=${celltype}`
+            } else if (category === "disease") {
+                ui_url = `/diseases/${text}?celltype=${celltype}`
+            } else if (category === "gene") {
+                ui_url = `/genes/${text}?celltype=${celltype}`
+            }
+            navigate(ui_url);
         }
     }
 
-    const handleSelect = (value) => {
-        setText(value)
+    const handleSelect = (value, category) => {
+        setText(value);
+        setCategory(category);
     }
 
     

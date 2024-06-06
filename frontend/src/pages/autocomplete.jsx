@@ -16,6 +16,7 @@ const Autocomplete = ({ query, onSelect }) => {
             try {
                 const res = await fetch(`${import.meta.env.VITE_EXPRESS_URL}/variants/autocomplete?query=${query}`);
                 const data = await res.json();
+                console.log(data)
                 setSuggestions(data);
             } catch (error) {
                 console.error(error);
@@ -34,8 +35,9 @@ const Autocomplete = ({ query, onSelect }) => {
             {loading && <div>Loading...</div>}
             <ul className="autocomplete-list">
                 {suggestions.map((suggestion) => (
-                    <li key={suggestion._id} onClick={() => onSelect(query.startsWith('r') ? suggestion.RSID : suggestion.variantID)}>
-                        {query.startsWith('r') ? suggestion.RSID : suggestion.variantID}
+                    <li key={suggestion._id} onClick={() => onSelect(suggestion.name, suggestion.category)}>
+                        {/* {query.startsWith('r') ? suggestion.RSID : suggestion.variantID} */}
+                        {suggestion.name}
                     </li>
                 ))}
             </ul>

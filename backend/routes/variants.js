@@ -1,6 +1,7 @@
 import express from "express";
 import VariantModel from "../models/variant.js";
 import Promoter_hMSC from "../models/promoter_hMSC.js";
+import Api_category from "../models/api_category.js";
 
 const router = express.Router();
 
@@ -13,12 +14,15 @@ router.get('/autocomplete', async (req, res) => {
     console.log(`Received query: ${query}`);
     try {
         const regex = new RegExp(query, 'i'); // 'i' for case-insensitive
-        const results = await VariantModel.find({
-            $or: [
-                { variantID: regex },
-                { RSID: regex }
-            ]
-        }).limit(10);
+        // const results = await VariantModel.find({
+        //     $or: [
+        //         { variantID: regex },
+        //         { RSID: regex }
+        //     ]
+        // }).limit(10);
+        const results = await Api_category.find({
+            name: regex
+        }).limit(10)
 
         console.log(`Search results for "${query}":`, results);
         return res.status(200).json(results);
