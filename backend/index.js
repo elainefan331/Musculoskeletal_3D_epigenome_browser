@@ -3,6 +3,7 @@ import { PORT, db_URI } from "./config.js";
 import mongoose from "mongoose";
 import variantRouter from "./routes/variants.js";
 import cors from "cors";
+import Api_category from "./models/api_category.js";
 
 const app = express();
 
@@ -17,6 +18,20 @@ app.use("/variants", variantRouter);
 // })
 
 // connect app to mongoDB database
+// mongoose
+//     .connect(db_URI, {
+//         useNewUrlParser: true,
+//         useUnifiedTopology: true 
+//     })
+//     .then(() => {
+//         console.log("App connected to database");
+//         app.listen(PORT, () => {
+//             console.log(`APP is listening to port: ${PORT}`)
+//         });
+//     })
+//     .catch((error) => {
+//         console.log(error);
+//     });
 mongoose
     .connect(db_URI, {
         useNewUrlParser: true,
@@ -24,11 +39,19 @@ mongoose
     })
     .then(() => {
         console.log("App connected to database");
+
+        // Ensure indexes are created
+        return Api_category.init();
+    })
+    .then(() => {
+        console.log("Indexes ensured");
+
+        // Start the app
         app.listen(PORT, () => {
-            console.log(`APP is listening to port: ${PORT}`)
+            console.log(`APP is listening to port: ${PORT}`);
         });
     })
     .catch((error) => {
-        console.log(error);
+        console.error(error);
     });
 

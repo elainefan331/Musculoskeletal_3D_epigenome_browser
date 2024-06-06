@@ -46,3 +46,7 @@
     background-color: rgb(34, 78, 115);
     cursor: pointer;
 }
+
+.prompt-message {
+    color: rgb(34, 78, 115);
+}
