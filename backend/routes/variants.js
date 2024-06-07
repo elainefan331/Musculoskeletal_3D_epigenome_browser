@@ -77,7 +77,7 @@ router.get("/:id", async(req, res) => {
             SigHiCRowData = obj.SigHiC_OB13
         }
         console.log("SigHiCRowData", SigHiCRowData)
-        let promoter;
+        let promoter="SigHiCRowData === NA";
         if (SigHiCRowData !== "NA") {
             const regex = /RegulatoryBin:(\d+:\d+:\d+)/;
             const match = SigHiCRowData.match(regex)
