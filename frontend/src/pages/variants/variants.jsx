@@ -98,8 +98,8 @@ const Variants = () => {
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>{`chr${regulatorybin}`}</td>
-                                                    <td>{`chr${promoterbin}`}</td>
+                                                    <td>{regulatorybin === ""? "NA":`chr${regulatorybin}`}</td>
+                                                    <td>{promoterbin ===""? "NA":`chr${promoterbin}`}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
