@@ -17,6 +17,7 @@ const Home = () => {
             setPrompt("Please select a cell type")
         } else {
             console.log("category", category)
+            console.log("celltype", celltype)
             setPrompt("");
             let ui_url;
             if (category === "variant") {

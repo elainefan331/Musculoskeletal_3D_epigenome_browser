@@ -66,7 +66,7 @@ router.get("/:id", async(req, res) => {
 
     try {
         let SigHiCRowData = "";
-        const variant = await VariantModel.find(variantQuery);
+        let variant = await VariantModel.find(variantQuery);
         const obj = variant[0]._doc
 
         if (celltype === "hMSC") {
@@ -77,11 +77,14 @@ router.get("/:id", async(req, res) => {
             SigHiCRowData = obj.SigHiC_OB13
         }
         console.log("SigHiCRowData", SigHiCRowData)
-        let promoter="SigHiCRowData === NA";
+        let promoter=[];
+        let extractedPart = "";
+        let promoterBin = "";
         if (SigHiCRowData !== "NA") {
-            const regex = /RegulatoryBin:(\d+:\d+:\d+)/;
+            const regex = /RegulatoryBin:(\d+:\d+:\d+);PromoterBin:(\d+:\d+:\d+)/;
             const match = SigHiCRowData.match(regex)
-            let extractedPart = match[1]
+            extractedPart = match[1]
+            promoterBin = match[2]
             promoter = await getPromoterData(celltype, extractedPart)
             console.log("promoter", promoter)
             // if(match) {
@@ -90,10 +93,15 @@ router.get("/:id", async(req, res) => {
             //     extractedPart = "no match found"
             // }
             console.log("extractedPart", extractedPart)
+            console.log("promoter_bin", promoterBin)
         }
        
         if (variant) {
-            return res.status(200).json({variant, promoter});
+            return res.status(200).json({variant, promoter, 
+                bin: {
+                    regulatoryBin: extractedPart, 
+                    promoterBin: promoterBin}
+            });
         } else {
             return res.status(404).send("Variant not found");
         }
