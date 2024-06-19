@@ -112,66 +112,8 @@ console.log(bedpeDataArray);
                     logScale: true,
                     showBlocks: true,
                     height: 150,
-                    // url: "/igv/rs947002423_hMSC.bedpe.txt"
-                    features: [
-                        {
-                            chr: "chr7",
-                            start: 260000,
-                            end: 262000,
-                            score: 7.66958622650809
-                        },
-                        {
-                            chr: "chr7",
-                            start: 244000,
-                            end: 246000,
-                            score: 7.66958622650809
-                        },
-                        // {
-                        //     chr1: "chr7",
-                        //     start1: 260000,
-                        //     end1: 262000,
-                        //     chr2: "chr7",
-                        //     start2: 244000,
-                        //     end2: 246000,
-                        //     score: 31.73754891026957
-                        // },
-                        // {
-                        //     chr1: "chr7",
-                        //     start1: 260000,
-                        //     end1: 262000,
-                        //     chr2: "chr7",
-                        //     start2: 254000,
-                        //     end2: 256000,
-                        //     score: 23.603800652944265
-                        // },
-                        // {
-                        //     chr1: "chr7",
-                        //     start1: 260000,
-                        //     end1: 262000,
-                        //     chr2: "chr7",
-                        //     start2: 254000,
-                        //     end2: 256000,
-                        //     score: 94.08941028970075
-                        // },
-                        // {
-                        //     chr1: "chr7",
-                        //     start1: 260000,
-                        //     end1: 262000,
-                        //     chr2: "chr7",
-                        //     start2: 256000,
-                        //     end2: 258000,
-                        //     score: 8.789965388637482
-                        // },
-                        // {
-                        //     chr1: "chr7",
-                        //     start1: 260000,
-                        //     end1: 262000,
-                        //     chr2: "chr7",
-                        //     start2: 256000,
-                        //     end2: 258000,
-                        //     score: 38.1681302257195
-                        // }
-                    ]
+                    // thickness: 12,
+                    url: `/igv/temp/${variant.RSID}_${celltype}.bedpe.txt`
                 },
                 {
                     type: "annotation",
