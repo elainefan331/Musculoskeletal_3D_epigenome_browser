@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
+import IgvVariant from "../../components/IgvVariant";
+import IgvVariantWithPromoter from "../../components/IgvVariantWithPromoter";
 import "./variants.css"
 
 const Variants = () => {
@@ -12,6 +14,7 @@ const Variants = () => {
     const[showallele, setShowallele] = useState(null);
     const queryParams = new URLSearchParams(location.search);
     const celltype = queryParams.get('celltype');
+    
    
 
     useEffect(() => {
@@ -39,20 +42,22 @@ const Variants = () => {
         console.log("r", regulatorybin)
     }, [Id, celltype])
 
-    const handleAlleleFrequency = (e, variant) => {
-        e.preventDefault();
-        setShowallele(variant);
-    }
+    // const handleAlleleFrequency = (e, variant) => {
+    //     e.preventDefault();
+    //     setShowallele(variant);
+    // }
+
+
 
     return (
-        <div>
+        <div className="variant-page-container">
             <h1>hello, variants</h1>
             <div className="table-wrapper">
                 <h3>{Id} in {celltype} cell-type</h3>
                 <table className="table">
                             <thead>
                                 <tr>
-                                    <th>Allele Frequency</th>
+                                    <th>Select to show Allele Frequency / Igv</th>
                                     <th>VariantID</th>
                                     <th>Region</th>
                                     <th>Gene</th>
@@ -67,7 +72,6 @@ const Variants = () => {
                 return (
                             <tbody key={variant._id}>
                                 <tr>
-                                    {/* <td><button onClick={(e) => handleAlleleFrequency(e, variant)}>select</button></td> */}
                                     <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td>
                                     <td>{`Chr${variant.Chr}:${variant.Start}:${variant.Ref}:${variant.Alt}`}</td>
                                     <td>{variant.Region_Ensembl}</td>
@@ -152,39 +156,35 @@ const Variants = () => {
                                 <td>{showallele["1000g_SAS"]}</td>
                                 <td>{showallele["gnomAD_SAS"]}</td>
                             </tr>
-                            {/* <tr>
-                                <td>NFE</td>
-                                <td>not available</td>
-                                <td>{showallele["gnomAD_NFE"]}</td>
-                            </tr> */}
                         </tbody>
                     </table>
              
                 </div>
             )}
+            
 
-            {showallele && promoterdata?.map((promoter) => {
-                return (
-                    <div key={promoter._id} className="table-wrapper">
-                        <h3>{Id}'s Hi-C interactions in {celltype} cell-type</h3>
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th>PROMOTER</th>
-                                    <th>GENE</th>
-                                    <th>GENE(TPM)</th>
-                                    <th>TSS</th>
-                                    <th>TRANSCRIPT</th>
-                                    <th>TRANSCRIPT(TPM)</th>
-                                    <th>HI-C PROMTER BIN</th>
-                                    <th>HI-C INFO</th>
-                                    <th>OPEN CHROMATIN</th>
-                                    <th>CHROMHMM</th>
-                                    <th>REFTSS</th>
-                                    <th>ENCODE-PLS</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+            <div className="table-wrapper">
+                <h3>{Id}'s Hi-C interactions in {celltype} cell-type</h3>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>PROMOTER</th>
+                            <th>GENE</th>
+                            <th>GENE(TPM)</th>
+                            <th>TSS</th>
+                            <th>TRANSCRIPT</th>
+                            <th>TRANSCRIPT(TPM)</th>
+                            <th>HI-C PROMTER BIN</th>
+                            <th>HI-C INFO</th>
+                            <th>OPEN CHROMATIN</th>
+                            <th>CHROMHMM</th>
+                            <th>REFTSS</th>
+                            <th>ENCODE-PLS</th>
+                        </tr>
+                    </thead>
+                    {promoterdata?.map((promoter) => {
+                        return (
+                            <tbody key={promoter._id}>
                                 <tr>
                                     <td>{`${promoter.Chr}:${promoter.Start}-${promoter.End}`}</td>
                                     <td>{promoter.Gene}</td>
@@ -200,12 +200,30 @@ const Variants = () => {
                                     <td>{promoter["ENCODE-cCRE-PLS"]}</td>
                                 </tr>
                             </tbody>
-                        </table>
+                        )
+                    })}
+                </table>
+            </div>
+            
+            {showallele ? (
+                promoterdata.length === 0 ? (
+                    <div className="gap">
+                        <div>
+                            <IgvVariant variant={showallele} celltype={celltype}/>
+                        </div>
+                        <p>{`* use search icon to re-load the IGV again`}</p>
+                    </div>
+                ):(
+                    <div className="gap">
+                        <div>
+                            <IgvVariantWithPromoter variant={showallele} celltype={celltype} promoter={promoterdata} regulatoryBin={regulatorybin} promoterBin={promoterbin}/>
+                        </div>
                     </div>
                 )
-            })}
+            ) : null }
             
         </div>
+        
     )
 }
 

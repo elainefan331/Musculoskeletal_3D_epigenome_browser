@@ -80,27 +80,30 @@ router.get("/:id", async(req, res) => {
         let promoter=[];
         let extractedPart = "";
         let promoterBin = "";
+        let promoterBinArray = [];
         if (SigHiCRowData !== "NA") {
-            const regex = /RegulatoryBin:(\d+:\d+:\d+);PromoterBin:(\d+:\d+:\d+)/;
+            const regex = /RegulatoryBin:(\d+:\d+:\d+);PromoterBin:((?:\d+:\d+:\d+,?)+)/;
             const match = SigHiCRowData.match(regex)
-            extractedPart = match[1]
-            promoterBin = match[2]
-            promoter = await getPromoterData(celltype, extractedPart)
-            console.log("promoter", promoter)
-            // if(match) {
-            //     extractedPart = match[1]
-            // } else {
-            //     extractedPart = "no match found"
-            // }
-            console.log("extractedPart", extractedPart)
-            console.log("promoter_bin", promoterBin)
+            if (match) {
+                extractedPart = match[1];
+                promoterBin = match[2];
+                promoterBinArray = promoterBin.split(",");
+                promoter = await getPromoterData(celltype, extractedPart)
+                console.log("promoter", promoter)
+                console.log("extractedPart", extractedPart)
+                console.log("promoter_bin", promoterBin)
+                console.log("promoterBinArray", promoterBinArray)
+
+            }
         }
        
         if (variant) {
             return res.status(200).json({variant, promoter, 
                 bin: {
                     regulatoryBin: extractedPart, 
-                    promoterBin: promoterBin}
+                    promoterBin: promoterBin,
+                    promoterBinArray: promoterBinArray
+                }
             });
         } else {
             return res.status(404).send("Variant not found");

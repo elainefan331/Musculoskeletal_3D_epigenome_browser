@@ -6,20 +6,23 @@ import diseaseRouter from "./routes/diseases.js";
 import geneRouter from "./routes/genes.js";
 import cors from "cors";
 import Api_category from "./models/api_category.js";
+// import path from "path"
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the "public" directory
+// app.use('/public', express.static(path.join(__dirname, 'public')));
+
+
 // routes
 app.use("/variants", variantRouter);
 app.use("/diseases", diseaseRouter);
 app.use("/genes", geneRouter);
 
-// app.get("/", (req, res) => {
-//     console.log(req)
-//     return res.status(234).send("welcome to mern stack")
-// })
+
 
 // connect app to mongoDB database
 // mongoose

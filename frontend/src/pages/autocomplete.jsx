@@ -19,7 +19,7 @@ const Autocomplete = ({ query, onSelect }) => {
                 console.log(data)
                 setSuggestions(data);
 
-                if (data.length > 0) {
+                if (data.length === 1) {
                     onSelect(data[0].name, data[0].category)
                 }
             } catch (error) {
