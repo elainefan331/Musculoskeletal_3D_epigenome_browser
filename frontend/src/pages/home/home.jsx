@@ -7,29 +7,33 @@ import "./home.css"
 
 const Home = () => {
     const [text, setText] = useState("");
+    const [category, setCategory] = useState("");
     const [celltype, setCelltype] = useState("");
+    const [prompt, setPrompt] = useState("");
     const navigate = useNavigate();
-    
-    let api_url = `/variants/${text}`;
-    let ui_url = `/variants/${text}?celltype=${celltype}`
 
-    // const search = async() => {
-    //     const res = await fetch(`${import.meta.env.VITE_EXPRESS_URL}${api_url}`, {
-    //         method: 'GET',
-    //         headers: { 'Content-Type': 'application/json' }
-    //     })
-    //     if(res.ok) {
-    //         const data = await res.json();
-    //         console.log("data", data);
-    //         navigate(ui_url)
-    //     }
-    // }
     const search = () => {
-        navigate(ui_url)
+        if(celltype === "") {
+            setPrompt("Please select a cell type")
+        } else {
+            console.log("category", category)
+            console.log("celltype", celltype)
+            setPrompt("");
+            let ui_url;
+            if (category === "variant") {
+                ui_url = `/variants/${text}?celltype=${celltype}`
+            } else if (category === "disease") {
+                ui_url = `/diseases/${text}?celltype=${celltype}`
+            } else if (category === "gene") {
+                ui_url = `/genes/${text}?celltype=${celltype}`
+            }
+            navigate(ui_url);
+        }
     }
 
-    const handleSelect = (value) => {
-        setText(value)
+    const handleSelect = (value, category) => {
+        setText(value);
+        setCategory(category);
     }
 
     
@@ -55,12 +59,14 @@ const Home = () => {
                         <option value="Osteoblast">Osteoblast</option>
                         <option value="Osteocyte">Osteocyte</option>
                     </select>
-                    <button className='home-page-search-button'
+                    <button
+                        className='home-page-search-button' 
                         onClick={() => search()}
                     >
                         Search
                     </button>
                 </div>
+                {prompt && <div className='prompt-message'>{prompt}</div>}
                 <Autocomplete query={text} onSelect={handleSelect}/>
                 </div>
             </section>

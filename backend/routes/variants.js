@@ -1,8 +1,28 @@
 import express from "express";
 import VariantModel from "../models/variant.js";
+import Api_category from "../models/api_category.js";
 import Promoter_hMSC from "../models/promoter_hMSC.js";
+import Promoter_OB from "../models/promoter_OB.js";
+import Promoter_OC from "../models/promoter_OC.js";
 
 const router = express.Router();
+
+// helper function
+const getPromoterData = async (celltype, extractedPart) => {
+    let promoterModel;
+
+    if (celltype === "hMSC") {
+        promoterModel = Promoter_hMSC
+    } else if (celltype === "Osteocyte") {
+        promoterModel = Promoter_OC
+    } else if (celltype === "Osteoblast") {
+        promoterModel = Promoter_OB
+    } else {
+        return null
+    }
+
+    return promoterModel.find({HiC_Distal_bin: extractedPart})
+}
 
 router.get('/autocomplete', async (req, res) => {
     const { query } = req.query;
@@ -13,12 +33,15 @@ router.get('/autocomplete', async (req, res) => {
     console.log(`Received query: ${query}`);
     try {
         const regex = new RegExp(query, 'i'); // 'i' for case-insensitive
-        const results = await VariantModel.find({
-            $or: [
-                { variantID: regex },
-                { RSID: regex }
-            ]
-        }).limit(10);
+        // const results = await VariantModel.find({
+        //     $or: [
+        //         { variantID: regex },
+        //         { RSID: regex }
+        //     ]
+        // }).limit(10);
+        const results = await Api_category.find({
+            name: regex
+        }).limit(10)
 
         console.log(`Search results for "${query}":`, results);
         return res.status(200).json(results);
@@ -43,7 +66,7 @@ router.get("/:id", async(req, res) => {
 
     try {
         let SigHiCRowData = "";
-        const variant = await VariantModel.find(variantQuery);
+        let variant = await VariantModel.find(variantQuery);
         const obj = variant[0]._doc
 
         if (celltype === "hMSC") {
@@ -54,22 +77,34 @@ router.get("/:id", async(req, res) => {
             SigHiCRowData = obj.SigHiC_OB13
         }
         console.log("SigHiCRowData", SigHiCRowData)
-        
+        let promoter=[];
+        let extractedPart = "";
+        let promoterBin = "";
+        let promoterBinArray = [];
         if (SigHiCRowData !== "NA") {
-            const regex = /RegulatoryBin:(\d+:\d+:\d+)/;
+            const regex = /RegulatoryBin:(\d+:\d+:\d+);PromoterBin:((?:\d+:\d+:\d+,?)+)/;
             const match = SigHiCRowData.match(regex)
-            let extractedPart = match[1]
-            const promoter_hMSC = await Promoter_hMSC.find({HiC_Distal_bin: extractedPart})
-            // if(match) {
-            //     extractedPart = match[1]
-            // } else {
-            //     extractedPart = "no match found"
-            // }
-            console.log("extractedPart", extractedPart)
+            if (match) {
+                extractedPart = match[1];
+                promoterBin = match[2];
+                promoterBinArray = promoterBin.split(",");
+                promoter = await getPromoterData(celltype, extractedPart)
+                console.log("promoter", promoter)
+                console.log("extractedPart", extractedPart)
+                console.log("promoter_bin", promoterBin)
+                console.log("promoterBinArray", promoterBinArray)
+
+            }
         }
        
         if (variant) {
-            return res.status(200).json(variant);
+            return res.status(200).json({variant, promoter, 
+                bin: {
+                    regulatoryBin: extractedPart, 
+                    promoterBin: promoterBin,
+                    promoterBinArray: promoterBinArray
+                }
+            });
         } else {
             return res.status(404).send("Variant not found");
         }

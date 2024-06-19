@@ -18,6 +18,10 @@ const Autocomplete = ({ query, onSelect }) => {
                 const data = await res.json();
                 console.log(data)
                 setSuggestions(data);
+
+                if (data.length === 1) {
+                    onSelect(data[0].name, data[0].category)
+                }
             } catch (error) {
                 console.error(error);
             } finally {
@@ -35,8 +39,8 @@ const Autocomplete = ({ query, onSelect }) => {
             {loading && <div>Loading...</div>}
             <ul className="autocomplete-list">
                 {suggestions.map((suggestion) => (
-                    <li key={suggestion._id} onClick={() => onSelect(suggestion.variantID || suggestion.RSID)}>
-                        {query.startsWith('r') ? suggestion.RSID : suggestion.variantID}
+                    <li key={suggestion._id} onClick={() => onSelect(suggestion.name, suggestion.category)}>
+                        {suggestion.name}
                     </li>
                 ))}
             </ul>
