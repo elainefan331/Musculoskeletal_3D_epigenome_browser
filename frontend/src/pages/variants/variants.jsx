@@ -51,6 +51,8 @@ const Variants = () => {
     return (
         <div className="variant-page-container">
             <h1>hello, variants</h1>
+            {variantdata === null && <h1>{`Oops! Couldn't find results for: ${Id}`}</h1>}
+            {variantdata === null? null : (
             <div className="table-wrapper">
                 <h3>{Id} in {celltype} cell-type</h3>
                 <table className="table">
@@ -115,6 +117,7 @@ const Variants = () => {
             })} 
                 </table>
             </div>
+            )}
            
             {showallele && (
                 <div className="table-wrapper">
