@@ -3,6 +3,7 @@ import igv from 'igv';
 
 const IgvVariant = ({variant, celltype}) => {
   const igvDiv = useRef(null);
+  const igvBrowser = useRef(null);
   // const [browser, setBrowser] = useState(null);
   const start = variant.Start - 50000;
   const end = variant.End + 50000;
@@ -209,33 +210,25 @@ const IgvVariant = ({variant, celltype}) => {
       log: true
     };
 
-    igv.createBrowser(igvDiv.current, options)
-      .then(function (browser) {
-        console.log("Created IGV browser");
-        console.log("ROI", options.roi);
-      });
-    // const createBrowser = async () => {
-    //   if (igvDiv.current) {
-    //     if(browser) {
-    //       await browser.removeAllTracks();
-    //       browser.dispose();
-    //     }
-    //     const newBrowser = await igv.createBrowser(igvDiv.current, options);
-    //     setBrowser(newBrowser);
+    // Create a new IGV instance
+    // igv.createBrowser(igvDiv.current, options)
+    //   .then(function (browser) {
     //     console.log("Created IGV browser");
-    //   }
-    // };
-    
-    // createBrowser();
-
-    // return () => {
-    //   if (browser) {
-    //       browser.removeAllTracks();
-    //       browser.dispose();
-    //       setBrowser(null);
-    //   }
-    // };
-
+    //     console.log("ROI", options.roi);
+    //   });
+    igv.createBrowser(igvDiv.current, options).then(function (browser) {
+      igvBrowser.current = browser;
+      console.log("Created IGV browser");
+    });
+   
+    // Cleanup function to remove the browser instance
+    return () => {
+      if (igvBrowser.current) {
+          igv.removeBrowser(igvBrowser.current);
+          igvBrowser.current = null;
+      }
+    };
+  
   }, [variant, celltype, locus]);
 
   return (

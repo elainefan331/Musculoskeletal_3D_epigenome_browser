@@ -34,13 +34,14 @@ const Variants = () => {
                 setPromoterbin(result.bin.promoterBin);
                 console.log("result", result);
                 console.log("promoterdata", promoterdata)
+                if (result.variant.length === 1) {
+                    setShowallele(result.variant[0])
+                }
             } else {
                 console.log(res.status)
             }
         }
         fetchData();
-        console.log("p", promoterbin)
-        console.log("r", regulatorybin)
     }, [Id, celltype])
 
    
@@ -55,7 +56,8 @@ const Variants = () => {
                 <table className="table">
                             <thead>
                                 <tr>
-                                    <th>Select to show Allele Frequency / Igv</th>
+                                    {variantdata && variantdata.length > 1 && <th>Select to show Allele Frequency / Igv</th>}
+                                    {/* <th>Select to show Allele Frequency / Igv</th> */}
                                     <th>VariantID</th>
                                     <th>Region</th>
                                     <th>Gene</th>
@@ -70,7 +72,8 @@ const Variants = () => {
                 return (
                             <tbody key={variant._id}>
                                 <tr>
-                                    <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td>
+                                    {variantdata && variantdata.length > 1 && <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td>}
+                                    {/* <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td> */}
                                     <td>{`Chr${variant.Chr}:${variant.Start}:${variant.Ref}:${variant.Alt}`}</td>
                                     <td>{variant.Region_Ensembl}</td>
                                     <td>{variant.GeneName_ID_Ensembl}</td>
@@ -112,6 +115,7 @@ const Variants = () => {
             })} 
                 </table>
             </div>
+           
             {showallele && (
                 <div className="table-wrapper">
                     <h3>{`Allele Frequency (variantID: ${showallele.variantID})`}</h3>

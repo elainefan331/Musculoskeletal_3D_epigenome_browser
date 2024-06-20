@@ -233,7 +233,7 @@ const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, pro
         //     console.log("Created IGV browser");
         //     // console.log("ROI", options.roi);
         // });
-        
+
         // Cleanup IGV instance if it exists
         // if (igvBrowser.current) {
         //     igv.removeBrowser(igvBrowser.current);
@@ -258,7 +258,7 @@ const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, pro
 
     return (
         <div>
-            <div ref={igvDiv} style={{ height: '500px', width: '100%',  marginBottom: '500px' }}></div>
+            <div ref={igvDiv} style={{ height: '500px', width: '100%',  marginBottom: '800px' }}></div>
         </div>
     )
 };
