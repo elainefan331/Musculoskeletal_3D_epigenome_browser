@@ -33,6 +33,7 @@ const Variants = () => {
                 setRegulatorybin(result.bin.regulatoryBin);
                 setPromoterbin(result.bin.promoterBin);
                 console.log("result", result);
+                console.log("promoterdata", promoterdata)
             } else {
                 console.log(res.status)
             }
@@ -42,10 +43,7 @@ const Variants = () => {
         console.log("r", regulatorybin)
     }, [Id, celltype])
 
-    // const handleAlleleFrequency = (e, variant) => {
-    //     e.preventDefault();
-    //     setShowallele(variant);
-    // }
+   
 
 
 
@@ -162,7 +160,7 @@ const Variants = () => {
                 </div>
             )}
             
-
+            {promoterdata && promoterdata.length > 0 && (
             <div className="table-wrapper">
                 <h3>{Id}'s Hi-C interactions in {celltype} cell-type</h3>
                 <table className="table">
@@ -204,6 +202,7 @@ const Variants = () => {
                     })}
                 </table>
             </div>
+            )} 
             
             {showallele ? (
                 promoterdata.length === 0 ? (

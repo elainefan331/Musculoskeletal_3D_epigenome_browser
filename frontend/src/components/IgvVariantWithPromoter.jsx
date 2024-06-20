@@ -3,6 +3,7 @@ import igv from 'igv';
 
 const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, promoterBin}) => {
     const igvDiv = useRef(null);
+    const igvBrowser = useRef(null);
     
     // calculate the start and end --> generate locus range
     let startMin = regulatoryBin.split(":")[1];
@@ -69,56 +70,6 @@ const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, pro
         H3k4me3_url = `/igv/bigwig/${celltype}/H3K4me3_${celltype}_pvalue.bigWig`;
         H3k4me1_url = `/igv/bigwig/${celltype}/H3K4me1_${celltype}_pvalue.bigWig`;
     }
-
-    // generate the bedpe array for promoters track
-    // const parseBin = binString => {
-    //     const [chr, start, end] = binString.split(':');
-    //     return { chr: `chr${chr}`, start: parseInt(start), end: parseInt(end) };
-    // }
-
-    // Extract data and construct the BEDPE array
-    // const bedpeDataArray = promoter.flatMap(data => {
-    //     const distalBin = parseBin(data.HiC_Distal_bin);
-    //     const promoterBins = data.HiC_Promoter_bin.split(',').map(parseBin);
-
-    //     // Split HiC_info to handle multiple qvalues
-    //     const qvalues = data.HiC_info.split('|').map(info => parseFloat(info.split('qvalue:')[1]));
-
-    //     // Generate rows for each qvalue and promoter bin
-    //     return qvalues.flatMap(qvalue =>
-    //         promoterBins.map(promoterBin => ({
-    //             chr1: distalBin.chr,
-    //             start1: distalBin.start,
-    //             end1: distalBin.end,
-    //             chr2: promoterBin.chr,
-    //             start2: promoterBin.start,
-    //             end2: promoterBin.end,
-    //             // score: qvalue
-    //             score: -Math.log10(qvalue)
-    //         }))
-    //     );
-        // return qvalues.flatMap(qvalue =>
-        //     promoterBins.map(promoterBin => [
-        //         {
-        //             chr: distalBin.chr,
-        //             start: distalBin.start,
-        //             end: distalBin.end,
-        //             score: -Math.log10(qvalue)
-        //         },
-        //         {
-        //             chr: promoterBin.chr,
-        //             start: promoterBin.start,
-        //             end: promoterBin.end,
-        //             score: -Math.log10(qvalue)
-        //         }
-        //     ])
-        // ).flat();
-
-// });
-
-// console.log(bedpeDataArray);
-
-
 
     useEffect(() => {
         const options = {
@@ -277,11 +228,31 @@ const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, pro
             log: true
         };
 
-        igv.createBrowser(igvDiv.current, options)
-            .then(function (browser) {
+        // igv.createBrowser(igvDiv.current, options)
+        //     .then(function (browser) {
+        //     console.log("Created IGV browser");
+        //     // console.log("ROI", options.roi);
+        // });
+        
+        // Cleanup IGV instance if it exists
+        // if (igvBrowser.current) {
+        //     igv.removeBrowser(igvBrowser.current);
+        //     igvBrowser.current = null;
+        // }
+
+        // Create a new IGV instance
+        igv.createBrowser(igvDiv.current, options).then(function (browser) {
+            igvBrowser.current = browser;
             console.log("Created IGV browser");
-            // console.log("ROI", options.roi);
         });
+
+        // Cleanup function to remove the browser instance
+        return () => {
+            if (igvBrowser.current) {
+                igv.removeBrowser(igvBrowser.current);
+                igvBrowser.current = null;
+            }
+        };
 
     }, [variant, celltype, locus])
 
