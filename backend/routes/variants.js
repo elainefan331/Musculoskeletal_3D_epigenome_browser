@@ -58,18 +58,7 @@ const generateBedpeFile = (promoter, filePath) => {
             
             const qvalues = promoterDoc.HiC_info.split('|').map(info => parseFloat(info.split('qvalue:')[1]));
             console.log("qvalues", qvalues)
-            // Generate rows for each qvalue and promoter bin
-            // return qvalues.flatMap(qvalue =>
-            //     promoterBin.map(promoterBin => ({
-            //         chr1: distalBin.chr,
-            //         start1: distalBin.start,
-            //         end1: distalBin.end,
-            //         chr2: promoterBin.chr,
-            //         start2: promoterBin.start,
-            //         end2: promoterBin.end,
-            //         score: -Math.log10(qvalue)
-            //     }))
-            // );
+         
             return qvalues.map(qvalue => ({
                 chr1: distalBin.chr,
                 start1: distalBin.start,
@@ -83,18 +72,6 @@ const generateBedpeFile = (promoter, filePath) => {
         });
         console.log("result array", bedpeDataArray)
 
-    // const data = {
-    //     chr1: "chr7",
-    //     start1: 234,
-    //     end1: 678,
-    //     chr2: "chr7",
-    //     start2: 789,
-    //     end2: 1000,
-    //     score: 789909
-    // }
-
-    // const bedpeString = `${data.chr1}\t${data.start1}\t${data.end1}\t${data.chr2}\t${data.start2}\t${data.end2}\t${data.score}\n`;
-    // Convert BEDPE array to string
     const bedpeString = bedpeDataArray.map(item =>
         `${item.chr1}\t${item.start1}\t${item.end1}\t${item.chr2}\t${item.start2}\t${item.end2}\t${item.score}`
     ).join('\n');

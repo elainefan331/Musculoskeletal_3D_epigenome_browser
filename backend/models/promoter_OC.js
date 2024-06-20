@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const promoter_OCSchema = new Schema({}, {
+const promoter_OCSchema = new Schema({
+    HiC_Distal_bin: {type: String, index: true},
+}, {
     collection: 'promoter_OC'
 });
 
