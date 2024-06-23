@@ -1,7 +1,27 @@
+.logo-nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px lightgray solid;
+}
+
+.logo-home-container {
+    display: flex;
+    align-items: center;
+}
+
+.home-link {
+    text-decoration: none;
+    color: rgb(34, 78, 115);
+    font-weight: bold;
+    font-size: large;
+}
+
 .nav-bar {
     display: flex;
     gap: 20px;
     align-items: center;
+    justify-content: end;
 }
 
 .nav-bar-link {

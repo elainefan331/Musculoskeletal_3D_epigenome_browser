@@ -33,31 +33,33 @@ const Variants = () => {
                 setRegulatorybin(result.bin.regulatoryBin);
                 setPromoterbin(result.bin.promoterBin);
                 console.log("result", result);
+                console.log("promoterdata", promoterdata)
+                if (result.variant.length === 1) {
+                    setShowallele(result.variant[0])
+                }
             } else {
                 console.log(res.status)
             }
         }
         fetchData();
-        console.log("p", promoterbin)
-        console.log("r", regulatorybin)
     }, [Id, celltype])
 
-    // const handleAlleleFrequency = (e, variant) => {
-    //     e.preventDefault();
-    //     setShowallele(variant);
-    // }
+   
 
 
 
     return (
         <div className="variant-page-container">
             <h1>hello, variants</h1>
+            {variantdata === null && <h1 className="no-results-message">{`Oops! No results found for ${Id}`}</h1>}
+            {variantdata === null? null : (
             <div className="table-wrapper">
                 <h3>{Id} in {celltype} cell-type</h3>
                 <table className="table">
                             <thead>
                                 <tr>
-                                    <th>Select to show Allele Frequency / Igv</th>
+                                    {variantdata && variantdata.length > 1 && <th>Select to show Allele Frequency / Igv</th>}
+                                    {/* <th>Select to show Allele Frequency / Igv</th> */}
                                     <th>VariantID</th>
                                     <th>Region</th>
                                     <th>Gene</th>
@@ -72,8 +74,9 @@ const Variants = () => {
                 return (
                             <tbody key={variant._id}>
                                 <tr>
-                                    <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td>
-                                    <td>{`Chr${variant.Chr}:${variant.Start}:${variant.Ref}:${variant.Alt}`}</td>
+                                    {variantdata && variantdata.length > 1 && <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td>}
+                                    {/* <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td> */}
+                                    <td>{`Chr${variant.Chr}:${variant.Start}:${variant.Ref}:`}<span style={{color: 'red'}}>{variant.Alt}</span></td>
                                     <td>{variant.Region_Ensembl}</td>
                                     <td>{variant.GeneName_ID_Ensembl}</td>
                                     <td>{variant.GeneInfo_DistNG_Ensembl}</td>
@@ -114,6 +117,8 @@ const Variants = () => {
             })} 
                 </table>
             </div>
+            )}
+           
             {showallele && (
                 <div className="table-wrapper">
                     <h3>{`Allele Frequency (variantID: ${showallele.variantID})`}</h3>
@@ -162,7 +167,7 @@ const Variants = () => {
                 </div>
             )}
             
-
+            {promoterdata && promoterdata.length > 0 && (
             <div className="table-wrapper">
                 <h3>{Id}'s Hi-C interactions in {celltype} cell-type</h3>
                 <table className="table">
@@ -204,6 +209,7 @@ const Variants = () => {
                     })}
                 </table>
             </div>
+            )} 
             
             {showallele ? (
                 promoterdata.length === 0 ? (

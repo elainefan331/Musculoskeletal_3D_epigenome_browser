@@ -2,10 +2,14 @@ import { NavLink } from "react-router-dom";
 import "./navigation.css"
 const Navigation = () => {
     return (
+        <div className="logo-nav-container">
+            <div className="logo-home-container">
+                <img src="/public/dnalogo.png" alt="logo" style={{height: '50px', width: '50px'}}></img>
+                <NavLink to="/" className="home-link">
+                    MSK 3D Epigenome Browser
+                </NavLink>
+            </div>
         <nav className="nav-bar">
-            <NavLink className="nav-bar-link" to="/">
-                Home
-            </NavLink>
             <NavLink className="nav-bar-link" to="/about">
                 About
             </NavLink>
@@ -18,6 +22,7 @@ const Navigation = () => {
             </span>
 
         </nav>
+        </div>
     )
 }
 

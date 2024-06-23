@@ -4,6 +4,12 @@ import Api_category from "../models/api_category.js";
 import Promoter_hMSC from "../models/promoter_hMSC.js";
 import Promoter_OB from "../models/promoter_OB.js";
 import Promoter_OC from "../models/promoter_OC.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
@@ -22,6 +28,58 @@ const getPromoterData = async (celltype, extractedPart) => {
     }
 
     return promoterModel.find({HiC_Distal_bin: extractedPart})
+}
+
+// helper function to parse bins
+const parseBin = binString => {
+    const [chr, start, end] = binString.split(':');
+    return { chr: `chr${chr}`, start: parseInt(start), end: parseInt(end) };
+}
+
+// helper function for generate bedpe file
+const generateBedpeFile = (promoter, filePath) => {
+      // Extract data and construct the BEDPE array
+        // console.log("promoter", promoter)
+        const bedpeDataArray = promoter.flatMap(data => {
+            console.log("data", data)
+            const promoterDoc = data._doc
+            const distalBin = parseBin(promoterDoc.HiC_Distal_bin);
+            const promoterBin = parseBin(promoterDoc.HiC_Promoter_bin);
+            
+            // const promoterBins = data.HiC_Promoter_bin.split(',').map(parseBin);
+            console.log("distalBin", distalBin)
+            console.log("promoterBin", promoterBin)
+
+            // Split HiC_info to handle multiple qvalues
+            // let qvalues = ""
+            // if (data.HiC_info.includes("|")) {
+                
+            // }
+            
+            const qvalues = promoterDoc.HiC_info.split('|').map(info => parseFloat(info.split('qvalue:')[1]));
+            console.log("qvalues", qvalues)
+         
+            return qvalues.map(qvalue => ({
+                chr1: distalBin.chr,
+                start1: distalBin.start,
+                end1: distalBin.end,
+                chr2: promoterBin.chr,
+                start2: promoterBin.start,
+                end2: promoterBin.end,
+                score: -Math.log10(qvalue)
+            }));
+
+        });
+        console.log("result array", bedpeDataArray)
+
+    const bedpeString = bedpeDataArray.map(item =>
+        `${item.chr1}\t${item.start1}\t${item.end1}\t${item.chr2}\t${item.start2}\t${item.end2}\t${item.score}`
+    ).join('\n');
+    
+    fs.writeFileSync(filePath, bedpeString, (err) => {
+        if (err) throw err;
+    });
+    console.log(`BEDPE file has been generated and saved to ${filePath}.`);
 }
 
 router.get('/autocomplete', async (req, res) => {
@@ -93,7 +151,13 @@ router.get("/:id", async(req, res) => {
                 console.log("extractedPart", extractedPart)
                 console.log("promoter_bin", promoterBin)
                 console.log("promoterBinArray", promoterBinArray)
-
+                // generate bedpe file if promoter exists
+                if (promoter.length > 0) {
+                    const publicFolderPath = path.resolve(__dirname,"../../frontend/public/igv/temp");
+                    const filePath = path.join(publicFolderPath, `${obj.RSID}_${celltype}.bedpe.txt`);
+                    generateBedpeFile(promoter, filePath);
+                    console.log('BEDPE file has been generated and saved.')
+                }
             }
         }
        

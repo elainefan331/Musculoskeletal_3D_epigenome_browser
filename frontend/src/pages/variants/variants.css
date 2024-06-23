@@ -47,3 +47,6 @@
     margin-bottom: 500px;
 }
 
+.no-results-message {
+    color: rgb(34, 78, 115);
+}
