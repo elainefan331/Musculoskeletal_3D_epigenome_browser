@@ -51,7 +51,7 @@ const Variants = () => {
     return (
         <div className="variant-page-container">
             <h1>hello, variants</h1>
-            {variantdata === null && <h1>{`Oops! Couldn't find results for: ${Id}`}</h1>}
+            {variantdata === null && <h1 className="no-results-message">{`Oops! No results found for ${Id}`}</h1>}
             {variantdata === null? null : (
             <div className="table-wrapper">
                 <h3>{Id} in {celltype} cell-type</h3>
@@ -76,7 +76,7 @@ const Variants = () => {
                                 <tr>
                                     {variantdata && variantdata.length > 1 && <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td>}
                                     {/* <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td> */}
-                                    <td>{`Chr${variant.Chr}:${variant.Start}:${variant.Ref}:${variant.Alt}`}</td>
+                                    <td>{`Chr${variant.Chr}:${variant.Start}:${variant.Ref}:`}<span style={{color: 'red'}}>{variant.Alt}</span></td>
                                     <td>{variant.Region_Ensembl}</td>
                                     <td>{variant.GeneName_ID_Ensembl}</td>
                                     <td>{variant.GeneInfo_DistNG_Ensembl}</td>
