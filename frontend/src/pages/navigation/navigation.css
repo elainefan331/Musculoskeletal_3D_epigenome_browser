@@ -15,6 +15,7 @@
     color: rgb(34, 78, 115);
     font-weight: bold;
     font-size: large;
+    cursor: pointer;
 }
 
 .nav-bar {
@@ -29,10 +30,16 @@
     color: rgb(105, 134, 184);
     font-weight: bold;
     font-size: large;
+    cursor: pointer;
+    
 }
 
 .nav-bar-link > a {
     text-decoration: none;
     color: rgb(105, 134, 184);
 }
+
+
+
+
 

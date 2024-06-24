@@ -12,8 +12,8 @@ router.get('/:id', async(req, res) => {
     console.log("celltype", celltype)
     
     try {
-        const disease = await Disease2variant.find({Disease_trait: id})
-        if(disease) {
+        const disease = await Disease2variant.find({Disease_trait: id}).sort({'P-value': 1})
+        if(disease.length > 0) {
             return res.status(200).json(disease)
         } else {
             return res.status(404).send("Disease not found")

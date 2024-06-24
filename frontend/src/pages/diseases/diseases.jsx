@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import Pagination from "../../components/Pagination/Pagination";
 
 const Diseases = () => {
     const { Id } = useParams();
@@ -7,6 +8,9 @@ const Diseases = () => {
     const queryParams = new URLSearchParams(location.search);
     const celltype = queryParams.get('celltype');
     const [diseasedata, setDiseasedata] = useState(null);
+    //
+    const [currentItems, setCurrentItems] = useState([]);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         async function fetchData() {
@@ -20,13 +24,19 @@ const Diseases = () => {
             if(res.ok) {
                 const result = await res.json();
                 console.log("result", result);
-                setDiseasedata(result)
+                setDiseasedata(result);
+                // pagination
+                setCurrentItems(result.slice(0, itemsPerPage));
             } else {
                 console.log(res.status)
             }
         }
         fetchData();
-    }, [Id, celltype])
+    }, [Id, celltype]);
+
+    const handlePageChange = (offset, itemsPerPage) => {
+        setCurrentItems(diseasedata.slice(offset, offset + itemsPerPage));
+    }
 
 
     return (
@@ -47,7 +57,7 @@ const Diseases = () => {
                                 <th>STUDY ID</th>
                             </tr>
                         </thead>
-                        {diseasedata?.map((disease) => {
+                        {currentItems?.map((disease) => {
                             return (
                                 
                                     <tbody key={disease._id}>
@@ -75,6 +85,7 @@ const Diseases = () => {
                         })}
                     </table>
                 </div>
+                {diseasedata && <Pagination itemsPerPage={itemsPerPage} items={diseasedata} onPageChange={handlePageChange} />}
         </div>
     )
 }
