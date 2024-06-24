@@ -10,7 +10,8 @@ const Diseases = () => {
     const [diseasedata, setDiseasedata] = useState(null);
     //
     const [currentItems, setCurrentItems] = useState([]);
-    const itemsPerPage = 10;
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    
 
     useEffect(() => {
         async function fetchData() {
@@ -32,11 +33,19 @@ const Diseases = () => {
             }
         }
         fetchData();
-    }, [Id, celltype]);
+    }, [Id, celltype, itemsPerPage]);
 
-    const handlePageChange = (offset, itemsPerPage) => {
+    // const handlePageChange = (offset, itemsPerPage) => {
+    //     setCurrentItems(diseasedata.slice(offset, offset + itemsPerPage));
+    // }
+    const handlePageChange = (offset) => {
         setCurrentItems(diseasedata.slice(offset, offset + itemsPerPage));
     }
+
+    const handleItemsPerPageChange = (e) => {
+        setItemsPerPage(parseInt(e.target.value));
+        handlePageChange(0); // Reset to first page
+    };
 
 
     return (
@@ -85,7 +94,18 @@ const Diseases = () => {
                         })}
                     </table>
                 </div>
-                {diseasedata && <Pagination itemsPerPage={itemsPerPage} items={diseasedata} onPageChange={handlePageChange} />}
+                {diseasedata && <Pagination key={itemsPerPage} itemsPerPage={itemsPerPage} items={diseasedata} onPageChange={handlePageChange} />}
+                {diseasedata && (
+                    <>
+                        <select onChange={handleItemsPerPageChange}> 
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                        </select>
+                        <span> Showing {currentItems.length > 0? `${(diseasedata.indexOf(currentItems[0])) + 1} to ${(diseasedata.indexOf(currentItems[currentItems.length - 1])) + 1}`: '0'} of {diseasedata.length} Results</span>
+                    </>
+                )
+                }
         </div>
     )
 }
