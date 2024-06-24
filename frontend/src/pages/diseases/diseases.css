@@ -16,3 +16,8 @@
     text-align: left;
 }
 
+.disease-row-tbody :hover {
+    background-color: rgb(105, 134, 184);
+    color: white;
+}
+

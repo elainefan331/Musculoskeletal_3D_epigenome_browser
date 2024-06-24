@@ -51,7 +51,7 @@ const Diseases = () => {
 
     return (
         <div>
-            <h1>disease page</h1>
+            <h1>Disease Search</h1>
                 <div className="table-wrapper">
                     <table className="table">
                         <thead>
@@ -70,7 +70,7 @@ const Diseases = () => {
                         {currentItems?.map((disease) => {
                             return (
                                 
-                                    <tbody key={disease._id}>
+                                    <tbody key={disease._id} className="disease-row-tbody">
                                         <tr>
                                             <td id="disease-rsid-td">{disease.RSID}</td>
                                             <td id="disease-variantId-td">{`${disease["#Chr"]}-${disease.Start}-${disease.Ref}-${disease.Alt}`}</td>
