@@ -9,7 +9,9 @@ const Diseases = () => {
     const queryParams = new URLSearchParams(location.search);
     const celltype = queryParams.get('celltype');
     const [diseasedata, setDiseasedata] = useState(null);
-    //
+    const [showDisease, setShowDisease] = useState(null);
+    const [selectedDiseaseId, setSelectDiseaseId] = useState(null);
+    // pagination
     const [currentItems, setCurrentItems] = useState([]);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     
@@ -48,6 +50,18 @@ const Diseases = () => {
         handlePageChange(0); // Reset to first page
     };
 
+    const handleShowDisease = (e) => {
+        const selectedDiseaseRSID = e.target.value;
+        const selectedDisease = diseasedata.find(disease => disease.RSID === selectedDiseaseRSID);
+        // console.log("seletedDisease", selectedDisease)
+        // console.log("seletedDiseaseRSID", selectedDisease.RSID)
+
+        setShowDisease(selectedDisease);
+        // console.log("showDisease", showDisease)
+        setSelectDiseaseId(selectedDisease.RSID);
+        // console.log("selectedDiseaseId", selectedDiseaseId)
+    }
+
 
     return (
         <div>
@@ -56,6 +70,7 @@ const Diseases = () => {
                     <table className="table">
                         <thead>
                             <tr>
+                                <th>Select cutoff of r-square</th>
                                 <th>RSID</th>
                                 <th>VARIANT ID</th>
                                 <th>RISK ALLELE</th>
@@ -72,6 +87,21 @@ const Diseases = () => {
                                 
                                     <tbody key={disease._id} className="disease-row-tbody">
                                         <tr>
+                                            <td>
+                                                <input type="radio" name="selectVariant" value={disease.RSID} onChange={handleShowDisease}/>
+                                                {selectedDiseaseId === disease.RSID
+                                                    && <select>
+                                                            <option value="0.1">0.1</option>
+                                                            <option value="0.2">0.2</option>
+                                                            <option value="0.3">0.3</option>
+                                                            <option value="0.4">0.4</option>
+                                                            <option value="0.5">0.5</option>
+                                                            <option value="0.6">0.6</option>
+                                                            <option value="0.7">0.7</option>
+                                                            <option value="0.8">0.8</option>
+                                                            <option value="0.9">0.9</option>
+                                                    </select>}
+                                            </td>
                                             <td id="disease-rsid-td">{disease.RSID}</td>
                                             <td id="disease-variantId-td">{`${disease["#Chr"]}-${disease.Start}-${disease.Ref}-${disease.Alt}`}</td>
                                             <td>{disease.Risk_allele}</td>
@@ -109,6 +139,8 @@ const Diseases = () => {
                     )
                     }
                 </div>
+                {selectedDiseaseId && <p>{`select disease id ${selectedDiseaseId}`}</p>}
+                {showDisease && <p>{`show disease id ${showDisease.RSID}`}</p>}
         </div>
     )
 }
