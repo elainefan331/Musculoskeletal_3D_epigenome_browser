@@ -14,7 +14,8 @@
     padding: 8px 16px;
     cursor: pointer;
     text-decoration: none;
-    color: rgb(34, 78, 115);
+    color: #007bff;
+    border-radius: 5px;
 }
 
 .pagination li a:hover {

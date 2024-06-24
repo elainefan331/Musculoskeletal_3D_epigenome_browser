@@ -1,0 +1,18 @@
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.items-per-page-options-container > select{
+    padding: 10px;
+    border: 1px #ddd solid;
+    border-radius: 5px;
+}
+
+#disease-rsid-td,
+#disease-variantId-td,
+#disease-studyId-td {
+    text-align: left;
+}
+

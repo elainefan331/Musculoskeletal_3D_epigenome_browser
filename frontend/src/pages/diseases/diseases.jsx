@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import Pagination from "../../components/Pagination/Pagination";
+import "./diseases.css"
 
 const Diseases = () => {
     const { Id } = useParams();
@@ -71,8 +72,8 @@ const Diseases = () => {
                                 
                                     <tbody key={disease._id}>
                                         <tr>
-                                            <td>{disease.RSID}</td>
-                                            <td>{`${disease["#Chr"]}-${disease.Start}-${disease.Ref}-${disease.Alt}`}</td>
+                                            <td id="disease-rsid-td">{disease.RSID}</td>
+                                            <td id="disease-variantId-td">{`${disease["#Chr"]}-${disease.Start}-${disease.Ref}-${disease.Alt}`}</td>
                                             <td>{disease.Risk_allele}</td>
                                             <td>{disease.Risk_allele_AF}</td>
                                             <td>
@@ -83,7 +84,7 @@ const Diseases = () => {
                                             <td>{disease.GeneName_ID_Ensembl}</td>
                                             <td>{disease.Reported_gene}</td>
                                             <td>{disease["P-value"]}</td>
-                                            <td>
+                                            <td id="disease-studyId-td">
                                                 <a href={`https://www.ebi.ac.uk/gwas/studies/${disease["STUDY_ACCESSION"]}/`} target="_blank">
                                                     {disease["STUDY_ACCESSION"]}
                                                 </a>
@@ -94,18 +95,20 @@ const Diseases = () => {
                         })}
                     </table>
                 </div>
-                {diseasedata && <Pagination key={itemsPerPage} itemsPerPage={itemsPerPage} items={diseasedata} onPageChange={handlePageChange} />}
-                {diseasedata && (
-                    <>
-                        <select onChange={handleItemsPerPageChange}> 
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </select>
-                        <span> Showing {currentItems.length > 0? `${(diseasedata.indexOf(currentItems[0])) + 1} to ${(diseasedata.indexOf(currentItems[currentItems.length - 1])) + 1}`: '0'} of {diseasedata.length} Results</span>
-                    </>
-                )
-                }
+                <div className="pagination-container">
+                    {diseasedata && <Pagination key={itemsPerPage} itemsPerPage={itemsPerPage} items={diseasedata} onPageChange={handlePageChange} />}
+                    {diseasedata && (
+                        <div className="items-per-page-options-container">
+                            <select onChange={handleItemsPerPageChange}> 
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                            </select>
+                            <span> Showing {currentItems.length > 0? `${(diseasedata.indexOf(currentItems[0])) + 1} to ${(diseasedata.indexOf(currentItems[currentItems.length - 1])) + 1}`: '0'} of {diseasedata.length} Results</span>
+                        </div>
+                    )
+                    }
+                </div>
         </div>
     )
 }
