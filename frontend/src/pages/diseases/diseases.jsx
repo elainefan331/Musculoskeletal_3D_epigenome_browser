@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import Pagination from "../../components/Pagination/Pagination";
-import "./diseases.css"
+import IgvVariant from "../../components/IgvVariant";
+import IgvVariantWithPromoter from "../../components/IgvVariantWithPromoter";
+import "./diseases.css";
 
 const Diseases = () => {
     const { Id } = useParams();
@@ -27,7 +29,7 @@ const Diseases = () => {
             })
             if(res.ok) {
                 const result = await res.json();
-                console.log("result", result);
+                // console.log("result", result);
                 setDiseasedata(result);
                 // pagination
                 setCurrentItems(result.slice(0, itemsPerPage));
@@ -52,10 +54,10 @@ const Diseases = () => {
 
     const handleShowDisease = (e) => {
         const selectedDiseaseRSID = e.target.value;
-        const selectedDisease = diseasedata.find(disease => disease.RSID === selectedDiseaseRSID);
-        // console.log("seletedDisease", selectedDisease)
+        let selectedDisease = diseasedata.find(disease => disease.RSID === selectedDiseaseRSID);
         // console.log("seletedDiseaseRSID", selectedDisease.RSID)
-
+        selectedDisease["Chr"] = selectedDisease["#Chr"]
+        console.log("seletedDisease", selectedDisease)
         setShowDisease(selectedDisease);
         // console.log("showDisease", showDisease)
         setSelectDiseaseId(selectedDisease.RSID);
@@ -141,6 +143,12 @@ const Diseases = () => {
                 </div>
                 {selectedDiseaseId && <p>{`select disease id ${selectedDiseaseId}`}</p>}
                 {showDisease && <p>{`show disease id ${showDisease.RSID}`}</p>}
+        
+        {showDisease ? (
+            <div>
+                <IgvVariant variant={showDisease} celltype={celltype}/>
+            </div>
+        ) : null }
         </div>
     )
 }

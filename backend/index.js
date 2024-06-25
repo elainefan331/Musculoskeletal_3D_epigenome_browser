@@ -6,6 +6,7 @@ import diseaseRouter from "./routes/diseases.js";
 import geneRouter from "./routes/genes.js";
 import cors from "cors";
 import Api_category from "./models/api_category.js";
+import GwasLD from "./models/gwasLD.js";
 // import path from "path"
 
 const app = express();
@@ -49,6 +50,11 @@ mongoose
 
         // Ensure indexes are created
         return Api_category.init();
+    })
+    .then(() => {
+
+        // Ensure indexes are created
+        return GwasLD.init();
     })
     .then(() => {
         console.log("Indexes ensured");
