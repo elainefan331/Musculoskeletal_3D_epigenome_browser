@@ -21,3 +21,31 @@
     color: white;
 }
 
+
+
+.cutoff-select-and-button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+#cutoff-search-button {
+    background: #007bff;
+    border: none;
+    padding: 2px 0px;
+    color: white;
+}
+
+#cutoff-search-button:hover {
+    background: #007bff;
+}
+
+#cutoff-select:hover {
+    background: white;
+    color: black;
+}
+
+
+
+
+

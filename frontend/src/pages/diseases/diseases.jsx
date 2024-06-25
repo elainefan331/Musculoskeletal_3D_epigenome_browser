@@ -13,6 +13,7 @@ const Diseases = () => {
     const [diseasedata, setDiseasedata] = useState(null);
     const [showDisease, setShowDisease] = useState(null);
     const [selectedDiseaseId, setSelectDiseaseId] = useState(null);
+    const [cutoff, setCutoff] = useState(0.7);
     // pagination
     const [currentItems, setCurrentItems] = useState([]);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -53,15 +54,35 @@ const Diseases = () => {
     };
 
     const handleShowDisease = (e) => {
-        const selectedDiseaseRSID = e.target.value;
-        let selectedDisease = diseasedata.find(disease => disease.RSID === selectedDiseaseRSID);
+        const selectedDiseaseID = e.target.value;
+        let selectedDisease = diseasedata.find(disease => disease._id === selectedDiseaseID);
         // console.log("seletedDiseaseRSID", selectedDisease.RSID)
+        // add Chr as an attribute in selectedDisease
         selectedDisease["Chr"] = selectedDisease["#Chr"]
         console.log("seletedDisease", selectedDisease)
         setShowDisease(selectedDisease);
         // console.log("showDisease", showDisease)
-        setSelectDiseaseId(selectedDisease.RSID);
+        setSelectDiseaseId(selectedDisease._id);
         // console.log("selectedDiseaseId", selectedDiseaseId)
+    }
+
+    const handleCutoffSeletion = (e) => {
+        async function fetchData() {
+            const url = new URL(`${import.meta.env.VITE_EXPRESS_URL}/gwasLD/${showDisease["#Chr"]}-${showDisease.Start}-${showDisease.Ref}-${showDisease.Alt}`)
+            url.search = new URLSearchParams({cutoff: cutoff}).toString();
+
+            const res = await fetch(url, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            if(res.ok) {
+                const cutoffResult = await res.json();
+                console.log("cutoffresult=====", cutoffResult)
+            } else {
+                console.log(res.status)
+            }
+        }
+        fetchData();
     }
 
 
@@ -89,20 +110,25 @@ const Diseases = () => {
                                 
                                     <tbody key={disease._id} className="disease-row-tbody">
                                         <tr>
-                                            <td>
-                                                <input type="radio" name="selectVariant" value={disease.RSID} onChange={handleShowDisease}/>
-                                                {selectedDiseaseId === disease.RSID
-                                                    && <select>
-                                                            <option value="0.1">0.1</option>
-                                                            <option value="0.2">0.2</option>
-                                                            <option value="0.3">0.3</option>
-                                                            <option value="0.4">0.4</option>
-                                                            <option value="0.5">0.5</option>
-                                                            <option value="0.6">0.6</option>
-                                                            <option value="0.7">0.7</option>
-                                                            <option value="0.8">0.8</option>
-                                                            <option value="0.9">0.9</option>
-                                                    </select>}
+                                            <td className="radio-cutoff-container">
+                                                <input type="radio" name="selectVariant" value={disease._id} onChange={handleShowDisease}/>
+                                                {selectedDiseaseId === disease._id
+                                                    &&
+                                                    <div className="cutoff-select-and-button-container">
+                                                        <select id="cutoff-select" defaultValue="0.7" onChange={(e) => setCutoff(e.target.value)}>
+                                                                <option value="0.1">0.1</option>
+                                                                <option value="0.2">0.2</option>
+                                                                <option value="0.3">0.3</option>
+                                                                <option value="0.4">0.4</option>
+                                                                <option value="0.5">0.5</option>
+                                                                <option value="0.6">0.6</option>
+                                                                <option value="0.7">0.7</option>
+                                                                <option value="0.8">0.8</option>
+                                                                <option value="0.9">0.9</option>
+                                                        </select>   
+                                                        <button id="cutoff-search-button" onClick={handleCutoffSeletion}>Search</button>
+                                                    </div> 
+                                                }
                                             </td>
                                             <td id="disease-rsid-td">{disease.RSID}</td>
                                             <td id="disease-variantId-td">{`${disease["#Chr"]}-${disease.Start}-${disease.Ref}-${disease.Alt}`}</td>
@@ -142,13 +168,14 @@ const Diseases = () => {
                     }
                 </div>
                 {selectedDiseaseId && <p>{`select disease id ${selectedDiseaseId}`}</p>}
-                {showDisease && <p>{`show disease id ${showDisease.RSID}`}</p>}
+                {showDisease && <p>{`show disease id ${showDisease._id}`}</p>}
+                {cutoff && <p>{`cutoff is ${cutoff}`}</p>}
         
-        {showDisease ? (
+        {/* {showDisease ? (
             <div>
                 <IgvVariant variant={showDisease} celltype={celltype}/>
             </div>
-        ) : null }
+        ) : null } */}
         </div>
     )
 }
