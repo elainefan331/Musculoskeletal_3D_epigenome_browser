@@ -29,6 +29,11 @@
     gap: 3px;
 }
 
+#cutoff-select,
+#cutoff-search-button {
+    border-radius: 3px;
+}
+
 #cutoff-search-button {
     background: #007bff;
     border: none;
@@ -38,6 +43,7 @@
 
 #cutoff-search-button:hover {
     background: #007bff;
+    border: 1px white solid;
 }
 
 #cutoff-select:hover {

@@ -6,9 +6,11 @@ const router = express.Router();
 router.get('/:variantId', async(req, res) => {
     const variantId = req.params.variantId;
     const { cutoff } = req.query;
+    const { celltype} = req.query;
 
     console.log("variantId", variantId)
     console.log("type of variantid", typeof(variantId))
+    console.log("celltype", celltype)
     console.log("cutoff", cutoff)
     // convert cutoff to number
     const cutoffNum = parseFloat(cutoff)

@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import Pagination from "../../components/Pagination/Pagination";
-import IgvVariant from "../../components/IgvVariant";
-import IgvVariantWithPromoter from "../../components/IgvVariantWithPromoter";
 import "./diseases.css";
 
 const Diseases = () => {
+    const navigate = useNavigate();
     const { Id } = useParams();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const celltype = queryParams.get('celltype');
+    // const celltype = queryParams.get('celltype');
     const [diseasedata, setDiseasedata] = useState(null);
     const [showDisease, setShowDisease] = useState(null);
     const [selectedDiseaseId, setSelectDiseaseId] = useState(null);
     const [cutoff, setCutoff] = useState(0.7);
+    const [celltype, setCelltype] = useState(queryParams.get('celltype'))
     // pagination
     const [currentItems, setCurrentItems] = useState([]);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -67,22 +68,24 @@ const Diseases = () => {
     }
 
     const handleCutoffSeletion = (e) => {
-        async function fetchData() {
-            const url = new URL(`${import.meta.env.VITE_EXPRESS_URL}/gwasLD/${showDisease["#Chr"]}-${showDisease.Start}-${showDisease.Ref}-${showDisease.Alt}`)
-            url.search = new URLSearchParams({cutoff: cutoff}).toString();
+        // async function fetchData() {
+        //     const url = new URL(`${import.meta.env.VITE_EXPRESS_URL}/gwasLD/${showDisease["#Chr"]}-${showDisease.Start}-${showDisease.Ref}-${showDisease.Alt}`)
+        //     url.search = new URLSearchParams({cutoff: cutoff}).toString();
 
-            const res = await fetch(url, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            })
-            if(res.ok) {
-                const cutoffResult = await res.json();
-                console.log("cutoffresult=====", cutoffResult)
-            } else {
-                console.log(res.status)
-            }
-        }
-        fetchData();
+        //     const res = await fetch(url, {
+        //         method: 'GET',
+        //         headers: { 'Content-Type': 'application/json' }
+        //     })
+        //     if(res.ok) {
+        //         const cutoffResult = await res.json();
+        //         console.log("cutoffresult=====", cutoffResult)
+        //     } else {
+        //         console.log(res.status)
+        //     }
+        // }
+        // fetchData();
+        let ui_url= `/indexSNP/${showDisease["#Chr"]}-${showDisease.Start}-${showDisease.Ref}-${showDisease.Alt}/?celltype=${celltype}&cutoff=${cutoff}`
+        navigate(ui_url);
     }
 
 
@@ -93,7 +96,7 @@ const Diseases = () => {
                     <table className="table">
                         <thead>
                             <tr>
-                                <th>Select cutoff of r-square</th>
+                                <th>Select cutoff of r-square &#40;default=0.7&#41;</th>
                                 <th>RSID</th>
                                 <th>VARIANT ID</th>
                                 <th>RISK ALLELE</th>
@@ -116,6 +119,7 @@ const Diseases = () => {
                                                     &&
                                                     <div className="cutoff-select-and-button-container">
                                                         <select id="cutoff-select" defaultValue="0.7" onChange={(e) => setCutoff(e.target.value)}>
+                                                                <option value="" disabled>Select cutoff</option>
                                                                 <option value="0.1">0.1</option>
                                                                 <option value="0.2">0.2</option>
                                                                 <option value="0.3">0.3</option>
@@ -126,6 +130,12 @@ const Diseases = () => {
                                                                 <option value="0.8">0.8</option>
                                                                 <option value="0.9">0.9</option>
                                                         </select>   
+                                                        <select id="cutoff-select" defaultValue={`${celltype}`} onChange={(e) => setCelltype(e.target.value)}>
+                                                            <option value="" disabled>Select Cell-Type</option>
+                                                            <option value="hMSC">hMSC</option>
+                                                            <option value="Osteoblast">Osteoblast</option>
+                                                            <option value="Osteocyte">Osteocyte</option>
+                                                        </select>
                                                         <button id="cutoff-search-button" onClick={handleCutoffSeletion}>Search</button>
                                                     </div> 
                                                 }
@@ -170,6 +180,7 @@ const Diseases = () => {
                 {selectedDiseaseId && <p>{`select disease id ${selectedDiseaseId}`}</p>}
                 {showDisease && <p>{`show disease id ${showDisease._id}`}</p>}
                 {cutoff && <p>{`cutoff is ${cutoff}`}</p>}
+                {celltype && <p>{`celltype is ${celltype}`}</p>}
         
         {/* {showDisease ? (
             <div>
