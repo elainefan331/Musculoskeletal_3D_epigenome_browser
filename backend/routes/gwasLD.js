@@ -21,7 +21,7 @@ router.get('/:variantId', async(req, res) => {
                 {R_square: {$gte: cutoffNum}}
             ]
         });
-        console.log("result at backend", variants)
+        // console.log("result at backend", variants)
         if(variants.length > 0) {
             return res.status(200).json(variants)
         } else {

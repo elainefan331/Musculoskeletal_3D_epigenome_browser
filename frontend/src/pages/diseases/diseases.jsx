@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import Pagination from "../../components/Pagination/Pagination";
 import "./diseases.css";
 
 const Diseases = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const { Id } = useParams();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -42,9 +42,6 @@ const Diseases = () => {
         fetchData();
     }, [Id, celltype, itemsPerPage]);
 
-    // const handlePageChange = (offset, itemsPerPage) => {
-    //     setCurrentItems(diseasedata.slice(offset, offset + itemsPerPage));
-    // }
     const handlePageChange = (offset) => {
         setCurrentItems(diseasedata.slice(offset, offset + itemsPerPage));
     }
@@ -57,14 +54,11 @@ const Diseases = () => {
     const handleShowDisease = (e) => {
         const selectedDiseaseID = e.target.value;
         let selectedDisease = diseasedata.find(disease => disease._id === selectedDiseaseID);
-        // console.log("seletedDiseaseRSID", selectedDisease.RSID)
         // add Chr as an attribute in selectedDisease
         selectedDisease["Chr"] = selectedDisease["#Chr"]
         console.log("seletedDisease", selectedDisease)
         setShowDisease(selectedDisease);
-        // console.log("showDisease", showDisease)
         setSelectDiseaseId(selectedDisease._id);
-        // console.log("selectedDiseaseId", selectedDiseaseId)
     }
 
     const handleCutoffSeletion = (e) => {
@@ -84,8 +78,10 @@ const Diseases = () => {
         //     }
         // }
         // fetchData();
-        let ui_url= `/indexSNP/${showDisease["#Chr"]}-${showDisease.Start}-${showDisease.Ref}-${showDisease.Alt}/?celltype=${celltype}&cutoff=${cutoff}`
-        navigate(ui_url);
+        let ui_url= `/indexSNP/${showDisease["#Chr"]}-${showDisease.Start}-${showDisease.Ref}-${showDisease.Alt}/?celltype=${celltype}&cutoff=${cutoff}`;
+
+        window.open(ui_url, '_blank');
+        // navigate(ui_url);
     }
 
 
