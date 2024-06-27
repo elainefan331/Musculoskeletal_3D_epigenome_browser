@@ -34,9 +34,9 @@ const DiseaseIndex = () => {
                 });
 
                 if (res.status === 200) {
-                    const cutoffResult = await res.json();
-                    setVariantData(cutoffResult);
-                    console.log("cutoffresult in diseaseIndex=====", cutoffResult)
+                    const result = await res.json();
+                    console.log("result in diseaseIndex=====", result)
+                    setVariantData(result.variants);
                 } else if (res.status === 404) {
                     setErrormessage("Variants not found");
                 } else {

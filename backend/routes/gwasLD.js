@@ -7,6 +7,8 @@ import Promoter_OC from "../models/promoter_OC.js";
 const router = express.Router();
 
 // helper function
+
+// find the promoters according celltype, access different promoter collections
 const getPromoterData = async (celltype, regulatoryBin) => {
     let promoterModel;
 
@@ -23,6 +25,7 @@ const getPromoterData = async (celltype, regulatoryBin) => {
     return promoterModel.find({HiC_Distal_bin: regulatoryBin})
 }
 
+// add regulatoryBin, promoterBin attribute to variant obj according celltype
 const variantBinFinder = async(variants, celltype) => {
     let SigHic = "";
     for(let variant of variants) {
@@ -60,6 +63,30 @@ const variantBinFinder = async(variants, celltype) => {
     }
 }
 
+// calculate the range of Igv
+const IgvRangeCalculator = (variants) => {
+    let start = Infinity;
+    let end = -Infinity;
+    const resultObj = {}
+
+    for(let variant of variants) {
+        const varriantStart = parseInt(variant._doc.regulatoryBin.split(":")[1]);
+        const variantEnd = parseInt(variant._doc.regulatoryBin.split(":")[2]);
+        console.log("start", varriantStart);
+        console.log("end", variantEnd);
+        if (!isNaN(varriantStart) && !isNaN(variantEnd)) {
+            start = Math.min(start, varriantStart);
+            end = Math.max(end, variantEnd);
+        }
+    }
+
+    resultObj["Start"] = start - 10000;
+    resultObj["End"] = end + 10000;
+    console.log("resultObj", resultObj);
+    
+    return resultObj;
+
+}
 
 
 router.get('/:variantId', async(req, res) => {
@@ -81,9 +108,10 @@ router.get('/:variantId', async(req, res) => {
         });
 
         await variantBinFinder(variants, celltype);
+        const Igvrange = IgvRangeCalculator(variants);
         
         if(variants.length > 0) {
-            return res.status(200).json(variants)
+            return res.status(200).json({variants, Igvrange})
         } else {
             return res.status(404).send("variants not found")
         }
