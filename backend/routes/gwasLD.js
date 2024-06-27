@@ -72,8 +72,8 @@ const IgvRangeCalculator = (variants) => {
     for(let variant of variants) {
         const varriantStart = parseInt(variant._doc.regulatoryBin.split(":")[1]);
         const variantEnd = parseInt(variant._doc.regulatoryBin.split(":")[2]);
-        console.log("start", varriantStart);
-        console.log("end", variantEnd);
+        // console.log("start", varriantStart);
+        // console.log("end", variantEnd);
         if (!isNaN(varriantStart) && !isNaN(variantEnd)) {
             start = Math.min(start, varriantStart);
             end = Math.max(end, variantEnd);
@@ -82,7 +82,7 @@ const IgvRangeCalculator = (variants) => {
 
     resultObj["Start"] = start - 10000;
     resultObj["End"] = end + 10000;
-    console.log("resultObj", resultObj);
+    // console.log("resultObj", resultObj);
     
     return resultObj;
 

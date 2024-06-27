@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import Pagination from "../../components/Pagination/Pagination";
+import { useDisease } from "../../context/diseaseContext";
 import "./diseases.css";
 
 const Diseases = () => {
+    const {disease, setDisease} = useDisease();
     const { Id } = useParams();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -58,6 +60,10 @@ const Diseases = () => {
     }
 
     const handleCutoffSeletion = (e) => {
+        if(showDisease) {
+            setDisease(showDisease);
+            console.log("disease in diseases.jsx", disease);
+        }
         let ui_url= `/indexSNP/${showDisease["#Chr"]}-${showDisease.Start}-${showDisease.Ref}-${showDisease.Alt}/?celltype=${celltype}&cutoff=${cutoff}`;
 
         window.open(ui_url, '_blank');

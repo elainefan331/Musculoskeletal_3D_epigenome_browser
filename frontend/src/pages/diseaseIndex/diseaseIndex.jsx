@@ -1,26 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
+// import { useDisease } from "../../context/diseaseContext";
 import IgvDisease from "../../components/IgvDisease";
 
 const DiseaseIndex = () => {
+    // const {disease} = useDisease();
     const { Id } = useParams();
+    let diseasePosition = Id.split("-")[1];
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const celltype = queryParams.get('celltype');
     const cutoff = queryParams.get('cutoff');
     const [errormessage, setErrormessage] = useState(null);
     const [variantData, setVariantData] = useState(null);
+    const [IgvRange, setIgvRange] = useState(null);
     const [selectedVariant, setSelectedVariant] = useState(null);
-
-    // for Igv
-    // let start = 1000000000;
-    // let end = 0
-    // if(variantData !== null) {
-    //     for (let i = 0; i < variantData.length; i++) {
-    //         let variant = variantData[i];
-    //         let obj = /
-    //     }
-    // }
+    
 
     useEffect(() => {
         async function fetchData() {
@@ -37,6 +32,7 @@ const DiseaseIndex = () => {
                     const result = await res.json();
                     console.log("result in diseaseIndex=====", result)
                     setVariantData(result.variants);
+                    setIgvRange(result.Igvrange);
                 } else if (res.status === 404) {
                     setErrormessage("Variants not found");
                 } else {
@@ -47,6 +43,7 @@ const DiseaseIndex = () => {
             }
 
         }
+       
         fetchData();
     },[celltype, cutoff])
 
@@ -68,7 +65,7 @@ const DiseaseIndex = () => {
                 <table className="table">
                     <thead>
                         <tr>
-                            <th>Select</th>
+                            <th>Select to show variant</th>
                             <th>Variant</th>
                             <th>RSID</th>
                             <th>R-square</th>
@@ -112,11 +109,11 @@ const DiseaseIndex = () => {
                 </table>
             </div>
             {selectedVariant && <p>{selectedVariant.Variant}</p>}
-            {/* {selectedVariant? (
+            {selectedVariant? (
                 <div>
-                    <IgvDisease variant={selectedVariant} celltype={celltype}/>
+                    <IgvDisease variant={selectedVariant} celltype={celltype} range={IgvRange} diseasePosition={diseasePosition}/>
                 </div>
-            ): null} */}
+            ): null}
         </div>
     )
 }
