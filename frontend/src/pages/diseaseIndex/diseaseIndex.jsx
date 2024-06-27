@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
-
+import IgvDisease from "../../components/IgvDisease";
 
 const DiseaseIndex = () => {
     const { Id } = useParams();
@@ -11,6 +11,16 @@ const DiseaseIndex = () => {
     const [errormessage, setErrormessage] = useState(null);
     const [variantData, setVariantData] = useState(null);
     const [selectedVariant, setSelectedVariant] = useState(null);
+
+    // for Igv
+    // let start = 1000000000;
+    // let end = 0
+    // if(variantData !== null) {
+    //     for (let i = 0; i < variantData.length; i++) {
+    //         let variant = variantData[i];
+    //         let obj = /
+    //     }
+    // }
 
     useEffect(() => {
         async function fetchData() {
@@ -40,10 +50,14 @@ const DiseaseIndex = () => {
         fetchData();
     },[celltype, cutoff])
 
+    // open a new tab for selected variantId
     const handleSelectVariant = (e, variant) => {
         setSelectedVariant(variant);
-        console.log("selected variant", variant)
-        console.log("selectedVariant", selectedVariant)
+        const variantId = variant.Variant;
+        const regexVariantId = variantId.replaceAll(":", "-").replace("/", "-")
+        const ui_url = `/variants/${regexVariantId}?celltype=${celltype}`
+        
+        window.open(ui_url, '_blank');
     }
 
     return (
@@ -98,6 +112,11 @@ const DiseaseIndex = () => {
                 </table>
             </div>
             {selectedVariant && <p>{selectedVariant.Variant}</p>}
+            {/* {selectedVariant? (
+                <div>
+                    <IgvDisease variant={selectedVariant} celltype={celltype}/>
+                </div>
+            ): null} */}
         </div>
     )
 }

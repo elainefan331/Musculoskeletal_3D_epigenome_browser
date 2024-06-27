@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-// import { useNavigate } from 'react-router-dom';
 import Pagination from "../../components/Pagination/Pagination";
 import "./diseases.css";
 
 const Diseases = () => {
-    // const navigate = useNavigate();
     const { Id } = useParams();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    // const celltype = queryParams.get('celltype');
     const [diseasedata, setDiseasedata] = useState(null);
     const [showDisease, setShowDisease] = useState(null);
     const [selectedDiseaseId, setSelectDiseaseId] = useState(null);
@@ -31,7 +28,6 @@ const Diseases = () => {
             })
             if(res.ok) {
                 const result = await res.json();
-                // console.log("result", result);
                 setDiseasedata(result);
                 // pagination
                 setCurrentItems(result.slice(0, itemsPerPage));
@@ -62,26 +58,10 @@ const Diseases = () => {
     }
 
     const handleCutoffSeletion = (e) => {
-        // async function fetchData() {
-        //     const url = new URL(`${import.meta.env.VITE_EXPRESS_URL}/gwasLD/${showDisease["#Chr"]}-${showDisease.Start}-${showDisease.Ref}-${showDisease.Alt}`)
-        //     url.search = new URLSearchParams({cutoff: cutoff}).toString();
-
-        //     const res = await fetch(url, {
-        //         method: 'GET',
-        //         headers: { 'Content-Type': 'application/json' }
-        //     })
-        //     if(res.ok) {
-        //         const cutoffResult = await res.json();
-        //         console.log("cutoffresult=====", cutoffResult)
-        //     } else {
-        //         console.log(res.status)
-        //     }
-        // }
-        // fetchData();
         let ui_url= `/indexSNP/${showDisease["#Chr"]}-${showDisease.Start}-${showDisease.Ref}-${showDisease.Alt}/?celltype=${celltype}&cutoff=${cutoff}`;
 
         window.open(ui_url, '_blank');
-        // navigate(ui_url);
+        
     }
 
 
@@ -177,12 +157,6 @@ const Diseases = () => {
                 {showDisease && <p>{`show disease id ${showDisease._id}`}</p>}
                 {cutoff && <p>{`cutoff is ${cutoff}`}</p>}
                 {celltype && <p>{`celltype is ${celltype}`}</p>}
-        
-        {/* {showDisease ? (
-            <div>
-                <IgvVariant variant={showDisease} celltype={celltype}/>
-            </div>
-        ) : null } */}
         </div>
     )
 }
