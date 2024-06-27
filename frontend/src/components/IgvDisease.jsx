@@ -2,11 +2,11 @@ import { useEffect, useRef } from 'react';
 // import { useDisease } from "../../context/diseaseContext.jsx";
 import igv from 'igv';
 
-const IgvDisease = ({variant, celltype, range, diseasePosition}) => {
+const IgvDisease = ({IndexSNP, celltype, range, diseasePosition}) => {
     // const {disease} = useDisease();
     const igvDiv = useRef(null);
     const igvBrowser = useRef(null);
-    const chr = variant.Variant.split(":")[0];
+    const chr = IndexSNP.split("-")[0];
     const locus = `chr${chr}:${range.Start}-${range.End}`;
 
     let promoter_like_url = "/igv/promoter/promoter_like_regions_annotation_sorted.bed";
@@ -64,7 +64,7 @@ const IgvDisease = ({variant, celltype, range, diseasePosition}) => {
             locus: locus,
             roi: [
                 {
-                    name: `${variant.RSID}`,
+                    name: `${IndexSNP}`,
                     color: "rgba(68, 134, 247, 0.25)",
                     features: [
                         {
@@ -76,6 +76,14 @@ const IgvDisease = ({variant, celltype, range, diseasePosition}) => {
                 }
             ],
             tracks: [
+                {
+                    type: "annotation",
+                    format: "bed",
+                    url: `/igv/temp/${IndexSNP}_LD.bed`,
+                    height: 50,
+                    name: "LD SNP",
+                    displayMode: "EXPANDED",
+                },
                 {
                     type: "annotation",
                     format: "bed",
@@ -197,7 +205,7 @@ const IgvDisease = ({variant, celltype, range, diseasePosition}) => {
                 igvBrowser.current = null;
             }
           };
-    }, [variant, celltype, locus]);
+    }, [IndexSNP, celltype, locus]);
 
     return (
         <div>

@@ -111,7 +111,7 @@ const DiseaseIndex = () => {
             {selectedVariant && <p>{selectedVariant.Variant}</p>}
             {selectedVariant? (
                 <div>
-                    <IgvDisease variant={selectedVariant} celltype={celltype} range={IgvRange} diseasePosition={diseasePosition}/>
+                    <IgvDisease IndexSNP={Id} celltype={celltype} range={IgvRange} diseasePosition={diseasePosition}/>
                 </div>
             ): null}
         </div>

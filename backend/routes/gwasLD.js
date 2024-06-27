@@ -3,6 +3,12 @@ import GwasLD from "../models/gwasLD.js";
 import Promoter_hMSC from "../models/promoter_hMSC.js";
 import Promoter_OB from "../models/promoter_OB.js";
 import Promoter_OC from "../models/promoter_OC.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
@@ -59,7 +65,7 @@ const variantBinFinder = async(variants, celltype) => {
         variant._doc["promoterBin"] = promoterBin;
         variant._doc["promoterBinArray"] = promoterBinArray;
         variant._doc["promoters"] = promoters;
-        console.log("variant bins check", variant)
+        // console.log("variant bins check", variant)
     }
 }
 
@@ -88,6 +94,54 @@ const IgvRangeCalculator = (variants) => {
 
 }
 
+// generate LD file
+
+const generateLDFile = (variants, filePath) => {
+    const LDdataArray = variants.flatMap(variant => {
+        const variantObj = variant._doc;
+        console.log("variantObj", variantObj)
+        const variantIdArr = variantObj.Variant.split(":")
+        const chr = `chr${variantIdArr[0]}`
+        const position = variantIdArr[1];
+        const rsid = variantObj.RSID;
+        const rsquare = variantObj.R_square;
+
+        let rgb;
+        if(rsquare === 1){
+            rgb = "127,0,255";
+        } else if(rsquare >= 0.8 && rsquare < 1){
+            rgb = "255,0,5";
+        } else if(rsquare < 0.8 && rsquare >= 0.6){
+            rgb = "255,153,51";
+        } else if(rsquare < 0.6 && rsquare >= 0.4){
+            rgb = "102,204,0";
+        } else if(rsquare < 0.4 && rsquare >= 0.2){
+            rgb = "153,204,255";
+        } else {
+            rgb = "0,0,0"
+        }
+
+        return {
+            chr: chr,
+            start1: position,
+            end1: position,
+            rsid: rsid,
+            rsquare: rsquare,
+            start2: position,
+            end2: position,
+            rgb: rgb
+        }
+    });
+
+    console.log("result array", LDdataArray);
+
+    const LDString = LDdataArray.map(item => `${item.chr}\t${item.start1}\t${item.end1}\t${item.rsid}\t${item.rsquare}\t+\t${item.start2}\t${item.end2}\t${item.rgb}`).join('\n');
+    fs.writeFileSync(filePath, LDString, (err) => {
+        if (err) throw err;
+    });
+    console.log(`LD file has been generated and saved to ${filePath}.`);
+
+}
 
 router.get('/:variantId', async(req, res) => {
     const variantId = req.params.variantId;
@@ -111,6 +165,10 @@ router.get('/:variantId', async(req, res) => {
         const Igvrange = IgvRangeCalculator(variants);
         
         if(variants.length > 0) {
+            const publicFolderPath = path.resolve(__dirname,"../../frontend/public/igv/temp");
+            const filePath = path.join(publicFolderPath, `${variantId}_LD.bed`);
+            console.log("test function")
+            generateLDFile(variants, filePath)
             return res.status(200).json({variants, Igvrange})
         } else {
             return res.status(404).send("variants not found")
