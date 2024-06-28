@@ -1,13 +1,10 @@
 import { useEffect, useRef } from 'react';
-// import { useDisease } from "../../context/diseaseContext.jsx";
 import igv from 'igv';
 
-const IgvDisease = ({IndexSNP, celltype, range, diseasePosition}) => {
-    // const {disease} = useDisease();
+const IgvDiseaseWithPromoter = ({IndexSNP, celltype, range, diseasePosition}) => {
     const igvDiv = useRef(null);
     const igvBrowser = useRef(null);
     const chr = IndexSNP.split("-")[0];
-    // console.log("range", range)
     const locus = `chr${chr}:${range.Start}-${range.End}`;
 
     let promoter_like_url = "/igv/promoter/promoter_like_regions_annotation_sorted.bed";
@@ -18,6 +15,7 @@ const IgvDisease = ({IndexSNP, celltype, range, diseasePosition}) => {
     let rnaseq_url = `/igv/bigwig/${celltype}/${celltype}_rep1PE_stranded_genome_plusAll.bw`;
     // for promoter exist
     let locus_hic_url = `/igv/temp/${IndexSNP}_${celltype}.bedpe.txt`
+
     let atac_url;
     let dnase_url;
     let chromHMM_url;
@@ -59,7 +57,6 @@ const IgvDisease = ({IndexSNP, celltype, range, diseasePosition}) => {
         H3k4me1_url = `/igv/bigwig/${celltype}/H3K4me1_${celltype}_pvalue.bigWig`;
     }
 
-
     useEffect(() => {
         const options = {
             genome: "hg38",
@@ -78,6 +75,18 @@ const IgvDisease = ({IndexSNP, celltype, range, diseasePosition}) => {
                 }
             ],
             tracks: [
+                {
+                    type: "interaction",
+                    format: "bedpe",
+                    name: "Significant Hi-C",
+                    arcType: "nested",
+                    useScore: true,
+                    color: "blue",
+                    logScale: true,
+                    showBlocks: true,
+                    height: 150,
+                    url: locus_hic_url,
+                },
                 {
                     type: "annotation",
                     format: "bed",
@@ -200,13 +209,13 @@ const IgvDisease = ({IndexSNP, celltype, range, diseasePosition}) => {
             console.log("Created IGV browser");
           });
          
-          // Cleanup function to remove the browser instance
-          return () => {
+        // Cleanup function to remove the browser instance
+        return () => {
             if (igvBrowser.current) {
                 igv.removeBrowser(igvBrowser.current);
                 igvBrowser.current = null;
             }
-          };
+        };
     }, [IndexSNP, celltype, locus]);
 
     return (
@@ -216,4 +225,4 @@ const IgvDisease = ({IndexSNP, celltype, range, diseasePosition}) => {
     )
 }
 
-export default IgvDisease;
+export default IgvDiseaseWithPromoter;

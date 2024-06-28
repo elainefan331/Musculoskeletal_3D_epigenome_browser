@@ -69,6 +69,15 @@ const variantBinFinder = async(variants, celltype) => {
     }
 }
 
+// check if there is no promoter exist in variants
+const promoterBinExist = (variants) => {
+    let result = false;
+    for (let variant of variants) {
+        if (variant._doc.SigHic !== "NA") result = true;
+    }
+    return result;
+}
+
 // calculate the range of Igv
 const IgvRangeCalculator = (variants) => {
     let start = Infinity;
@@ -95,11 +104,10 @@ const IgvRangeCalculator = (variants) => {
 }
 
 // generate LD file
-
 const generateLDFile = (variants, filePath) => {
     const LDdataArray = variants.flatMap(variant => {
         const variantObj = variant._doc;
-        console.log("variantObj", variantObj)
+        // console.log("variantObj", variantObj)
         const variantIdArr = variantObj.Variant.split(":")
         const chr = `chr${variantIdArr[0]}`
         const position = variantIdArr[1];
@@ -133,7 +141,7 @@ const generateLDFile = (variants, filePath) => {
         }
     });
 
-    console.log("result array", LDdataArray);
+    // console.log("result array", LDdataArray);
 
     const LDString = LDdataArray.map(item => `${item.chr}\t${item.start1}\t${item.end1}\t${item.rsid}\t${item.rsquare}\t+\t${item.start2}\t${item.end2}\t${item.rgb}`).join('\n');
     fs.writeFileSync(filePath, LDString, (err) => {
@@ -141,6 +149,35 @@ const generateLDFile = (variants, filePath) => {
     });
     console.log(`LD file has been generated and saved to ${filePath}.`);
 
+}
+
+// generate bedpe file
+const generateBedpeFile = (variants, filePath) => {
+    const bedpeDataArray = variants.flatMap(variant => {
+        const variantDoc = variant._doc;
+        const variantArr = variantDoc.Variant.split(":");
+        const chr = `chr${variantArr[0]}`;
+        const position = variantArr[1];
+        const promoterBins = variantDoc.promoterBinArray;
+
+        return promoterBins.map(promoterBin => ({
+            chr1: chr,
+            start1: position,
+            end1: position,
+            chr2: chr,
+            start2: promoterBin.split(":")[1],
+            end2: promoterBin.split(":")[2]
+        }));  
+    });
+    // console.log("disease bedpe data array", bedpeDataArray)
+
+    const bedpeString = bedpeDataArray.map(item => `${item.chr1}\t${item.start1}\t${item.end1}\t${item.chr2}\t${item.start2}\t${item.end2}`).join('\n');
+    
+    fs.writeFileSync(filePath, bedpeString, (err) => {
+        if (err) throw err;
+    });
+
+    console.log(`BEDPE file has been generated and saved to ${filePath}.`);
 }
 
 router.get('/:variantId', async(req, res) => {
@@ -163,13 +200,17 @@ router.get('/:variantId', async(req, res) => {
 
         await variantBinFinder(variants, celltype);
         const Igvrange = IgvRangeCalculator(variants);
+        const promoterExist = promoterBinExist(variants);
         
         if(variants.length > 0) {
             const publicFolderPath = path.resolve(__dirname,"../../frontend/public/igv/temp");
-            const filePath = path.join(publicFolderPath, `${variantId}_LD.bed`);
-            console.log("test function")
-            generateLDFile(variants, filePath)
-            return res.status(200).json({variants, Igvrange})
+            const LDfilePath = path.join(publicFolderPath, `${variantId}_LD.bed`);
+            const bedpeFilePath = path.join(publicFolderPath, `${variantId}_${celltype}.bedpe.txt`)
+            generateLDFile(variants, LDfilePath);
+            if (promoterExist) {
+                generateBedpeFile(variants, bedpeFilePath);
+            }
+            return res.status(200).json({variants, Igvrange, promoterExist})
         } else {
             return res.status(404).send("variants not found")
         }

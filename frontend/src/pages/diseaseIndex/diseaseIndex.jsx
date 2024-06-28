@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 // import { useDisease } from "../../context/diseaseContext";
 import IgvDisease from "../../components/IgvDisease";
+import IgvDiseaseWithPromoter from "../../components/IgvDiseaseWithPromoter";
 
 const DiseaseIndex = () => {
     // const {disease} = useDisease();
@@ -15,6 +16,7 @@ const DiseaseIndex = () => {
     const [variantData, setVariantData] = useState(null);
     const [IgvRange, setIgvRange] = useState(null);
     const [selectedVariant, setSelectedVariant] = useState(null);
+    const [promoterExist, setPromoterExist] = useState(false);
     
 
     useEffect(() => {
@@ -33,6 +35,7 @@ const DiseaseIndex = () => {
                     console.log("result in diseaseIndex=====", result)
                     setVariantData(result.variants);
                     setIgvRange(result.Igvrange);
+                    setPromoterExist(result.promoterExist);
                 } else if (res.status === 404) {
                     setErrormessage("Variants not found");
                 } else {
@@ -109,11 +112,15 @@ const DiseaseIndex = () => {
                 </table>
             </div>
             {selectedVariant && <p>{selectedVariant.Variant}</p>}
-            {selectedVariant? (
+            {variantData? (promoterExist? (
                 <div>
+                    <IgvDiseaseWithPromoter IndexSNP={Id} celltype={celltype} range={IgvRange} diseasePosition={diseasePosition}/>
+                </div>
+            ) : <div>
                     <IgvDisease IndexSNP={Id} celltype={celltype} range={IgvRange} diseasePosition={diseasePosition}/>
                 </div>
-            ): null}
+            ) : null}
+            
         </div>
     )
 }
