@@ -4,8 +4,10 @@ import mongoose from "mongoose";
 import variantRouter from "./routes/variants.js";
 import diseaseRouter from "./routes/diseases.js";
 import geneRouter from "./routes/genes.js";
+import gwasLDRouter from "./routes/gwasLD.js"
 import cors from "cors";
 import Api_category from "./models/api_category.js";
+import GwasLD from "./models/gwasLD.js";
 // import path from "path"
 
 const app = express();
@@ -21,6 +23,7 @@ app.use(express.json());
 app.use("/variants", variantRouter);
 app.use("/diseases", diseaseRouter);
 app.use("/genes", geneRouter);
+app.use("/gwasLD", gwasLDRouter);
 
 
 
@@ -49,6 +52,11 @@ mongoose
 
         // Ensure indexes are created
         return Api_category.init();
+    })
+    .then(() => {
+
+        // Ensure indexes are created
+        return GwasLD.init();
     })
     .then(() => {
         console.log("Indexes ensured");

@@ -1,0 +1,57 @@
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.items-per-page-options-container > select{
+    padding: 10px;
+    border: 1px #ddd solid;
+    border-radius: 5px;
+}
+
+#disease-rsid-td,
+#disease-variantId-td,
+#disease-studyId-td {
+    text-align: left;
+}
+
+.disease-row-tbody :hover {
+    background-color: rgb(105, 134, 184);
+    color: white;
+}
+
+
+
+.cutoff-select-and-button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+#cutoff-select,
+#cutoff-search-button {
+    border-radius: 3px;
+}
+
+#cutoff-search-button {
+    background: #007bff;
+    border: none;
+    padding: 2px 0px;
+    color: white;
+}
+
+#cutoff-search-button:hover {
+    background: #007bff;
+    border: 1px white solid;
+}
+
+#cutoff-select:hover {
+    background: white;
+    color: black;
+}
+
+
+
+
+
