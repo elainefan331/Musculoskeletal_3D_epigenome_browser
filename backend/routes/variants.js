@@ -91,15 +91,13 @@ router.get('/autocomplete', async (req, res) => {
     console.log(`Received query: ${query}`);
     try {
         const regex = new RegExp(query, 'i'); // 'i' for case-insensitive
-        // const results = await VariantModel.find({
-        //     $or: [
-        //         { variantID: regex },
-        //         { RSID: regex }
-        //     ]
-        // }).limit(10);
+        // const results = await Api_category.find({
+        //     name: regex
+        // }).limit(5)
         const results = await Api_category.find({
-            name: regex
-        }).limit(10)
+            $text: { $search: `"${query}"` }
+        }).limit(5);
+       
 
         console.log(`Search results for "${query}":`, results);
         return res.status(200).json(results);
