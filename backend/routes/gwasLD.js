@@ -85,13 +85,16 @@ const IgvRangeCalculator = (variants) => {
     const resultObj = {}
 
     for(let variant of variants) {
-        const varriantStart = parseInt(variant._doc.regulatoryBin.split(":")[1]);
-        const variantEnd = parseInt(variant._doc.regulatoryBin.split(":")[2]);
-        // console.log("start", varriantStart);
-        // console.log("end", variantEnd);
-        if (!isNaN(varriantStart) && !isNaN(variantEnd)) {
-            start = Math.min(start, varriantStart);
-            end = Math.max(end, variantEnd);
+        let promoterBins = variant._doc.promoterBinArray;
+        if (promoterBins.length > 0) {
+            for (let promoterBin of promoterBins) {
+                const binStart = parseInt(promoterBin.split(":")[1]);
+                const binEnd = parseInt(promoterBin.split(":")[2]);
+    
+                start = Math.min(start, binStart);
+                end = Math.max(end, binEnd);
+            }
+
         }
     }
 
@@ -107,7 +110,6 @@ const IgvRangeCalculator = (variants) => {
 const generateLDFile = (variants, filePath) => {
     const LDdataArray = variants.flatMap(variant => {
         const variantObj = variant._doc;
-        // console.log("variantObj", variantObj)
         const variantIdArr = variantObj.Variant.split(":")
         const chr = `chr${variantIdArr[0]}`
         const position = variantIdArr[1];
@@ -205,7 +207,7 @@ router.get('/:variantId', async(req, res) => {
         if(variants.length > 0) {
             const publicFolderPath = path.resolve(__dirname,"../../frontend/public/igv/temp");
             const LDfilePath = path.join(publicFolderPath, `${variantId}_LD.bed`);
-            const bedpeFilePath = path.join(publicFolderPath, `${variantId}_${celltype}.bedpe.txt`)
+            const bedpeFilePath = path.join(publicFolderPath, `IndexSNP_${variantId}_${celltype}.bedpe.txt`)
             generateLDFile(variants, LDfilePath);
             if (promoterExist) {
                 generateBedpeFile(variants, bedpeFilePath);

@@ -50,3 +50,7 @@
 .no-results-message {
     color: rgb(34, 78, 115);
 }
+
+.narrow-column {
+    width: 100px;
+  }

@@ -14,7 +14,7 @@ const IgvDiseaseWithPromoter = ({IndexSNP, celltype, range, diseasePosition}) =>
     let genecode_index_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi"
     let rnaseq_url = `/igv/bigwig/${celltype}/${celltype}_rep1PE_stranded_genome_plusAll.bw`;
     // for promoter exist
-    let locus_hic_url = `/igv/temp/${IndexSNP}_${celltype}.bedpe.txt`
+    let locus_hic_url = `/igv/temp/IndexSNP_${IndexSNP}_${celltype}.bedpe.txt`
 
     let atac_url;
     let dnase_url;
