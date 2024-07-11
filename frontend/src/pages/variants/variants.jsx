@@ -108,7 +108,17 @@ const Variants = () => {
                                             <tbody>
                                                 <tr>
                                                     <td>{regulatorybin === ""? "NA":`chr${regulatorybin}`}</td>
-                                                    <td>{promoterbin ===""? "NA":`chr${promoterbin}`}</td>
+                                                    <td>{
+                                                            promoterbin ===""? "NA": (
+                                                                <div>
+                                                                    {promoterbin.split(',').map((bin, index) => (
+                                                                        <div key={index}>{`chr${bin}`}</div>
+                                                                    ))}
+                                                                </div>
+                                                            )
+                                                        // `chr${promoterbin}`}
+                                                        }
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
