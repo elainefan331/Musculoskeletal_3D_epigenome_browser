@@ -6,10 +6,11 @@ const Autocomplete = ({ query, onSelect }) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (!query) {
+        if (!query || query.length < 4) {
             setSuggestions([]);
             return;
         }
+        
 
         const fetchSuggestions = async () => {
             setLoading(true);

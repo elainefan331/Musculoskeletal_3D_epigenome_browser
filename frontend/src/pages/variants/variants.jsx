@@ -51,7 +51,7 @@ const Variants = () => {
     return (
         <div className="variant-page-container">
             <h1>SNP search results</h1>
-            {variantdata === null && <h1 className="no-results-message">{`Woops! No results found for ${Id}`}</h1>}
+            {variantdata === null && <h1 className="no-results-message">{`No results found for ${Id}`}</h1>}
             {variantdata === null? null : (
             <div className="table-wrapper">
                 <h3>{Id} in {celltype} cell-type</h3>
@@ -179,6 +179,23 @@ const Variants = () => {
                 </div>
             )}
             
+            {showallele ? (
+                promoterdata.length === 0 ? (
+                    <div className="gap">
+                        <div>
+                            <IgvVariant variant={showallele} celltype={celltype}/>
+                        </div>
+                        <p>{`* use search icon to re-load the IGV again`}</p>
+                    </div>
+                ):(
+                    <div className="gap">
+                        <div>
+                            <IgvVariantWithPromoter variant={showallele} celltype={celltype} promoter={promoterdata} regulatoryBin={regulatorybin} promoterBin={promoterbin}/>
+                        </div>
+                    </div>
+                )
+            ) : null }
+
             {promoterdata && promoterdata.length > 0 && (
             <div className="table-wrapper">
                 <h3>{Id}'s Hi-C interactions in {celltype} cell-type</h3>
@@ -223,22 +240,7 @@ const Variants = () => {
             </div>
             )} 
             
-            {showallele ? (
-                promoterdata.length === 0 ? (
-                    <div className="gap">
-                        <div>
-                            <IgvVariant variant={showallele} celltype={celltype}/>
-                        </div>
-                        <p>{`* use search icon to re-load the IGV again`}</p>
-                    </div>
-                ):(
-                    <div className="gap">
-                        <div>
-                            <IgvVariantWithPromoter variant={showallele} celltype={celltype} promoter={promoterdata} regulatoryBin={regulatorybin} promoterBin={promoterbin}/>
-                        </div>
-                    </div>
-                )
-            ) : null }
+            
             
         </div>
         

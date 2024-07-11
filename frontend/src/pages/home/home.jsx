@@ -20,12 +20,20 @@ const Home = () => {
             console.log("celltype", celltype)
             setPrompt("");
             let ui_url;
-            if (category === "variant") {
-                ui_url = `/variants/${text}?celltype=${celltype}`
-            } else if (category === "disease") {
+            // if (category === "variant") {
+            //     ui_url = `/variants/${text}?celltype=${celltype}`
+            // } else if (category === "disease") {
+            //     ui_url = `/diseases/${text}?celltype=${celltype}`
+            // } else if (category === "gene") {
+            //     ui_url = `/genes/${text}?celltype=${celltype}`
+            // }
+            if (category === "disease") {
                 ui_url = `/diseases/${text}?celltype=${celltype}`
             } else if (category === "gene") {
                 ui_url = `/genes/${text}?celltype=${celltype}`
+            } else if (category === ""){
+                setCategory("variant")
+                ui_url = `/variants/${text}?celltype=${celltype}`
             }
             navigate(ui_url);
         }
@@ -48,7 +56,7 @@ const Home = () => {
                 <div>
                 <div className='home-page-search-container'>
                     <input className='search-input'
-                        placeholder='Search by rsID, Gene or Disease trait'
+                        placeholder='Search by Variant, RSID, Gene or Disease'
                         type="text"
                         value={text}
                         onChange={(e) => setText(e.target.value)}

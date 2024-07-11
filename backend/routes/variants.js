@@ -83,21 +83,41 @@ const generateBedpeFile = (promoter, filePath) => {
 }
 
 router.get('/autocomplete', async (req, res) => {
-    const { query } = req.query;
+    let { query } = req.query;
 
     if (!query) {
         return res.status(400).send("Query parameter is required");
     }
     console.log(`Received query: ${query}`);
+    
+   
     try {
-        const regex = new RegExp(query, 'i'); // 'i' for case-insensitive
+        // const regex = new RegExp(query, 'i'); // 'i' for case-insensitive
         // const results = await Api_category.find({
         //     name: regex
         // }).limit(5)
+
+        // let results;
+        // if (regex !== "") {
+        //     results = await Api_category.find({
+        //         name: regex
+        //     }).limit(5).lean().exec();
+        // } else {
+        //     results = await Api_category.find({
+        //         $text: { $search: `"${query}"` }
+        //     }).limit(5);
+        // }
+
+        // original find method
         const results = await Api_category.find({
-            $text: { $search: `"${query}"` }
-        }).limit(5);
+            $text: { $search: query }
+        }, {
+            score: { $meta: "textScore" }
+        }).sort({
+            score: { $meta: "textScore" }
+        }).limit(5).lean().exec()
        
+        
 
         console.log(`Search results for "${query}":`, results);
         return res.status(200).json(results);
