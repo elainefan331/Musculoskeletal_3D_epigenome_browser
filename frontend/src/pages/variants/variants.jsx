@@ -60,6 +60,7 @@ const Variants = () => {
                                 <tr>
                                     {variantdata && variantdata.length > 1 && <th>Select to show Allele Frequency / Igv</th>}
                                     {/* <th>Select to show Allele Frequency / Igv</th> */}
+                                    <th>RSID</th>
                                     <th>VariantID</th>
                                     <th>Region</th>
                                     <th>Gene</th>
@@ -76,6 +77,7 @@ const Variants = () => {
                                 <tr>
                                     {variantdata && variantdata.length > 1 && <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td>}
                                     {/* <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td> */}
+                                    <td>{variant.RSID}</td>
                                     <td>{`Chr${variant.Chr}:${variant.Start}:${variant.Ref}:`}<span style={{color: 'red'}}>{variant.Alt}</span></td>
                                     <td>{variant.Region_Ensembl}</td>
                                     <td>{variant.GeneName_ID_Ensembl}</td>
