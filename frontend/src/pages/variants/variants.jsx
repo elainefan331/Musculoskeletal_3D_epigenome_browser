@@ -60,13 +60,13 @@ const Variants = () => {
                                 <tr>
                                     {variantdata && variantdata.length > 1 && <th>Select to show Allele Frequency / Igv</th>}
                                     {/* <th>Select to show Allele Frequency / Igv</th> */}
-                                    <th>RSID</th>
+                                    <th className="narrow-column">RSID</th>
                                     <th>VariantID</th>
-                                    <th>Region</th>
-                                    <th>Gene</th>
+                                    <th className="narrow-column">Region</th>
+                                    <th className="narrow-column">Gene</th>
                                     <th>Distance with gene</th>
                                     <th>Promoter-like</th>
-                                    <th>Chromhmm</th>
+                                    <th className="narrow-column">Chromhmm</th>
                                     <th>Open Chromatin</th>
                                     <th>Hi-C Chromatin Interaction</th>
                                 </tr>
@@ -77,13 +77,13 @@ const Variants = () => {
                                 <tr>
                                     {variantdata && variantdata.length > 1 && <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td>}
                                     {/* <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td> */}
-                                    <td>{variant.RSID}</td>
+                                    <td className="narrow-column">{variant.RSID}</td>
                                     <td>{`Chr${variant.Chr}:${variant.Start}:${variant.Ref}:`}<span style={{color: 'red'}}>{variant.Alt}</span></td>
-                                    <td>{variant.Region_Ensembl}</td>
-                                    <td>{variant.GeneName_ID_Ensembl}</td>
+                                    <td className="narrow-column">{variant.Region_Ensembl}</td>
+                                    <td className="narrow-column">{variant.GeneName_ID_Ensembl}</td>
                                     <td>{variant.GeneInfo_DistNG_Ensembl}</td>
                                     <td>{variant.Promoter_like_region}</td>
-                                    <td>
+                                    <td className="narrow-column">
                                         {celltype === "hMSC" 
                                         ? variant.chromHMM_hMSC 
                                         : celltype === "Osteoblast"
