@@ -122,7 +122,11 @@ const Diseases = () => {
                                                     </div> 
                                                 }
                                             </td>
-                                            <td id="disease-rsid-td">{disease.RSID}</td>
+                                            <td id="disease-rsid-td">
+                                                <a href={`http://www.ncbi.nlm.nih.gov/snp/${disease.RSID}`} target="_blank">
+                                                    {disease.RSID}
+                                                </a>
+                                            </td>
                                             <td id="disease-variantId-td">{`${disease["#Chr"]}-${disease.Start}-${disease.Ref}-${disease.Alt}`}</td>
                                             <td>{disease.Risk_allele}</td>
                                             <td>{disease.Risk_allele_AF}</td>
