@@ -48,14 +48,18 @@ const Home = () => {
                 searchText = suggestion.name;
                 console.log(searchText)
             } else {
-                let textLower = text.toLowerCase()
-                let regex = /^(1[0-9]|2[0-4]|[1-9])-.+/;
-                if (textLower.startsWith("rs") || regex.test(textLower)) {
-                    selectedCategory = "variant";  // Default to "variant"
-                } else {
-                    setInputPrompt("Please refer to the correct format for searching")
-                    return
-                }
+                selectedCategory = "variant";  // Default to "variant"
+                // let textLower = text.toLowerCase().trim()
+                // // let regex = /^(1[0-9]|2[0-4]|[1-9])-.+/;
+                // let regex = /^[0-9]+-.+/;
+                // console.log("Testing regex against:", textLower);  // Debug statement
+                // console.log("Regex result:", regex.test(textLower));  // Debug statement
+                // if (textLower.startsWith("rs") || regex.test(textLower)) {
+                //     selectedCategory = "variant";  // Default to "variant"
+                // } else {
+                //     setInputPrompt("Please refer to the correct format for searching")
+                //     return
+                // }
             }
             }
                         

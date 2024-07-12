@@ -77,7 +77,11 @@ const Variants = () => {
                                 <tr>
                                     {variantdata && variantdata.length > 1 && <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td>}
                                     {/* <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td> */}
-                                    <td className="narrow-column">{variant.RSID}</td>
+                                    <td className="narrow-column">
+                                        <a href={`http://www.ncbi.nlm.nih.gov/snp/${variant.RSID}/`} target="_blank">
+                                            {variant.RSID}
+                                        </a>
+                                    </td>
                                     <td>{`Chr${variant.Chr}:${variant.Start}:${variant.Ref}:`}<span style={{color: 'red'}}>{variant.Alt}</span></td>
                                     <td className="narrow-column">{variant.Region_Ensembl}</td>
                                     <td className="narrow-column">{variant.GeneName_ID_Ensembl}</td>
