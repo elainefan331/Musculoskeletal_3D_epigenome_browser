@@ -53,4 +53,8 @@
 
 .narrow-column {
     width: 100px;
-  }
+}
+
+.narrow-column > a {
+    color: #007bff;
+}
