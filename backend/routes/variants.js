@@ -115,7 +115,7 @@ router.get('/autocomplete', async (req, res) => {
             score: { $meta: "textScore" }
         }).sort({
             score: { $meta: "textScore" }
-        }).limit(5).lean().exec()
+        }).limit(10).lean().exec()
        
         
 

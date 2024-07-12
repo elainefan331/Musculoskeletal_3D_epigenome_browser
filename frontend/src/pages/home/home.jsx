@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Autocomplete from '../autocomplete';
 import "./home.css"
@@ -9,18 +9,28 @@ const Home = () => {
     const [text, setText] = useState("");
     const [category, setCategory] = useState("");
     const [celltype, setCelltype] = useState("");
-    const [prompt, setPrompt] = useState("");
+    const [cellTypePrompt, setCellTypePrompt] = useState("");
+    const [inputPrompt, setInputPrompt] = useState("");
     // check if the suggestions has the same result with user input
     const [suggestions, setSuggestions] = useState([]);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (celltype !== "") {
+            setCellTypePrompt("")
+        }
+        setInputPrompt("")
+    }, [celltype, text])
+
     const search = () => {
         if(celltype === "") {
-            setPrompt("Please select a cell type")
+            // setPrompt("Please select a cell type");
+            setCellTypePrompt("Please select a cell type")
+            return
         } else {
             console.log("category", category)
             console.log("celltype", celltype)
-            setPrompt("");
+            // setPrompt("");
             // if (category === "variant") {
                 //     ui_url = `/variants/${text}?celltype=${celltype}`
                 // } else if (category === "disease") {
@@ -35,10 +45,17 @@ const Home = () => {
             const suggestion = suggestions.find(suggestion => suggestion.name.toLowerCase() === text.toLowerCase());
             if (suggestion) {
                 selectedCategory = suggestion.category;
-                searchText = suggestion.name
+                searchText = suggestion.name;
                 console.log(searchText)
             } else {
-                selectedCategory = "variant";  // Default to "variant"
+                let textLower = text.toLowerCase()
+                let regex = /^(1[0-9]|2[0-4]|[1-9])-.+/;
+                if (textLower.startsWith("rs") || regex.test(textLower)) {
+                    selectedCategory = "variant";  // Default to "variant"
+                } else {
+                    setInputPrompt("Please refer to the correct format for searching")
+                    return
+                }
             }
             }
                         
@@ -71,7 +88,7 @@ const Home = () => {
     
 
     return (
-        <div>
+        <div className='home-page-container'>
             <section className='home-page-section'>
                 <h1 className='home-page-h1'>Musculoskeletal 3D Epigenome Browser</h1>
                 <div>
@@ -98,7 +115,8 @@ const Home = () => {
                         Search
                     </button>
                 </div>
-                {prompt && <div className='prompt-message'>{prompt}</div>}
+                {cellTypePrompt && <div className='prompt-message'>{cellTypePrompt}</div>}
+                {inputPrompt && <div className='prompt-message'>{inputPrompt}</div>}
                 <Autocomplete query={text} onSelect={handleSelect} setParentSuggestions={setSuggestions}/>
                 </div>
             </section>

@@ -6,7 +6,7 @@ const Autocomplete = ({ query, onSelect, setParentSuggestions }) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (!query || query.length < 4) {
+        if (!query) { // || query.length < 3
             setSuggestions([]);
             setParentSuggestions([]);  // Update parent state
             return;
@@ -22,9 +22,9 @@ const Autocomplete = ({ query, onSelect, setParentSuggestions }) => {
                 setSuggestions(data);
                 setParentSuggestions(data);  // Update parent state
 
-                if (data.length === 1) {
-                    onSelect(data[0].name, data[0].category)
-                }
+                // if (data.length === 1) {
+                //     onSelect(data[0].name, data[0].category)
+                // }
             } catch (error) {
                 console.error(error);
             } finally {
