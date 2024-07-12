@@ -110,7 +110,7 @@ router.get('/autocomplete', async (req, res) => {
 
         // original find method
         const results = await Api_category.find({
-            $text: { $search: query }
+            $text: { $search: `"${query}"` }
         }, {
             score: { $meta: "textScore" }
         }).sort({

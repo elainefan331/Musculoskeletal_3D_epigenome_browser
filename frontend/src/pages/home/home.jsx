@@ -10,6 +10,8 @@ const Home = () => {
     const [category, setCategory] = useState("");
     const [celltype, setCelltype] = useState("");
     const [prompt, setPrompt] = useState("");
+    // check if the suggestions has the same result with user input
+    const [suggestions, setSuggestions] = useState([]);
     const navigate = useNavigate();
 
     const search = () => {
@@ -19,21 +21,43 @@ const Home = () => {
             console.log("category", category)
             console.log("celltype", celltype)
             setPrompt("");
-            let ui_url;
             // if (category === "variant") {
-            //     ui_url = `/variants/${text}?celltype=${celltype}`
-            // } else if (category === "disease") {
+                //     ui_url = `/variants/${text}?celltype=${celltype}`
+                // } else if (category === "disease") {
+                    //     ui_url = `/diseases/${text}?celltype=${celltype}`
+                    // } else if (category === "gene") {
+                        //     ui_url = `/genes/${text}?celltype=${celltype}`
+                        // }
+            let selectedCategory = category;
+            let searchText = text;
+            if (category === "") {
+            // Try to find the category based on suggestions
+            const suggestion = suggestions.find(suggestion => suggestion.name.toLowerCase() === text.toLowerCase());
+            if (suggestion) {
+                selectedCategory = suggestion.category;
+                searchText = suggestion.name
+                console.log(searchText)
+            } else {
+                selectedCategory = "variant";  // Default to "variant"
+            }
+            }
+                        
+            // let ui_url;
+            // if (category === "disease") {
             //     ui_url = `/diseases/${text}?celltype=${celltype}`
             // } else if (category === "gene") {
             //     ui_url = `/genes/${text}?celltype=${celltype}`
+            // } else if (category === ""){
+            //     // setCategory("variant")
+            //     ui_url = `/variants/${text}?celltype=${celltype}`
             // }
-            if (category === "disease") {
-                ui_url = `/diseases/${text}?celltype=${celltype}`
-            } else if (category === "gene") {
-                ui_url = `/genes/${text}?celltype=${celltype}`
-            } else if (category === ""){
-                setCategory("variant")
-                ui_url = `/variants/${text}?celltype=${celltype}`
+            let ui_url;
+            if (selectedCategory === "disease") {
+                ui_url = `/diseases/${searchText}?celltype=${celltype}`;
+            } else if (selectedCategory === "gene") {
+                ui_url = `/genes/${searchText}?celltype=${celltype}`;
+            } else {
+                ui_url = `/variants/${searchText}?celltype=${celltype}`;
             }
             navigate(ui_url);
         }
@@ -75,7 +99,7 @@ const Home = () => {
                     </button>
                 </div>
                 {prompt && <div className='prompt-message'>{prompt}</div>}
-                <Autocomplete query={text} onSelect={handleSelect}/>
+                <Autocomplete query={text} onSelect={handleSelect} setParentSuggestions={setSuggestions}/>
                 </div>
             </section>
         </div>

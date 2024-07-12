@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import "./autocomplete.css"
 
-const Autocomplete = ({ query, onSelect }) => {
+const Autocomplete = ({ query, onSelect, setParentSuggestions }) => {
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (!query || query.length < 4) {
             setSuggestions([]);
+            setParentSuggestions([]);  // Update parent state
             return;
         }
         
@@ -19,6 +20,7 @@ const Autocomplete = ({ query, onSelect }) => {
                 const data = await res.json();
                 console.log(data)
                 setSuggestions(data);
+                setParentSuggestions(data);  // Update parent state
 
                 if (data.length === 1) {
                     onSelect(data[0].name, data[0].category)

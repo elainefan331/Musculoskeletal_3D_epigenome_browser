@@ -50,7 +50,7 @@ const Variants = () => {
 
     return (
         <div className="variant-page-container">
-            <h1>SNP search results</h1>
+            <h1>Variant search results - GRCh38</h1>
             {variantdata === null && <h1 className="no-results-message">{`No results found for ${Id}`}</h1>}
             {variantdata === null? null : (
             <div className="table-wrapper">
