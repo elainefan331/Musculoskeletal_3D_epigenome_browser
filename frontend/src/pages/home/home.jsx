@@ -123,6 +123,14 @@ const Home = () => {
                 {inputPrompt && <div className='prompt-message'>{inputPrompt}</div>}
                 <Autocomplete query={text} onSelect={handleSelect} setParentSuggestions={setSuggestions}/>
                 </div>
+                <div className='home-examples-container'>
+                    <h3>Examples</h3>
+                    <p>Variant: 7-121337680-G-A</p>
+                    <p>Gene: SUN1</p>
+                    <p>RSID: rs534962220</p>
+                    <p>Disease: Bone mineral density</p>
+
+                </div>
             </section>
         </div>
     )
