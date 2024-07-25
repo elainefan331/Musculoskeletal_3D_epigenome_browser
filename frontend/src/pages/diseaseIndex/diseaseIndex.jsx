@@ -62,7 +62,7 @@ const DiseaseIndex = () => {
 
     return (
         <div>
-            <p>disease index page</p>
+            <p>{`${Id}'s LD SNPs`}</p>
             {errormessage && <h2>{errormessage}</h2>}
             <div className="table-wrapper">
                 <table className="table">

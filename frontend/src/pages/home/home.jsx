@@ -99,6 +99,7 @@ const Home = () => {
                     <img className='dna-img' src='/dna_whitesmoke_background.png' />
                 </div>
                 <div>
+                <div className='home-search-example-container'>
                 <div className='home-page-search-container'>
                     <input className='search-input'
                         placeholder='Search by Variant, RSID, Gene or Disease'
@@ -122,6 +123,15 @@ const Home = () => {
                 {cellTypePrompt && <div className='prompt-message'>{cellTypePrompt}</div>}
                 {inputPrompt && <div className='prompt-message'>{inputPrompt}</div>}
                 <Autocomplete query={text} onSelect={handleSelect} setParentSuggestions={setSuggestions}/>
+                </div>
+                <div className='home-examples-container'>
+                    <h3>Examples</h3>
+                    <p>Variant: 7-121337680-G-A</p>
+                    <p>RSID: rs534962220</p>
+                    <p>Gene: SUN1</p>
+                    <p>Disease: Bone mineral density</p>
+
+                </div>
                 </div>
             </section>
         </div>
