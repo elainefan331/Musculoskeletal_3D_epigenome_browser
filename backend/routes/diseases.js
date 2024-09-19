@@ -8,8 +8,8 @@ router.get('/:id', async(req, res) => {
     const id = req.params.id;
     const { celltype } = req.query;
     
-    console.log("id", id)
-    console.log("celltype", celltype)
+    // console.log("id", id)
+    // console.log("celltype", celltype)
     
     try {
         const disease = await Disease2variant.find({Disease_trait: id}).sort({'P-value': 1})
