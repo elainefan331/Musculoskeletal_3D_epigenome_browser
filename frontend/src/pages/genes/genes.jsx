@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import "./genes.css";
 
 const Genes = () => {
     const { Id } = useParams();
@@ -30,17 +31,43 @@ const Genes = () => {
         fetchData();
     }, [Id, celltype])
 
+    if (!genedata) {
+        return <div>Loading gene data...</div>;
+    }
+
     return (
         <div>
             <h1>Gene Search</h1>
             <div className="gene_card">
                 <h2>{`Gene Name: ${genedata["Gene_Name"]}`}</h2>
-                <a href={`http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=${genedata.ID}`} target="_blank">{`Ensembl ID: ${genedata.ID}`}</a>
-                <p>{`Gene Type: ${genedata["Gene_Type"]}`}</p>
-                <p>{`Region(GRCh38/hg38): Chr${genedata.Chr}-${genedata.Start}-${genedata.End}`}</p>
-                <p>{genedata.Strand === "+" ? `Orientation: Plus strand` : `Orientation: Minus strand`}</p>
-                <p>{`Size: ${genedata.Len}`}</p>
-                <a href={`https://www.genecards.org/cgi-bin/carddisp.pl?gene=${genedata["Gene_Name"]}`} target="_blank">{`GeneCards: ${genedata["Gene_Name"]}`}</a>
+                <div className="gene_info">
+                    <div className="gene_info_row">
+                        <strong className="gene_info_title">Ensembl ID:</strong>
+                        <span>
+                            <a className="gene_external_link" href={`http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=${genedata.ID}`} target="_blank">{genedata.ID}</a>
+                        </span>
+                    </div>
+                    <div className="gene_info_row">
+                        <strong className="gene_info_title">Gene Type:</strong>
+                        <span>{genedata["Gene_Type"]}</span>
+                    </div>
+                    <div className="gene_info_row">
+                        <strong className="gene_info_title">Region(GRCh38/hg38):</strong>
+                        <span>{`Chr${genedata.Chr}:${genedata.Start}-${genedata.End}`}</span>
+                    </div>
+                    <div className="gene_info_row">
+                        <strong className="gene_info_title">Orientation:</strong>
+                        <span>{genedata.Strand === "+" ? `Plus strand` : `Minus strand`}</span>
+                    </div>
+                    <div className="gene_info_row">
+                        <strong className="gene_info_title">Size:</strong>
+                        <span>{genedata.Len}</span>
+                    </div>
+                    <div className="gene_info_row">
+                        <strong className="gene_info_title">GeneCards:</strong>
+                        <a className="gene_external_link" href={`https://www.genecards.org/cgi-bin/carddisp.pl?gene=${genedata["Gene_Name"]}`} target="_blank">{genedata["Gene_Name"]}</a>
+                    </div>
+                </div>
             </div>
         </div>
     )

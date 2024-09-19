@@ -1,0 +1,26 @@
+.gene_card {
+    border-bottom: 1px solid rgb(184, 182, 182);
+    padding: 10px;
+    width: 50%;
+}
+
+.gene_card > h2 {
+    color: rgb(34, 78, 115);
+}
+
+.gene_info_row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 0px;
+    padding: 5px 0px;
+}
+
+.gene_info_title {
+    color: rgb(68, 68, 68);
+}
+
+.gene_external_link {
+    text-decoration: none;
+    color: #007bff;
+
+}
