@@ -12,7 +12,7 @@ const IgvRangeCalculator = async(celltype, gene) => {
     let end = -Infinity
     let genes = null
     const resultObj = {}
-    // console.log("gene in calculator", gene)
+    
     if (celltype === "hMSC") {
         // gene is an array with single element
         genes = await Promoter_hMSC.find({Gene: `${gene[0]["Gene_Name"]}`})
@@ -22,7 +22,6 @@ const IgvRangeCalculator = async(celltype, gene) => {
         genes = await Promoter_OC.find({Gene: `${gene[0]["Gene_Name"]}`})
     }
 
-    // console.log("genes in calculator after define celltype", genes)
 
     for (let gene of genes) {
         let HicBinStart = parseInt(gene._doc.HiC_Promoter_bin.split(":")[1])
@@ -34,9 +33,9 @@ const IgvRangeCalculator = async(celltype, gene) => {
         end = Math.max(end, HicBinEnd, distalBinEnd)
     }
 
-    resultObj["Start"] = start - 10000;
-    resultObj["End"] = end + 10000;
-    console.log("resultObj", resultObj)
+    resultObj["locusStart"] = start - 10000;
+    resultObj["locusEnd"] = end + 10000;
+    // console.log("resultObj", resultObj)
     
     return resultObj
 }
@@ -54,9 +53,9 @@ router.get('/:id', async(req, res) => {
     
     try {
         const gene = await geneModel.find({Gene_Name: id})
-        let range = IgvRangeCalculator(celltype, gene)
+        let Igvrange = await IgvRangeCalculator(celltype, gene)
         if(gene.length > 0) {
-            return res.status(200).json(gene)
+            return res.status(200).json({gene: gene, Igvrange: Igvrange})
         } else {
             return res.status(404).send("Gene not found")
         }

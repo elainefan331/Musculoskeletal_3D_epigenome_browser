@@ -22,8 +22,8 @@ const Genes = () => {
             })
             if(res.ok) {
                 const result = await res.json();
-                console.log("result", result[0])
-                setGenedata(result[0])
+                console.log("result", result)
+                setGenedata(result.gene[0])
             } else {
                 console.log(res.status)
             }
