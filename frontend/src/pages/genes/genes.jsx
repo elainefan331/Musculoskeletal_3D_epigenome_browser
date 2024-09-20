@@ -39,7 +39,7 @@ const Genes = () => {
         <div>
             <h1>Gene Search</h1>
             <div className="gene_card">
-                <h2>{`Gene Name: ${genedata["Gene_Name"]}`}</h2>
+                <h2>{genedata["Gene_Name"]}</h2>
                 <div className="gene_info">
                     <div className="gene_info_row">
                         <strong className="gene_info_title">Ensembl ID:</strong>
