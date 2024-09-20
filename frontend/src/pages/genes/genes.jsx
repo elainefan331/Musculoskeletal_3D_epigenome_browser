@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import IgvGene from "../../components/IgvGene";
 import "./genes.css";
 
 const Genes = () => {
@@ -7,7 +8,8 @@ const Genes = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search)
     const celltype = queryParams.get('celltype');
-    const [genedata, setGenedata] = useState(null)
+    const [genedata, setGenedata] = useState(null);
+    const [Igvrange, setIgvrange] = useState(null);
 
     useEffect(() => {
         async function fetchData() {
@@ -22,8 +24,9 @@ const Genes = () => {
             })
             if(res.ok) {
                 const result = await res.json();
-                console.log("result", result)
+                console.log("result in genes.jsx", result)
                 setGenedata(result.gene[0])
+                setIgvrange(result.Igvrange)
             } else {
                 console.log(res.status)
             }
@@ -36,6 +39,7 @@ const Genes = () => {
     }
 
     return (
+        <div>
         <div>
             <h1>Gene Search</h1>
             <div className="gene_card">
@@ -69,6 +73,13 @@ const Genes = () => {
                     </div>
                 </div>
             </div>
+        </div>
+
+        {genedata && celltype && Igvrange? (
+            <div>
+                <IgvGene gene = {genedata} celltype = {celltype} Igvrange = {Igvrange}/>
+            </div>
+        ) : null}
         </div>
     )
 }
