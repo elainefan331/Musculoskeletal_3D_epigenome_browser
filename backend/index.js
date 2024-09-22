@@ -9,6 +9,7 @@ import cors from "cors";
 import Api_category from "./models/api_category.js";
 import GwasLD from "./models/gwasLD.js";
 import VariantModel from "./models/variant.js";
+import geneModel from "./models/gene.js";
 // import path from "path"
 
 const app = express();
@@ -63,6 +64,11 @@ mongoose
 
         // Ensure indexes are created
         return GwasLD.init();
+    })
+    .then(() => {
+
+        // Ensure indexes are created
+        return geneModel.init();
     })
     .then(() => {
         console.log("Indexes ensured");
