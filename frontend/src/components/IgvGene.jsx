@@ -7,6 +7,9 @@ const IgvGene = ({gene, celltype, Igvrange}) => {
     const igvBrowser = useRef(null);
     const locus = `chr${gene.Chr}:${Igvrange.locusStart}-${Igvrange.locusEnd}`
 
+    let locus_hic_url = `/igv/temp/IndexSNP_${IndexSNP}_${celltype}.bedpe.txt`
+    let genecode_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz"
+    let genecode_index_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi"
     let atac_url;
     let dnase_url;
     let chromHMM_url;
@@ -55,6 +58,47 @@ const IgvGene = ({gene, celltype, Igvrange}) => {
             locus: locus,
             tracks:[
                 {
+                    type: "interaction",
+                    format: "bedpe",
+                    name: "Significant Hi-C",
+                    arcType: "nested",
+                    useScore: true,
+                    color: "blue",
+                    logScale: true,
+                    showBlocks: true,
+                    height: 150,
+                    url: locus_hic_url,
+                },
+                {
+                    type: "annotation",
+                    format: "gff3",
+                    // format: "gtf",
+                    url: genecode_url,
+                    indexURL: genecode_index_url,
+                    displayMode: "EXPANDED",
+                    name: "Gencode v35 (gtf)",
+                    visibilityWindow: 10000000,
+                    height: 150,
+                    color: (feature) => {
+                        switch (feature.getAttributeValue("biotype")) {
+                            case "antisense":
+                                return "blueviolet"
+                            case "protein_coding":
+                                return "blue"
+                            case "retained_intron":
+                                return "rgb(0, 150, 150)"
+                            case "processed_transcript":
+                                return "purple"
+                            case "processed_pseudogene":
+                                return "#7fff00"
+                            case "unprocessed_pseudogene":
+                                return "#d2691e"
+                            default:
+                                return "black"
+                        }
+                    }
+                },
+                {
                     type: "wig",
                     format: "bigwig",
                     url: atac_url,
@@ -99,8 +143,15 @@ const IgvGene = ({gene, celltype, Igvrange}) => {
                     height: 50,
                     name: H3k4me3_name,
                     color: "rgb(252, 74, 3)",
+                },
+                {
+                    type: "annotation",
+                    format: "bb",
+                    url: '/igv/encodeCcreCombined.bb',
+                    height: 50,
+                    name: "ENCODE-cCRE",
+                    displayMode: "EXPANDED",
                 }
-
             ],
             log: true
         };

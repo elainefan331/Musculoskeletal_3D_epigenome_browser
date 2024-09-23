@@ -3,7 +3,11 @@ import geneModel from "../models/gene.js";
 import Promoter_hMSC from "../models/promoter_hMSC.js";
 import Promoter_OB from "../models/promoter_OB.js";
 import Promoter_OC from "../models/promoter_OC.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
 
+const router = express.Router();
 // helper function
 
 // calculate the Igv locus range
@@ -40,7 +44,6 @@ const IgvRangeCalculator = async(celltype, gene) => {
     return resultObj
 }
 
-const router = express.Router();
 
 router.get('/:id', async(req, res) => {
     const id = req.params.id;
