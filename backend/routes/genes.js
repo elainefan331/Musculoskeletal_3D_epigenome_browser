@@ -7,7 +7,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const router = express.Router();
+
 // helper function
 
 // calculate the Igv locus range
@@ -26,6 +30,9 @@ const IgvRangeCalculator = async(celltype, gene) => {
         genes = await Promoter_OC.find({Gene: `${gene[0]["Gene_Name"]}`})
     }
 
+    const publicFolderPath = path.resolve(__dirname,"../../frontend/public/igv/temp"); 
+    const bedpeFilePath = path.join(publicFolderPath, `${gene[0]["Gene_Name"]}_${celltype}.bedpe.txt`);
+    generateBedpeFile(genes, bedpeFilePath);
 
     for (let gene of genes) {
         let HicBinStart = parseInt(gene._doc.HiC_Promoter_bin.split(":")[1])
@@ -42,6 +49,36 @@ const IgvRangeCalculator = async(celltype, gene) => {
     // console.log("resultObj", resultObj)
     
     return resultObj
+}
+
+// generate bedpe file
+const generateBedpeFile = (genes, filePath) => {
+    // console.log("in generate bedpe file")
+    const bedpeDataArray = genes.flatMap(gene => {
+        const geneDoc = gene._doc;
+        const HicBinArray = geneDoc.HiC_Promoter_bin.split(":")
+        const distalBinArray = geneDoc.HiC_Distal_bin.split(":")
+        const chr = `chr${HicBinArray[0]}`;
+        
+        return {
+            chr1: chr,
+            start1: distalBinArray[1],
+            end1: distalBinArray[2],
+            chr2: chr,
+            start2: HicBinArray[1],
+            end2: HicBinArray[2],
+            long: 10
+        }
+    });
+
+    const bedpeString = bedpeDataArray.map(item => `${item.chr1}\t${item.start1}\t${item.end1}\t${item.chr2}\t${item.start2}\t${item.end2}\t${item.long}`).join('\n');
+    
+    fs.writeFileSync(filePath, bedpeString, (err) => {
+        if (err) throw err;
+    });
+
+    console.log(`BEDPE file has been generated and saved to ${filePath}.`);
+
 }
 
 

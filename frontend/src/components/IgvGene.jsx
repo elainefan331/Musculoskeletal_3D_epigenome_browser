@@ -7,7 +7,7 @@ const IgvGene = ({gene, celltype, Igvrange}) => {
     const igvBrowser = useRef(null);
     const locus = `chr${gene.Chr}:${Igvrange.locusStart}-${Igvrange.locusEnd}`
 
-    let locus_hic_url = `/igv/temp/IndexSNP_${IndexSNP}_${celltype}.bedpe.txt`
+    let locus_hic_url = `/igv/temp/${gene["Gene_Name"]}_${celltype}.bedpe.txt`
     let genecode_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz"
     let genecode_index_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi"
     let atac_url;
