@@ -69,7 +69,7 @@ const Genes = () => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "gene_data.csv";
+        a.download = `${Id}_GWAS_results.csv`;
         a.click();
         URL.revokeObjectURL(url);
     };

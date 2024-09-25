@@ -44,7 +44,49 @@ const Variants = () => {
         fetchData();
     }, [Id, celltype])
 
-   
+
+    const downloadCSV = () => {
+        if (!promoterdata) return;
+
+        // Define CSV column headers
+        const headers = ["PROMOTER", "GENE", "GENE(TPM)", "TSS", "TRANSCRIPT", "TRANSCRIPT(TPM)", "HI-C PROMTER BIN", "HI-C INFO", "OPEN CHROMATIN", "CHROMHMM", "REFTSS", "ENCODE-PLS"];
+        
+        // Function to wrap a value in double quotes if it contains commas or newlines
+        const escapeCSVValue = (value) => {
+            if (typeof value === 'string' && (value.includes(',') || value.includes('\n'))) {
+                return `"${value}"`; // Enclose the value in double quotes
+            }
+            return value;
+        };
+
+        // Map through the diseases data to create rows
+        const rows = promoterdata.map(promoter => [
+            escapeCSVValue(`${promoter.Chr}:${promoter.Start}-${promoter.End}`), // Escape commas in reported genes
+            escapeCSVValue(promoter["Gene"]),
+            escapeCSVValue(promoter["Gene_TPM"]),
+            escapeCSVValue(`${promoter.Chr}:${promoter.TSS}`),
+            escapeCSVValue(promoter["Transcript"]),
+            escapeCSVValue(promoter["Transcript_TPM"]),
+            escapeCSVValue(`chr${promoter.HiC_Promoter_bin}`),
+            escapeCSVValue(promoter.HiC_info),
+            escapeCSVValue(promoter.OpenChromatin),
+            escapeCSVValue(promoter.ChromHMM),
+            escapeCSVValue(promoter.RefTSS),
+            escapeCSVValue(promoter["ENCODE-cCRE-PLS"]),
+        ]);
+        
+        // Create CSV content
+        const csvContent = [headers, ...rows].map(row => row.join(",")).join("\n");
+        
+        // Create a blob and download it
+        const blob = new Blob([csvContent], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${Id}_HiC_interactions_${celltype}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+    };
 
 
 
@@ -201,6 +243,11 @@ const Variants = () => {
             ) : null }
 
             {promoterdata && promoterdata.length > 0 && (
+            <>
+                <button onClick={downloadCSV} className="csv-download-button">
+                    <i class="fa-solid fa-download"></i>
+                    Download CSV
+                </button>
             <div className="table-wrapper">
                 <h3>{Id}'s Hi-C interactions in {celltype} cell-type</h3>
                 <table className="table">
@@ -242,6 +289,7 @@ const Variants = () => {
                     })}
                 </table>
             </div>
+            </>
             )} 
             
             
