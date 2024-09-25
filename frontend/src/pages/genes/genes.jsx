@@ -10,6 +10,7 @@ const Genes = () => {
     const celltype = queryParams.get('celltype');
     const [genedata, setGenedata] = useState(null);
     const [Igvrange, setIgvrange] = useState(null);
+    const [diseases, setDiseases] = useState(null);
 
     useEffect(() => {
         async function fetchData() {
@@ -27,12 +28,53 @@ const Genes = () => {
                 console.log("result in genes.jsx", result)
                 setGenedata(result.gene[0])
                 setIgvrange(result.Igvrange)
+                setDiseases(result.diseases)
             } else {
                 console.log(res.status)
             }
         }
         fetchData();
     }, [Id, celltype])
+
+    const downloadCSV = () => {
+        if (!diseases) return;
+
+        // Define CSV column headers
+        const headers = ["Reported Gene", "Phenotype", "Variant", "P-value", "OR-Beta", "Pubmed", "Study Accession"];
+        
+        // Function to wrap a value in double quotes if it contains commas or newlines
+        const escapeCSVValue = (value) => {
+            if (typeof value === 'string' && (value.includes(',') || value.includes('\n'))) {
+                return `"${value}"`; // Enclose the value in double quotes
+            }
+            return value;
+        };
+
+        // Map through the diseases data to create rows
+        const rows = diseases.map(disease => [
+            escapeCSVValue(disease["Reported_gene"]), // Escape commas in reported genes
+            escapeCSVValue(disease["Disease_trait"]),
+            escapeCSVValue(disease["RSID"]),
+            escapeCSVValue(disease["P-value"]),
+            escapeCSVValue(disease["OR-Beta"]),
+            escapeCSVValue(disease["Pubmed"]),
+            escapeCSVValue(disease["STUDY_ACCESSION"])
+        ]);
+        
+        // Create CSV content
+        const csvContent = [headers, ...rows].map(row => row.join(",")).join("\n");
+        
+        // Create a blob and download it
+        const blob = new Blob([csvContent], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "gene_data.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+
+
 
     if (!genedata) {
         return <div>Loading gene data...</div>;
@@ -76,10 +118,62 @@ const Genes = () => {
         </div>
 
         {genedata && celltype && Igvrange? (
-            <div>
-                <IgvGene gene = {genedata} celltype = {celltype} Igvrange = {Igvrange}/>
+            <div className="gap">
+                <div>
+                    <IgvGene gene = {genedata} celltype = {celltype} Igvrange = {Igvrange}/>
+                </div>
             </div>
         ) : null}
+            <div className="gene-disease-table-container">
+                <h2>GWAS Results</h2>
+                <button onClick={downloadCSV} className="csv-download-button">
+                    <i class="fa-solid fa-download"></i>
+                    Download CSV
+                </button>
+                <div className="table-wrapper">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Reported Gene</th>
+                                <th>Phenotype</th>
+                                <th>Variant</th>
+                                <th>P-value</th>
+                                <th>OR-Beta</th>
+                                <th>Pubmed</th>
+                                <th>Study Accession</th>
+                            </tr>
+                        </thead>
+
+                        {diseases?.map((disease) => {
+                            return (
+                                    <tbody key={disease._id} className="disease-row-tbody">
+                                        <tr>
+                                            <td>{disease["Reported_gene"]}</td>
+                                            <td>{disease["Disease_trait"]}</td>
+                                            <td>
+                                                <a className="gene_external_link" href={`https://www.ncbi.nlm.nih.gov/snp/${disease["RSID"]}`}>
+                                                    {disease["RSID"]}
+                                                </a>
+                                            </td>
+                                            <td>{disease["P-value"]}</td>
+                                            <td>{disease["OR-Beta"]}</td>
+                                            <td>
+                                                <a className="gene_external_link" href={`http://pubmed.ncbi.nlm.nih.gov/${disease["Pubmed"]}/`} target="_blank">
+                                                    {disease["Pubmed"]}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a className="gene_external_link" href={`http://www.ebi.ac.uk/gwas/studies/${disease["STUDY_ACCESSION"]}`} target="_blank">
+                                                    {disease["STUDY_ACCESSION"]}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>  
+                            )
+                        })}
+                    </table>
+                </div>
+            </div>
         </div>
     )
 }
