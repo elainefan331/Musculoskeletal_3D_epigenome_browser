@@ -12,6 +12,7 @@ const Genes = () => {
     const [Igvrange, setIgvrange] = useState(null);
     const [diseases, setDiseases] = useState(null);
     const [codingRegion, setCodingRegion] = useState(null);
+    const [activeTab, setActiveTab] = useState(1);
 
     useEffect(() => {
         async function fetchData() {
@@ -126,7 +127,24 @@ const Genes = () => {
                 </div>
             </div>
         ) : null}
-        
+
+            <div className="gene-page-tabs">
+                <button
+                    className={activeTab === 1? "active-tab": "tab"}
+                    onClick={() => setActiveTab(1)}
+                >
+                    GWAS Results
+                </button>
+
+                <button
+                    className={activeTab === 2? "active-tab": "tab"}
+                    onClick={() => setActiveTab(2)}
+                >
+                    Coding Region
+                </button>
+            </div>
+
+            {activeTab === 1 && (
             <div className="gene-disease-table-container">
                 <button onClick={downloadCSV} className="csv-download-button">
                     <i className="fa-solid fa-download"></i>
@@ -176,8 +194,9 @@ const Genes = () => {
                         })}
                     </table>
                 </div>
-            </div>
+            </div>)}
 
+            {activeTab === 2 && (
             <div className="table-wrapper">
                 <h3>{`Coding Region of ${Id} in ${celltype} cell-type`}</h3>
                 <table className="table">
@@ -202,7 +221,7 @@ const Genes = () => {
                         )
                     })}
                 </table>
-            </div>
+            </div>)}
         </div>
     )
 }

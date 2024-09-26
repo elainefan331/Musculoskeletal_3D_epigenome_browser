@@ -43,3 +43,33 @@
     gap: 5px;
 }
 
+.gene-page-tabs {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    width: fit-content;
+    border: 1px lightgray solid;
+    box-shadow: 1px 1px 1px 1px lightgray;
+}
+
+.tab {
+    border: none;
+    padding: 10px;
+    background-color: white;
+    color: rgb(34, 78, 115);
+    cursor: pointer;
+}
+
+.tab:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.active-tab {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+    padding: 10px 20px;
+    cursor: default;
+
+}
