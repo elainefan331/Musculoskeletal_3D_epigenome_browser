@@ -11,6 +11,7 @@ const Genes = () => {
     const [genedata, setGenedata] = useState(null);
     const [Igvrange, setIgvrange] = useState(null);
     const [diseases, setDiseases] = useState(null);
+    const [codingRegion, setCodingRegion] = useState(null);
 
     useEffect(() => {
         async function fetchData() {
@@ -29,6 +30,7 @@ const Genes = () => {
                 setGenedata(result.gene[0])
                 setIgvrange(result.Igvrange)
                 setDiseases(result.diseases)
+                setCodingRegion(result.codingRegion)
             } else {
                 console.log(res.status)
             }
@@ -124,13 +126,14 @@ const Genes = () => {
                 </div>
             </div>
         ) : null}
+        
             <div className="gene-disease-table-container">
-                <h2>GWAS Results</h2>
                 <button onClick={downloadCSV} className="csv-download-button">
                     <i className="fa-solid fa-download"></i>
                     Download CSV
                 </button>
                 <div className="table-wrapper">
+                    <h3>GWAS Results</h3>
                     <table className="table">
                         <thead>
                             <tr>
@@ -173,6 +176,32 @@ const Genes = () => {
                         })}
                     </table>
                 </div>
+            </div>
+
+            <div className="table-wrapper">
+                <h3>{`Coding Region of ${Id} in ${celltype} cell-type`}</h3>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>RSID</th>
+                            <th>VariantID</th>
+                            <th>ExonicFunc_Ensembl</th>
+                            <th>AAChange_Ensembl</th>
+                        </tr>
+                    </thead>
+                    {codingRegion?.map((region, index) => {
+                        return (
+                            <tbody key={index}>
+                                <tr>
+                                    <td>{region.RSID}</td>
+                                    <td>{region.variantID}</td>
+                                    <td>{region["ExonicFunc_Ensembl"]}</td>
+                                    <td>{region["AAChange_Ensembl"]}</td>
+                                </tr>
+                            </tbody>
+                        )
+                    })}
+                </table>
             </div>
         </div>
     )

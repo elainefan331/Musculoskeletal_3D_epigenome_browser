@@ -8,8 +8,7 @@
     margin-bottom: 5px;
 }
 
-.gene_card > h2,
-.gene-disease-table-container > h2 {
+.gene_card > h2 {
     color: rgb(34, 78, 115);
     border-bottom: 1px solid rgb(184, 182, 182);
 }

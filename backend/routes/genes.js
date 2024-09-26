@@ -4,6 +4,7 @@ import Promoter_hMSC from "../models/promoter_hMSC.js";
 import Promoter_OB from "../models/promoter_OB.js";
 import Promoter_OC from "../models/promoter_OC.js";
 import Disease2variant from "../models/disease2variant.js";
+import VariantModel from "../models/variant.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
@@ -117,9 +118,10 @@ router.get('/:id', async(req, res) => {
     try {
         const gene = await geneModel.find({Gene_Name: id});
         const diseases = await Disease2variant.find({Reported_gene: { $regex: id, $options: 'i' } }).sort({'P-value': 1});
+        const codingRegion = await VariantModel.find({GeneName_ID_Ensembl: id, Region_Ensembl: "exonic"})
         if(gene.length > 0) {
             let Igvrange = await IgvRangeCalculator(celltype, gene)
-            return res.status(200).json({gene: gene, Igvrange: Igvrange, diseases: diseases})
+            return res.status(200).json({gene: gene, Igvrange: Igvrange, diseases: diseases, codingRegion: codingRegion})
         } else {
             return res.status(404).send("Gene not found")
         }
