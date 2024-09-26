@@ -127,7 +127,7 @@ const Genes = () => {
             <div className="gene-disease-table-container">
                 <h2>GWAS Results</h2>
                 <button onClick={downloadCSV} className="csv-download-button">
-                    <i class="fa-solid fa-download"></i>
+                    <i className="fa-solid fa-download"></i>
                     Download CSV
                 </button>
                 <div className="table-wrapper">

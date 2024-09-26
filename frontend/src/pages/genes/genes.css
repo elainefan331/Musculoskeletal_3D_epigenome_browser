@@ -1,12 +1,17 @@
 .gene_card {
-    border-bottom: 1px solid rgb(184, 182, 182);
-    padding: 10px;
+    border: none;
+    padding: 5px 10px 10px 10px;
     width: 50%;
+    background: white;
+    box-shadow: 1px 1px 1px 2px lightgray;
+    border-radius: 5px;
+    margin-bottom: 5px;
 }
 
 .gene_card > h2,
 .gene-disease-table-container > h2 {
     color: rgb(34, 78, 115);
+    border-bottom: 1px solid rgb(184, 182, 182);
 }
 
 .gene_info_row {
