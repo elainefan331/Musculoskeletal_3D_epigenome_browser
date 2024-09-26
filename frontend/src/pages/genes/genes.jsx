@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import IgvGene from "../../components/IgvGene";
 import "./genes.css";
+// pagination
+import Pagination from "../../components/Pagination/Pagination";
 
 const Genes = () => {
     const { Id } = useParams();
@@ -13,6 +15,9 @@ const Genes = () => {
     const [diseases, setDiseases] = useState(null);
     const [codingRegion, setCodingRegion] = useState(null);
     const [activeTab, setActiveTab] = useState(1);
+    // pagination
+    const [currentItems, setCurrentItems] = useState([]);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
     useEffect(() => {
         async function fetchData() {
@@ -38,6 +43,12 @@ const Genes = () => {
         }
         fetchData();
     }, [Id, celltype])
+
+    useEffect(() => {
+        if (codingRegion) {
+            setCurrentItems(codingRegion.slice(0, itemsPerPage));
+        }
+    }, [codingRegion, itemsPerPage]);
 
     const downloadCSV = () => {
         if (!diseases) return;
@@ -77,6 +88,15 @@ const Genes = () => {
         URL.revokeObjectURL(url);
     };
 
+    // coding region pagination
+    const handlePageChange = (offset) => {
+        setCurrentItems(codingRegion.slice(offset, offset + itemsPerPage));
+    }
+
+    const handleItemsPerPageChange = (e) => {
+        setItemsPerPage(parseInt(e.target.value));
+        handlePageChange(0); // Reset to first page
+    };
 
 
     if (!genedata) {
@@ -197,6 +217,7 @@ const Genes = () => {
             </div>)}
 
             {activeTab === 2 && (
+            <>
             <div className="table-wrapper">
                 <h3>{`Coding Region of ${Id} in ${celltype} cell-type`}</h3>
                 <table className="table">
@@ -208,9 +229,9 @@ const Genes = () => {
                             <th>AAChange_Ensembl</th>
                         </tr>
                     </thead>
-                    {codingRegion?.map((region, index) => {
+                    {currentItems?.map((region, index) => {
                         return (
-                            <tbody key={index}>
+                            <tbody key={index} className="disease-row-tbody">
                                 <tr>
                                     <td>{region.RSID}</td>
                                     <td>{region.variantID}</td>
@@ -221,7 +242,27 @@ const Genes = () => {
                         )
                     })}
                 </table>
-            </div>)}
+            </div>
+
+            <div className="pagination-container">
+                    {codingRegion && <Pagination key={itemsPerPage} itemsPerPage={itemsPerPage} items={codingRegion} onPageChange={handlePageChange} />}
+                    {codingRegion && (
+                        <div className="items-per-page-options-container">
+                            <select onChange={handleItemsPerPageChange}> 
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                            </select>
+                            <span> Showing {currentItems.length > 0? `${(codingRegion.indexOf(currentItems[0])) + 1} to ${(codingRegion.indexOf(currentItems[currentItems.length - 1])) + 1}`: '0'} of {codingRegion.length} Results</span>
+                        </div>
+                    )
+                    }
+            </div>
+            </>
+            
+            
+            
+            )}
         </div>
     )
 }
