@@ -1,11 +1,16 @@
 .gene_card {
-    border-bottom: 1px solid rgb(184, 182, 182);
-    padding: 10px;
+    border: none;
+    padding: 5px 10px 10px 10px;
     width: 50%;
+    background: white;
+    box-shadow: 1px 1px 1px 2px lightgray;
+    border-radius: 5px;
+    margin-bottom: 5px;
 }
 
 .gene_card > h2 {
     color: rgb(34, 78, 115);
+    border-bottom: 1px solid rgb(184, 182, 182);
 }
 
 .gene_info_row {
@@ -22,5 +27,52 @@
 .gene_external_link {
     text-decoration: none;
     color: #007bff;
+}
 
+.csv-download-button {
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: white;
+    box-shadow: 1px 1px 1px 2px lightgray;
+    color: rgb(34, 78, 115);
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    gap: 5px;
+}
+
+.gene-page-tabs {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    width: fit-content;
+    border: 1px lightgray solid;
+    box-shadow: 1px 1px 1px 1px lightgray;
+}
+
+.tab {
+    border: none;
+    padding: 10px;
+    background-color: white;
+    color: rgb(34, 78, 115);
+    cursor: pointer;
+}
+
+.tab:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.active-tab {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+    padding: 10px 20px;
+    cursor: default;
+
+}
+
+#gene-nest-table-container {
+    padding: 0px;
 }
