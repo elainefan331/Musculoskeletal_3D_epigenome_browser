@@ -44,20 +44,6 @@ const IgvRangeCalculator = async(celltype, gene) => {
     // let genes = null
     let genes = await getPromoterData(celltype, gene)
     const resultObj = {}
-    
-    // if (celltype === "hMSC") {
-    //     // gene is an array with single element
-    //     genes = await Promoter_hMSC.find({Gene: `${gene[0]["Gene_Name"]}`})
-    // } else if (celltype === "Osteoblast") {
-    //     genes = await Promoter_OB.find({Gene: `${gene[0]["Gene_Name"]}`})
-    // } else {
-    //     genes = await Promoter_OC.find({Gene: `${gene[0]["Gene_Name"]}`})
-    // }
-
-
-    // const publicFolderPath = path.resolve(__dirname,"../../frontend/public/igv/temp"); 
-    // const bedpeFilePath = path.join(publicFolderPath, `${gene[0]["Gene_Name"]}_${celltype}.bedpe.txt`);
-    // generateBedpeFile(genes, bedpeFilePath);
 
     for (let gene of genes) {
         let HicBinStart = parseInt(gene._doc.HiC_Promoter_bin.split(":")[1])
@@ -105,15 +91,79 @@ const generateBedpeFile = async(genes, filePath) => {
 
 }
 
+// generate proximal regulatory region
+const proximalRegion = async(gene, celltype) => {
+    let genes = await getPromoterData(celltype, gene);
+    let range = []
+    // console.log("genes in proximal helper function =====", genes)
+    for (let gene of genes) {
+        const rangeObj = {
+            chr: parseInt(gene._doc.Chr.replace('chr', '')),
+            start: gene._doc.Start, 
+            end: gene._doc.End,
+        }
+        // Check if the range object already exists in the array
+        // temporary comment out  && gene._doc.OpenChromatin !== "NA"
+        if (!range.some(r => r.start === rangeObj.start && r.end === rangeObj.end)) {
+            console.log("chr", gene._doc.Chr)
+            range.push(rangeObj);  // Add range object to the array if it's unique
+        }
+    }
+    console.log("range in proximal helper function =====", range)
+    
+    // Build an array of range conditions for the MongoDB query
+    let rangeConditions;
+    let result = [];
+    if (range.length > 0) {
+        rangeConditions = range.map(ele => ({
+            Chr: ele.chr,
+            Start: { $gte: ele.start, $lte: ele.end }
+        }));
+        console.log("condition", rangeConditions)
+    
+        // Query the VariantModel where the Start falls within any of the ranges
+        result = await VariantModel.find({
+            $or: rangeConditions
+        });
+
+    }
+
+    return result;
+
+}
+
+router.get('/:id/proximal_regulatory', async(req, res) => {
+    console.log("proximal regulatory =============")
+    const id = req.params.id;
+    const { celltype } = req.query;
+    const gene = await geneModel.find({Gene_Name: id});
+
+    console.log("id in proximal", id)
+    console.log("celltype in proximal", celltype)
+    try {
+        const result = await proximalRegion(gene, celltype);
+        console.log("result in proximal route====", result)
+        
+        if (result) {
+            return res.status(200).json({proximalRegion: result})
+        } else {
+            return res.status(404).json({ message: "No proximal regulatory data found" });
+        }
+
+    } catch(error) {
+        return res.status(500).send("Sever error")
+    }
+
+})
+
+
 
 router.get('/:id', async(req, res) => {
     const id = req.params.id;
     const { celltype } = req.query;
 
-    
     // console.log("id in gene route", id)
     // console.log("celltype in gene route", celltype)
-    
     
     try {
         const gene = await geneModel.find({Gene_Name: id});
@@ -130,6 +180,7 @@ router.get('/:id', async(req, res) => {
     }
 
 });
+
 
 
 

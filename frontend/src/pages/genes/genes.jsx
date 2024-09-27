@@ -14,10 +14,20 @@ const Genes = () => {
     const [Igvrange, setIgvrange] = useState(null);
     const [diseases, setDiseases] = useState(null);
     const [codingRegion, setCodingRegion] = useState(null);
+    const [proximalRegion, setProximalRegion] = useState(null);
     const [activeTab, setActiveTab] = useState(1);
-    // pagination
+
+    // pagination for coding region
     const [currentItems, setCurrentItems] = useState([]);
     const [itemsPerPage, setItemsPerPage] = useState(10);
+
+    // pagination for GWAS Results
+    const [currentDiseaseItems, setCurrentDiseaseItems] = useState([]);
+    const [diseaseItemsPerPage, setDiseaseItemsPerPage] = useState(10);
+
+    // pagination for proximal region
+    const [currentProximalItems, setCurrentProximalItems] = useState([]);
+    const [proximalItemsPerPage, setProximalItemsPerPage] = useState(10);
 
     useEffect(() => {
         async function fetchData() {
@@ -44,11 +54,26 @@ const Genes = () => {
         fetchData();
     }, [Id, celltype])
 
+    // useEffect for coding region pagination
     useEffect(() => {
         if (codingRegion) {
             setCurrentItems(codingRegion.slice(0, itemsPerPage));
         }
     }, [codingRegion, itemsPerPage]);
+
+    // useEffect for GWAS Results pagination
+    useEffect(() => {
+        if (diseases) {
+            setCurrentDiseaseItems(diseases.slice(0, diseaseItemsPerPage));
+        }
+    }, [diseases, diseaseItemsPerPage]);
+
+     // useEffect for proximal Results pagination
+     useEffect(() => {
+        if (proximalRegion) {
+            setCurrentProximalItems(proximalRegion.slice(0, proximalItemsPerPage));
+        }
+    }, [proximalRegion, proximalItemsPerPage]);
 
     const downloadCSV = () => {
         if (!diseases) return;
@@ -93,10 +118,52 @@ const Genes = () => {
         setCurrentItems(codingRegion.slice(offset, offset + itemsPerPage));
     }
 
+    // GWAS Results pagination
+    const handleDiseasePageChange = (offset) => {
+        setCurrentDiseaseItems(diseases.slice(offset, offset + diseaseItemsPerPage));
+    }
+
+    // proximal Results pagination
+    const handleProximalPageChange = (offset) => {
+        setCurrentProximalItems(proximalRegion.slice(offset, offset + proximalItemsPerPage));
+    }
+
+    // coding region pagination
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(parseInt(e.target.value));
         handlePageChange(0); // Reset to first page
     };
+
+    // GWAS Results pagination
+    const handleDiseaseItemsPerPageChange = (e) => {
+        setDiseaseItemsPerPage(parseInt(e.target.value));
+        handleDiseasePageChange(0); // Reset to first page
+    };
+
+     // proximal Results pagination
+     const handleProximalItemsPerPageChange = (e) => {
+        setProximalItemsPerPage(parseInt(e.target.value));
+        handleProximalPageChange(0); // Reset to first page
+    };
+
+    // proximal region request function
+    const fetchProximalRegion = async () => {
+        const url = new URL(`${import.meta.env.VITE_EXPRESS_URL}/genes/${Id}/proximal_regulatory`)
+        url.search = new URLSearchParams({celltype: celltype}).toString();
+        
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+
+        if(res.ok) {
+            const result = await res.json();
+            setProximalRegion(result.proximalRegion)
+        } else {
+            console.log(res.status)
+        }
+        
+    }
 
 
     if (!genedata) {
@@ -162,9 +229,19 @@ const Genes = () => {
                 >
                     Coding Region
                 </button>
+                <button
+                    className={activeTab === 3? "active-tab": "tab"}
+                    onClick={() => {
+                        setActiveTab(3);
+                        fetchProximalRegion();
+                    }}
+                >
+                    Proximal Regulatory Region
+                </button>
             </div>
 
             {activeTab === 1 && (
+            <>
             <div className="gene-disease-table-container">
                 <button onClick={downloadCSV} className="csv-download-button">
                     <i className="fa-solid fa-download"></i>
@@ -177,7 +254,7 @@ const Genes = () => {
                             <tr>
                                 <th>Reported Gene</th>
                                 <th>Phenotype</th>
-                                <th>Variant</th>
+                                <th>RSID</th>
                                 <th>P-value</th>
                                 <th>OR-Beta</th>
                                 <th>Pubmed</th>
@@ -185,7 +262,7 @@ const Genes = () => {
                             </tr>
                         </thead>
 
-                        {diseases?.map((disease) => {
+                        {currentDiseaseItems?.map((disease) => {
                             return (
                                     <tbody key={disease._id} className="disease-row-tbody">
                                         <tr>
@@ -214,7 +291,23 @@ const Genes = () => {
                         })}
                     </table>
                 </div>
-            </div>)}
+            </div>
+            
+            <div className="pagination-container">
+                    {diseases && <Pagination key={diseaseItemsPerPage} itemsPerPage={diseaseItemsPerPage} items={diseases} onPageChange={handleDiseasePageChange} />}
+                    {diseases && (
+                        <div className="items-per-page-options-container">
+                            <select onChange={handleDiseaseItemsPerPageChange}> 
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                            </select>
+                            <span> Showing {currentDiseaseItems.length > 0 ? `${(diseases.indexOf(currentDiseaseItems[0])) + 1} to ${(diseases.indexOf(currentDiseaseItems[currentDiseaseItems.length - 1])) + 1}` : '0'} of {diseases.length} Results</span>
+                        </div>
+                    )}
+            </div>
+            </>
+            )}
 
             {activeTab === 2 && (
             <>
@@ -233,7 +326,11 @@ const Genes = () => {
                         return (
                             <tbody key={index} className="disease-row-tbody">
                                 <tr>
-                                    <td>{region.RSID}</td>
+                                    <td>
+                                        <a href={`http://www.ncbi.nlm.nih.gov/snp/${region.RSID}/`} target="_blank" className="gene_external_link">
+                                            {region.RSID}
+                                        </a>
+                                    </td>
                                     <td>{region.variantID}</td>
                                     <td>{region["ExonicFunc_Ensembl"]}</td>
                                     <td>{region["AAChange_Ensembl"]}</td>
@@ -259,9 +356,110 @@ const Genes = () => {
                     }
             </div>
             </>
-            
-            
-            
+            )}
+            {activeTab === 3 && (
+                <>
+                <div className="table-wrapper">
+                    <h3>Proximal Region</h3>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>RSID</th>
+                                <th>VariantID</th>
+                                <th>Region</th>
+                                <th>Distance with gene</th>
+                                <th>Promoter-like</th>
+                                <th>Chromhmm</th>
+                                <th>Open Chromatin</th>
+                                <th>Hi-C Chromatin Interaction</th>
+                            </tr>
+                        </thead>
+                        {proximalRegion && proximalRegion.length > 0? (currentProximalItems.map((region) => {
+                            return (
+                                <tbody key={region._id}>
+                                    <tr>
+                                        <td>
+                                            <a href={`http://www.ncbi.nlm.nih.gov/snp/${region.RSID}/`} target="_blank" className="gene_external_link">
+                                            {region.RSID}
+                                        </a>
+                                        </td>
+                                        <td>{region.variantID}</td>
+                                        <td>{region["Region_Ensembl"]}</td>
+                                        <td>{region.GeneInfo_DistNG_Ensembl}</td>
+                                        <td>{region.Promoter_like_region}</td>
+                                        <td >
+                                            {celltype === "hMSC" 
+                                            ? region.chromHMM_hMSC 
+                                            : celltype === "Osteoblast"
+                                            ? region.chromHMM_osteoblast
+                                            : "NA"}
+                                        </td>
+                                        <td>
+                                            {celltype === "hMSC"
+                                            ? region.OpenChromatin_hMSC
+                                            : celltype === "Osteoblast"
+                                            ? region.OpenChromatin_OB
+                                            : "NA"}
+                                        </td>
+                                        <td id="gene-nest-table-container">
+                                            <table className="nest-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Regulatory Bin</th>
+                                                        <th>Promoter Bin</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            {celltype === "hMSC"
+                                                            ? region.SigHiC_hMSC.split(";")[0].split(":").slice(1).join(":")
+                                                            : celltype === "Osteoblast"
+                                                            ? region.SigHiC_OB13.split(";")[0].split(":").slice(1).join(":")
+                                                            : region.SigHiC_OC.split(";")[0].split(":").slice(1).join(":")
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            {celltype === "hMSC"
+                                                            ? region.SigHiC_hMSC.split(";")[1].split(":").slice(1).join(":")
+                                                            : celltype === "Osteoblast"
+                                                            ? region.SigHiC_OB13.split(";")[1].split(":").slice(1).join(":")
+                                                            : region.SigHiC_OC.split(";")[1].split(":").slice(1).join(":")
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            )
+                        })) : (
+                            <tbody>
+                                <tr>
+                                    <td>no results found</td>
+                                </tr>
+                            </tbody>
+                        )
+
+                        }
+                    </table>
+                </div>
+
+                <div className="pagination-container">
+                    {proximalRegion && <Pagination key={proximalItemsPerPage} itemsPerPage={proximalItemsPerPage} items={proximalRegion} onPageChange={handleProximalPageChange} />}
+                    {proximalRegion && (
+                        <div className="items-per-page-options-container">
+                            <select onChange={handleProximalItemsPerPageChange}> 
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                            </select>
+                            <span> Showing {currentProximalItems.length > 0 ? `${(proximalRegion.indexOf(currentProximalItems[0])) + 1} to ${(proximalRegion.indexOf(currentProximalItems[currentProximalItems.length - 1])) + 1}` : '0'} of {proximalRegion.length} Results</span>
+                        </div>
+                    )}
+            </div>
+                </>
             )}
         </div>
     )
