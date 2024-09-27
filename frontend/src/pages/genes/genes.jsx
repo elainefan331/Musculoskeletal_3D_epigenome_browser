@@ -15,7 +15,10 @@ const Genes = () => {
     const [diseases, setDiseases] = useState(null);
     const [codingRegion, setCodingRegion] = useState(null);
     const [proximalRegion, setProximalRegion] = useState(null);
+    const [distalRegion, setDistalRegion] = useState(null);
     const [activeTab, setActiveTab] = useState(1);
+    const [loadingDistal, setLoadingDistal] = useState(false); // State to track loading for distal regulatory region
+
 
     // pagination for coding region
     const [currentItems, setCurrentItems] = useState([]);
@@ -162,7 +165,26 @@ const Genes = () => {
         } else {
             console.log(res.status)
         }
+    }
+
+    // distal region request function
+    const fetchDistalRegion = async () => {
+        setLoadingDistal(true);
+        const url = new URL(`${import.meta.env.VITE_EXPRESS_URL}/genes/${Id}/distal_regulatory`)
+        url.search = new URLSearchParams({celltype: celltype}).toString();
         
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+
+        if(res.ok) {
+            const result = await res.json();
+            setDistalRegion(result.distalRegion)
+        } else {
+            console.log(res.status)
+        }
+        setLoadingDistal(false);
     }
 
 
@@ -236,7 +258,16 @@ const Genes = () => {
                         fetchProximalRegion();
                     }}
                 >
-                    Proximal Regulatory Region
+                    Promotor Regulatory Region
+                </button>
+                <button
+                    className={activeTab === 4? "active-tab": "tab"}
+                    onClick={() => {
+                        setActiveTab(4);
+                        fetchDistalRegion();
+                    }}
+                >
+                    Distal Regulatory Region
                 </button>
             </div>
 
@@ -357,10 +388,11 @@ const Genes = () => {
             </div>
             </>
             )}
+
             {activeTab === 3 && (
                 <>
                 <div className="table-wrapper">
-                    <h3>Proximal Region</h3>
+                    <h3>Promoter Regulatory Region</h3>
                     <table className="table">
                         <thead>
                             <tr>
@@ -381,7 +413,7 @@ const Genes = () => {
                                         <td>
                                             <a href={`http://www.ncbi.nlm.nih.gov/snp/${region.RSID}/`} target="_blank" className="gene_external_link">
                                             {region.RSID}
-                                        </a>
+                                            </a>
                                         </td>
                                         <td>{region.variantID}</td>
                                         <td>{region["Region_Ensembl"]}</td>
@@ -458,9 +490,104 @@ const Genes = () => {
                             <span> Showing {currentProximalItems.length > 0 ? `${(proximalRegion.indexOf(currentProximalItems[0])) + 1} to ${(proximalRegion.indexOf(currentProximalItems[currentProximalItems.length - 1])) + 1}` : '0'} of {proximalRegion.length} Results</span>
                         </div>
                     )}
-            </div>
+                </div>
                 </>
             )}
+
+            {activeTab === 4 && (
+            <>
+            <div className="table-wrapper">
+                <h3>Distal Regulatory Region</h3>
+                {loadingDistal ? (
+                <div>Loading distal regulatory region data...</div>
+                ) : (
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>RSID</th>
+                            <th>VariantID</th>
+                            <th>Region</th>
+                            <th>Distance with gene</th>
+                            <th>Promoter-like</th>
+                            <th>Chromhmm</th>
+                            <th>Open Chromatin</th>
+                            <th>Hi-C Chromatin Interaction</th>
+                        </tr>
+                    </thead>
+                    {distalRegion && distalRegion.length > 0? (distalRegion.map((region) => {
+                        return (
+                            <tbody key={region._id}>
+                                <tr>
+                                    <td>
+                                        <a href={`http://www.ncbi.nlm.nih.gov/snp/${region.RSID}/`} target="_blank" className="gene_external_link">
+                                            {region.RSID}
+                                        </a>
+                                    </td>
+                                    <td>{region.variantID}</td>
+                                    <td>{region["Region_Ensembl"]}</td>
+                                    <td>{region.GeneInfo_DistNG_Ensembl}</td>
+                                    <td>{region.Promoter_like_region}</td>
+                                    <td>
+                                        {celltype === "hMSC"
+                                        ? region.chromHMM_hMSC
+                                        : celltype === "Osteoblast"
+                                        ? region.chromHMM_osteoblast
+                                        : "NA"
+                                        }
+                                    </td>
+                                    <td>
+                                        {celltype === "hMSC"
+                                        ? region.OpenChromatin_hMSC
+                                        : celltype === "Osteoblast"
+                                        ? region.OpenChromatin_OB
+                                        : "NA"}
+                                    </td>
+                                    <td id="gene-nest-table-container">
+                                        <table className="nest-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Regulatory Bin</th>
+                                                    <th>Promoter Bin</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        {celltype === "hMSC"
+                                                        ? region.SigHiC_hMSC.split(";")[0].split(":").slice(1).join(":")
+                                                        : celltype === "Osteoblast"
+                                                        ? region.SigHiC_OB13.split(";")[0].split(":").slice(1).join(":")
+                                                        : region.SigHiC_OC.split(";")[0].split(":").slice(1).join(":")
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        {celltype === "hMSC"
+                                                        ? region.SigHiC_hMSC.split(";")[1].split(":").slice(1).join(":")
+                                                        : celltype === "Osteoblast"
+                                                        ? region.SigHiC_OB13.split(";")[1].split(":").slice(1).join(":")
+                                                        : region.SigHiC_OC.split(";")[1].split(":").slice(1).join(":")
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        )
+                    })):(
+                        <tbody>
+                            <tr>
+                                <td>no results found</td>
+                            </tr>
+                        </tbody>
+                    )}
+                </table>
+                )}
+            </div>
+            </>
+            )}
+
         </div>
     )
 }

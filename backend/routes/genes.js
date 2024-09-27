@@ -129,7 +129,6 @@ const proximalRegion = async(gene, celltype) => {
     }
 
     return result;
-
 }
 
 router.get('/:id/proximal_regulatory', async(req, res) => {
@@ -148,6 +147,58 @@ router.get('/:id/proximal_regulatory', async(req, res) => {
             return res.status(200).json({proximalRegion: result})
         } else {
             return res.status(404).json({ message: "No proximal regulatory data found" });
+        }
+
+    } catch(error) {
+        return res.status(500).send("Sever error")
+    }
+
+})
+
+
+router.get('/:id/distal_regulatory', async(req, res) => {
+    console.log("distal regulatory =============")
+    const id = req.params.id;
+    const { celltype } = req.query;
+    const variants = await VariantModel.find({GeneName_ID_Ensembl: { $regex: id, $options: 'i' }});
+    console.log("celltype in distal regulatory", celltype)
+
+    let result = []
+    for (let variant of variants) {
+        // console.log("variant", variant)
+        if (celltype === "hMSC") {
+            if (variant._doc.chromHMM_hMSC && 
+                (variant._doc.chromHMM_hMSC.startsWith("13_") || 
+                 variant._doc.chromHMM_hMSC.startsWith("14_") || 
+                 variant._doc.chromHMM_hMSC.startsWith("15_") ||
+                 variant._doc.chromHMM_hMSC.startsWith("16_") ||
+                 variant._doc.chromHMM_hMSC.startsWith("17_") ||
+                 variant._doc.chromHMM_hMSC.startsWith("18_") 
+                )) {
+                    
+                    result.push(variant);
+            }
+        } else if (celltype == "Osteoblast") {
+            if (variant._doc.chromHMM_osteoblast && 
+                (variant._doc.chromHMM_osteoblast.startsWith("13_") || 
+                 variant._doc.chromHMM_osteoblast.startsWith("14_") || 
+                 variant._doc.chromHMM_osteoblast.startsWith("15_") ||
+                 variant._doc.chromHMM_osteoblast.startsWith("16_") ||
+                 variant._doc.chromHMM_osteoblast.startsWith("17_") ||
+                 variant._doc.chromHMM_osteoblast.startsWith("18_") 
+                )) {
+                    // console.log("variant", variant)
+                    result.push(variant);
+            }
+        }
+    }
+
+    console.log("result", result[0])
+    try {
+        if (result) {
+            return res.status(200).json({distalRegion: result})
+        } else {
+            return res.status(404).json({ message: "No distal regulatory data found" });
         }
 
     } catch(error) {
