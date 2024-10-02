@@ -248,10 +248,12 @@ router.get('/:id/distal_regulatory', async(req, res) => {
         } else if (celltype === "Osteoblast") {
             cellTypeField = "chromHMM_osteoblast";
         }
-
+        // console.log("celltype in distal fetch function", celltype)
+        // console.log("gene name in distal fetch function", id)
+        // console.log("celltypefield", cellTypeField)
         const variants = await VariantModel.find({
             GeneName_ID_Ensembl: { $regex: id, $options: 'i' },
-            [cellTypeField]: { $regex: "^[13-18]_"}
+            [cellTypeField]: { $regex: "^1[3-8]_"}
         }, {
             _id: 1,  // Include the _id field
             RSID: 1,  // Include the RSID field
@@ -266,8 +268,8 @@ router.get('/:id/distal_regulatory', async(req, res) => {
             SigHiC_hMSC: 1,  // Include the SigHiC_hMSC field
             SigHiC_OB13: 1,  // Include the SigHiC_OB13 field
             SigHiC_OC: 1  // Include the SigHiC_OC field
-        }).lean();
-
+        });
+        // console.log("variants in distal region", variants)
         if (variants.length > 0) {
             return res.status(200).json({distalRegion: variants})
         } else {
