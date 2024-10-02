@@ -136,39 +136,62 @@ router.get('/:id/proximal_regulatory', async(req, res) => {
     const id = req.params.id;
     const { celltype } = req.query;
     // const gene = await geneModel.find({Gene_Name: id});
-    const variants = await VariantModel.find({GeneName_ID_Ensembl: { $regex: id, $options: 'i' }});
+    // const variants = await VariantModel.find({GeneName_ID_Ensembl: { $regex: id, $options: 'i' }});
 
-    let result = []
-    for (let variant of variants) {
-        // console.log("variant", variant)
-        if (celltype === "hMSC") {
-            if (variant._doc.chromHMM_hMSC && 
-                (variant._doc.chromHMM_hMSC.startsWith("1_") || 
-                 variant._doc.chromHMM_hMSC.startsWith("2_") || 
-                 variant._doc.chromHMM_hMSC.startsWith("3_") ||
-                 variant._doc.chromHMM_hMSC.startsWith("4_") 
-                )) {
+    // let result = []
+    // for (let variant of variants) {
+    //     // console.log("variant", variant)
+    //     if (celltype === "hMSC") {
+    //         if (variant._doc.chromHMM_hMSC && 
+    //             (variant._doc.chromHMM_hMSC.startsWith("1_") || 
+    //              variant._doc.chromHMM_hMSC.startsWith("2_") || 
+    //              variant._doc.chromHMM_hMSC.startsWith("3_") ||
+    //              variant._doc.chromHMM_hMSC.startsWith("4_") 
+    //             )) {
                     
-                    result.push(variant);
-            }
-        } else if (celltype == "Osteoblast") {
-            if (variant._doc.chromHMM_osteoblast && 
-                (variant._doc.chromHMM_osteoblast.startsWith("1_") || 
-                 variant._doc.chromHMM_osteoblast.startsWith("2_") || 
-                 variant._doc.chromHMM_osteoblast.startsWith("3_") ||
-                 variant._doc.chromHMM_osteoblast.startsWith("4_") 
-                )) {
-                    // console.log("variant", variant)
-                    result.push(variant);
-            }
-        }
-    }
+    //                 result.push(variant);
+    //         }
+    //     } else if (celltype == "Osteoblast") {
+    //         if (variant._doc.chromHMM_osteoblast && 
+    //             (variant._doc.chromHMM_osteoblast.startsWith("1_") || 
+    //              variant._doc.chromHMM_osteoblast.startsWith("2_") || 
+    //              variant._doc.chromHMM_osteoblast.startsWith("3_") ||
+    //              variant._doc.chromHMM_osteoblast.startsWith("4_") 
+    //             )) {
+    //                 // console.log("variant", variant)
+    //                 result.push(variant);
+    //         }
+    //     }
+    // }
     try {
-        // const result = await proximalRegion(gene, celltype);
-        // console.log("result in proximal route====", result)
-        
-        if (result) {
-            return res.status(200).json({proximalRegion: result})
+        let cellTypeField;
+        if (celltype === "hMSC") {
+            cellTypeField = "chromHMM_hMSC";
+        } else if (celltype === "Osteoblast") {
+            cellTypeField = "chromHMM_osteoblast";
+        }
+
+        const variants = await VariantModel.find({
+            GeneName_ID_Ensembl: { $regex: id, $options: 'i' },
+            [cellTypeField]: { $regex: "^[1-4]_"}
+        }, {
+            _id: 1,  // Include the _id field
+            RSID: 1,  // Include the RSID field
+            variantID: 1,  // Include the variantID field
+            Region_Ensembl: 1,  // Include the Region_Ensembl field
+            GeneInfo_DistNG_Ensembl: 1,  // Include the GeneInfo_DistNG_Ensembl field
+            Promoter_like_region: 1,  // Include the Promoter_like_region field
+            chromHMM_hMSC: 1,  // Include the chromHMM_hMSC field
+            chromHMM_osteoblast: 1,  // Include the chromHMM_osteoblast field
+            OpenChromatin_hMSC: 1,  // Include the OpenChromatin_hMSC field
+            OpenChromatin_OB: 1,  // Include the OpenChromatin_OB field
+            SigHiC_hMSC: 1,  // Include the SigHiC_hMSC field
+            SigHiC_OB13: 1,  // Include the SigHiC_OB13 field
+            SigHiC_OC: 1  // Include the SigHiC_OC field
+        }).lean();
+        // console.log("variants in proximal region", variants)
+        if (variants.length > 0) {
+            return res.status(200).json({proximalRegion: variants})
         } else {
             return res.status(404).json({ message: "No proximal regulatory data found" });
         }
@@ -184,43 +207,69 @@ router.get('/:id/distal_regulatory', async(req, res) => {
     console.log("distal regulatory =============")
     const id = req.params.id;
     const { celltype } = req.query;
-    const variants = await VariantModel.find({GeneName_ID_Ensembl: { $regex: id, $options: 'i' }});
-    console.log("celltype in distal regulatory", celltype)
+    // const variants = await VariantModel.find({GeneName_ID_Ensembl: { $regex: id, $options: 'i' }});
+    // console.log("celltype in distal regulatory", celltype)
 
-    let result = []
-    for (let variant of variants) {
-        // console.log("variant", variant)
-        if (celltype === "hMSC") {
-            if (variant._doc.chromHMM_hMSC && 
-                (variant._doc.chromHMM_hMSC.startsWith("13_") || 
-                 variant._doc.chromHMM_hMSC.startsWith("14_") || 
-                 variant._doc.chromHMM_hMSC.startsWith("15_") ||
-                 variant._doc.chromHMM_hMSC.startsWith("16_") ||
-                 variant._doc.chromHMM_hMSC.startsWith("17_") ||
-                 variant._doc.chromHMM_hMSC.startsWith("18_") 
-                )) {
+    // let result = []
+    // for (let variant of variants) {
+    //     // console.log("variant", variant)
+    //     if (celltype === "hMSC") {
+    //         if (variant._doc.chromHMM_hMSC && 
+    //             (variant._doc.chromHMM_hMSC.startsWith("13_") || 
+    //              variant._doc.chromHMM_hMSC.startsWith("14_") || 
+    //              variant._doc.chromHMM_hMSC.startsWith("15_") ||
+    //              variant._doc.chromHMM_hMSC.startsWith("16_") ||
+    //              variant._doc.chromHMM_hMSC.startsWith("17_") ||
+    //              variant._doc.chromHMM_hMSC.startsWith("18_") 
+    //             )) {
                     
-                    result.push(variant);
-            }
-        } else if (celltype == "Osteoblast") {
-            if (variant._doc.chromHMM_osteoblast && 
-                (variant._doc.chromHMM_osteoblast.startsWith("13_") || 
-                 variant._doc.chromHMM_osteoblast.startsWith("14_") || 
-                 variant._doc.chromHMM_osteoblast.startsWith("15_") ||
-                 variant._doc.chromHMM_osteoblast.startsWith("16_") ||
-                 variant._doc.chromHMM_osteoblast.startsWith("17_") ||
-                 variant._doc.chromHMM_osteoblast.startsWith("18_") 
-                )) {
-                    // console.log("variant", variant)
-                    result.push(variant);
-            }
-        }
-    }
+    //                 result.push(variant);
+    //         }
+    //     } else if (celltype == "Osteoblast") {
+    //         if (variant._doc.chromHMM_osteoblast && 
+    //             (variant._doc.chromHMM_osteoblast.startsWith("13_") || 
+    //              variant._doc.chromHMM_osteoblast.startsWith("14_") || 
+    //              variant._doc.chromHMM_osteoblast.startsWith("15_") ||
+    //              variant._doc.chromHMM_osteoblast.startsWith("16_") ||
+    //              variant._doc.chromHMM_osteoblast.startsWith("17_") ||
+    //              variant._doc.chromHMM_osteoblast.startsWith("18_") 
+    //             )) {
+    //                 // console.log("variant", variant)
+    //                 result.push(variant);
+    //         }
+    //     }
+    // }
 
-    console.log("result", result[0])
+    // console.log("result", result[0])
     try {
-        if (result) {
-            return res.status(200).json({distalRegion: result})
+        let cellTypeField;
+        if (celltype === "hMSC") {
+            cellTypeField = "chromHMM_hMSC";
+        } else if (celltype === "Osteoblast") {
+            cellTypeField = "chromHMM_osteoblast";
+        }
+
+        const variants = await VariantModel.find({
+            GeneName_ID_Ensembl: { $regex: id, $options: 'i' },
+            [cellTypeField]: { $regex: "^[13-18]_"}
+        }, {
+            _id: 1,  // Include the _id field
+            RSID: 1,  // Include the RSID field
+            variantID: 1,  // Include the variantID field
+            Region_Ensembl: 1,  // Include the Region_Ensembl field
+            GeneInfo_DistNG_Ensembl: 1,  // Include the GeneInfo_DistNG_Ensembl field
+            Promoter_like_region: 1,  // Include the Promoter_like_region field
+            chromHMM_hMSC: 1,  // Include the chromHMM_hMSC field
+            chromHMM_osteoblast: 1,  // Include the chromHMM_osteoblast field
+            OpenChromatin_hMSC: 1,  // Include the OpenChromatin_hMSC field
+            OpenChromatin_OB: 1,  // Include the OpenChromatin_OB field
+            SigHiC_hMSC: 1,  // Include the SigHiC_hMSC field
+            SigHiC_OB13: 1,  // Include the SigHiC_OB13 field
+            SigHiC_OC: 1  // Include the SigHiC_OC field
+        }).lean();
+
+        if (variants.length > 0) {
+            return res.status(200).json({distalRegion: variants})
         } else {
             return res.status(404).json({ message: "No distal regulatory data found" });
         }

@@ -152,6 +152,7 @@ const Genes = () => {
 
     // proximal region request function
     const fetchProximalRegion = async () => {
+        if (proximalRegion) return;
         setLoadingProximal(true);
         const url = new URL(`${import.meta.env.VITE_EXPRESS_URL}/genes/${Id}/proximal_regulatory`)
         url.search = new URLSearchParams({celltype: celltype}).toString();
@@ -172,6 +173,7 @@ const Genes = () => {
 
     // distal region request function
     const fetchDistalRegion = async () => {
+        if (distalRegion) return;
         setLoadingDistal(true);
         const url = new URL(`${import.meta.env.VITE_EXPRESS_URL}/genes/${Id}/distal_regulatory`)
         url.search = new URLSearchParams({celltype: celltype}).toString();
