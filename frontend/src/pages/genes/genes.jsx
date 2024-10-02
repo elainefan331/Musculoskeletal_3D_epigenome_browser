@@ -17,6 +17,7 @@ const Genes = () => {
     const [proximalRegion, setProximalRegion] = useState(null);
     const [distalRegion, setDistalRegion] = useState(null);
     const [activeTab, setActiveTab] = useState(1);
+    const [loadingProximal, setLoadingProximal] = useState(false); // State to track loading for proximal regulatory region
     const [loadingDistal, setLoadingDistal] = useState(false); // State to track loading for distal regulatory region
 
 
@@ -151,6 +152,7 @@ const Genes = () => {
 
     // proximal region request function
     const fetchProximalRegion = async () => {
+        setLoadingProximal(true);
         const url = new URL(`${import.meta.env.VITE_EXPRESS_URL}/genes/${Id}/proximal_regulatory`)
         url.search = new URLSearchParams({celltype: celltype}).toString();
         
@@ -165,6 +167,7 @@ const Genes = () => {
         } else {
             console.log(res.status)
         }
+        setLoadingProximal(false);
     }
 
     // distal region request function
@@ -393,6 +396,9 @@ const Genes = () => {
                 <>
                 <div className="table-wrapper">
                     <h3>Promoter Regulatory Region</h3>
+                    {loadingProximal ? (
+                    <div>Loading proximal regulatory region data...</div>
+                    ) : (
                     <table className="table">
                         <thead>
                             <tr>
@@ -472,10 +478,9 @@ const Genes = () => {
                                     <td>no results found</td>
                                 </tr>
                             </tbody>
-                        )
-
-                        }
+                        )}
                     </table>
+                    )}
                 </div>
 
                 <div className="pagination-container">

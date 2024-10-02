@@ -92,44 +92,44 @@ const generateBedpeFile = async(genes, filePath) => {
 }
 
 // generate proximal regulatory region
-const proximalRegion = async(gene, celltype) => {
-    let genes = await getPromoterData(celltype, gene);
-    let range = []
-    // console.log("genes in proximal helper function =====", genes)
-    for (let gene of genes) {
-        const rangeObj = {
-            chr: parseInt(gene._doc.Chr.replace('chr', '')),
-            start: gene._doc.Start, 
-            end: gene._doc.End,
-        }
-        // Check if the range object already exists in the array
-        // temporary comment out  && gene._doc.OpenChromatin !== "NA"
-        if (!range.some(r => r.start === rangeObj.start && r.end === rangeObj.end)) {
-            console.log("chr", gene._doc.Chr)
-            range.push(rangeObj);  // Add range object to the array if it's unique
-        }
-    }
-    console.log("range in proximal helper function =====", range)
+// const proximalRegion = async(gene, celltype) => {
+//     let genes = await getPromoterData(celltype, gene);
+//     let range = []
+//     // console.log("genes in proximal helper function =====", genes)
+//     for (let gene of genes) {
+//         const rangeObj = {
+//             chr: parseInt(gene._doc.Chr.replace('chr', '')),
+//             start: gene._doc.Start, 
+//             end: gene._doc.End,
+//         }
+//         // Check if the range object already exists in the array
+//         // temporary comment out  && gene._doc.OpenChromatin !== "NA"
+//         if (!range.some(r => r.start === rangeObj.start && r.end === rangeObj.end)) {
+//             console.log("chr", gene._doc.Chr)
+//             range.push(rangeObj);  // Add range object to the array if it's unique
+//         }
+//     }
+//     console.log("range in proximal helper function =====", range)
     
-    // Build an array of range conditions for the MongoDB query
-    let rangeConditions;
-    let result = [];
-    if (range.length > 0) {
-        rangeConditions = range.map(ele => ({
-            Chr: ele.chr,
-            Start: { $gte: ele.start, $lte: ele.end }
-        }));
-        console.log("condition", rangeConditions)
+//     // Build an array of range conditions for the MongoDB query
+//     let rangeConditions;
+//     let result = [];
+//     if (range.length > 0) {
+//         rangeConditions = range.map(ele => ({
+//             Chr: ele.chr,
+//             Start: { $gte: ele.start, $lte: ele.end }
+//         }));
+//         console.log("condition", rangeConditions)
     
-        // Query the VariantModel where the Start falls within any of the ranges
-        result = await VariantModel.find({
-            $or: rangeConditions
-        });
+//         // Query the VariantModel where the Start falls within any of the ranges
+//         result = await VariantModel.find({
+//             $or: rangeConditions
+//         });
 
-    }
+//     }
 
-    return result;
-}
+//     return result;
+// }
 
 router.get('/:id/proximal_regulatory', async(req, res) => {
     console.log("proximal regulatory =============")
