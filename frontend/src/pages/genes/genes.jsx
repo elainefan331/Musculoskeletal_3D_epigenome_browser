@@ -267,7 +267,7 @@ const Genes = () => {
                         fetchDistalRegion();
                     }}
                 >
-                    Distal Regulatory Region
+                    Enhancer Regulatory Region
                 </button>
             </div>
 
@@ -497,7 +497,7 @@ const Genes = () => {
             {activeTab === 4 && (
             <>
             <div className="table-wrapper">
-                <h3>Distal Regulatory Region</h3>
+                <h3>Enhancer Regulatory Region</h3>
                 {loadingDistal ? (
                 <div>Loading distal regulatory region data...</div>
                 ) : (

@@ -135,13 +135,37 @@ router.get('/:id/proximal_regulatory', async(req, res) => {
     console.log("proximal regulatory =============")
     const id = req.params.id;
     const { celltype } = req.query;
-    const gene = await geneModel.find({Gene_Name: id});
+    // const gene = await geneModel.find({Gene_Name: id});
+    const variants = await VariantModel.find({GeneName_ID_Ensembl: { $regex: id, $options: 'i' }});
 
-    console.log("id in proximal", id)
-    console.log("celltype in proximal", celltype)
+    let result = []
+    for (let variant of variants) {
+        // console.log("variant", variant)
+        if (celltype === "hMSC") {
+            if (variant._doc.chromHMM_hMSC && 
+                (variant._doc.chromHMM_hMSC.startsWith("1_") || 
+                 variant._doc.chromHMM_hMSC.startsWith("2_") || 
+                 variant._doc.chromHMM_hMSC.startsWith("3_") ||
+                 variant._doc.chromHMM_hMSC.startsWith("4_") 
+                )) {
+                    
+                    result.push(variant);
+            }
+        } else if (celltype == "Osteoblast") {
+            if (variant._doc.chromHMM_osteoblast && 
+                (variant._doc.chromHMM_osteoblast.startsWith("1_") || 
+                 variant._doc.chromHMM_osteoblast.startsWith("2_") || 
+                 variant._doc.chromHMM_osteoblast.startsWith("3_") ||
+                 variant._doc.chromHMM_osteoblast.startsWith("4_") 
+                )) {
+                    // console.log("variant", variant)
+                    result.push(variant);
+            }
+        }
+    }
     try {
-        const result = await proximalRegion(gene, celltype);
-        console.log("result in proximal route====", result)
+        // const result = await proximalRegion(gene, celltype);
+        // console.log("result in proximal route====", result)
         
         if (result) {
             return res.status(200).json({proximalRegion: result})
