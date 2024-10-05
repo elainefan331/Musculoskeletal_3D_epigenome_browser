@@ -56,6 +56,9 @@ const Genes = () => {
             }
         }
         fetchData();
+        fetchProximalRegion();
+        fetchDistalRegion();
+
     }, [Id, celltype])
 
     // useEffect for coding region pagination

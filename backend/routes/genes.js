@@ -202,6 +202,36 @@ router.get('/:id/proximal_regulatory', async(req, res) => {
 
 })
 
+const findDistalRegion = async(geneName, celltype) => {
+    let cellTypeField;
+        if (celltype === "hMSC") {
+            cellTypeField = "chromHMM_hMSC";
+        } else if (celltype === "Osteoblast") {
+            cellTypeField = "chromHMM_osteoblast";
+        }
+
+        const variants = await VariantModel.find({
+            GeneName_ID_Ensembl: { $regex: geneName, $options: 'i' },
+            [cellTypeField]: { $regex: "^[1-4]_"}
+        }, {
+            _id: 1,  // Include the _id field
+            RSID: 1,  // Include the RSID field
+            variantID: 1,  // Include the variantID field
+            Region_Ensembl: 1,  // Include the Region_Ensembl field
+            GeneInfo_DistNG_Ensembl: 1,  // Include the GeneInfo_DistNG_Ensembl field
+            Promoter_like_region: 1,  // Include the Promoter_like_region field
+            chromHMM_hMSC: 1,  // Include the chromHMM_hMSC field
+            chromHMM_osteoblast: 1,  // Include the chromHMM_osteoblast field
+            OpenChromatin_hMSC: 1,  // Include the OpenChromatin_hMSC field
+            OpenChromatin_OB: 1,  // Include the OpenChromatin_OB field
+            SigHiC_hMSC: 1,  // Include the SigHiC_hMSC field
+            SigHiC_OB13: 1,  // Include the SigHiC_OB13 field
+            SigHiC_OC: 1  // Include the SigHiC_OC field
+        }).lean();
+
+        return variants;
+        
+}
 
 router.get('/:id/distal_regulatory', async(req, res) => {
     console.log("distal regulatory =============")
@@ -291,6 +321,7 @@ router.get('/:id', async(req, res) => {
     // console.log("id in gene route", id)
     // console.log("celltype in gene route", celltype)
     
+   
     try {
         const gene = await geneModel.find({Gene_Name: id});
         const diseases = await Disease2variant.find({Reported_gene: { $regex: id, $options: 'i' } }).sort({'P-value': 1});
