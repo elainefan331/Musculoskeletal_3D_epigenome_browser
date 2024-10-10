@@ -246,32 +246,32 @@ const Genes = () => {
         ) : null}
 
             <div className="gene-page-tabs">
-                <button
+                {/* <button
                     className={activeTab === 1? "active-tab": "tab"}
                     onClick={() => setActiveTab(1)}
                 >
                     GWAS Results
-                </button>
+                </button> */}
 
                 <button
-                    className={activeTab === 2? "active-tab": "tab"}
-                    onClick={() => setActiveTab(2)}
+                    className={activeTab === 1? "active-tab": "tab"}
+                    onClick={() => setActiveTab(1)}
                 >
                     Coding Region
                 </button>
                 <button
-                    className={activeTab === 3? "active-tab": "tab"}
+                    className={activeTab === 2? "active-tab": "tab"}
                     onClick={() => {
-                        setActiveTab(3);
+                        setActiveTab(2);
                         fetchProximalRegion();
                     }}
                 >
                     Promotor Regulatory Region
                 </button>
                 <button
-                    className={activeTab === 4? "active-tab": "tab"}
+                    className={activeTab === 3? "active-tab": "tab"}
                     onClick={() => {
-                        setActiveTab(4);
+                        setActiveTab(3);
                         fetchDistalRegion();
                     }}
                 >
@@ -279,7 +279,7 @@ const Genes = () => {
                 </button>
             </div>
 
-            {activeTab === 1 && (
+            {/* {activeTab === 1 && (
             <>
             <div className="gene-disease-table-container">
                 <button onClick={downloadCSV} className="csv-download-button">
@@ -346,9 +346,9 @@ const Genes = () => {
                     )}
             </div>
             </>
-            )}
+            )} */}
 
-            {activeTab === 2 && (
+            {activeTab === 1 && (
             <>
             <div className="table-wrapper">
                 <h3>{`Coding Region of ${Id} in ${celltype} cell-type`}</h3>
@@ -397,7 +397,7 @@ const Genes = () => {
             </>
             )}
 
-            {activeTab === 3 && (
+            {activeTab === 2 && (
                 <>
                 <div className="table-wrapper">
                     <h3>Promoter Regulatory Region</h3>
@@ -504,7 +504,7 @@ const Genes = () => {
                 </>
             )}
 
-            {activeTab === 4 && (
+            {activeTab === 3 && (
             <>
             <div className="table-wrapper">
                 <h3>Enhancer Regulatory Region</h3>
