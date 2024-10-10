@@ -33,6 +33,10 @@ const Genes = () => {
     const [currentProximalItems, setCurrentProximalItems] = useState([]);
     const [proximalItemsPerPage, setProximalItemsPerPage] = useState(10);
 
+    // pagination for distal region
+    const [currentDistalItems, setCurrentDistalItems] = useState([]);
+    const [distalItemsPerPage, setDistalItemsPerPage] = useState(10);
+
     useEffect(() => {
         async function fetchData() {
             const url = new URL(`${import.meta.env.VITE_EXPRESS_URL}/genes/${Id}`)
@@ -81,6 +85,13 @@ const Genes = () => {
             setCurrentProximalItems(proximalRegion.slice(0, proximalItemsPerPage));
         }
     }, [proximalRegion, proximalItemsPerPage]);
+
+    // useEffect for distal Results pagination
+    useEffect(() => {
+        if (distalRegion) {
+            setCurrentDistalItems(distalRegion.slice(0, distalItemsPerPage));
+        }
+    }, [distalRegion, distalItemsPerPage]);
 
     const downloadCSV = () => {
         if (!diseases) return;
@@ -135,6 +146,11 @@ const Genes = () => {
         setCurrentProximalItems(proximalRegion.slice(offset, offset + proximalItemsPerPage));
     }
 
+    // distal Results pagination
+    const handleDistalPageChange = (offset) => {
+        setCurrentDistalItems(distalRegion.slice(offset, offset + distalItemsPerPage));
+    }
+
     // coding region pagination
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(parseInt(e.target.value));
@@ -151,6 +167,12 @@ const Genes = () => {
      const handleProximalItemsPerPageChange = (e) => {
         setProximalItemsPerPage(parseInt(e.target.value));
         handleProximalPageChange(0); // Reset to first page
+    };
+
+     // distal Results pagination
+     const handleDistalItemsPerPageChange = (e) => {
+        setDistalItemsPerPage(parseInt(e.target.value));
+        handleDistalPageChange(0); // Reset to first page
     };
 
     // proximal region request function
