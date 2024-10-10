@@ -598,6 +598,75 @@ const Genes = () => {
             </>
             )}
 
+
+            
+            <>
+            <div className="gene-disease-table-container">
+                <button onClick={downloadCSV} className="csv-download-button">
+                    <i className="fa-solid fa-download"></i>
+                    Download CSV
+                </button>
+                <div className="table-wrapper">
+                    <h3>GWAS Results</h3>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Reported Gene</th>
+                                <th>Phenotype</th>
+                                <th>RSID</th>
+                                <th>P-value</th>
+                                <th>OR-Beta</th>
+                                <th>Pubmed</th>
+                                <th>Study Accession</th>
+                            </tr>
+                        </thead>
+
+                        {currentDiseaseItems?.map((disease) => {
+                            return (
+                                    <tbody key={disease._id} className="disease-row-tbody">
+                                        <tr>
+                                            <td>{disease["Reported_gene"]}</td>
+                                            <td>{disease["Disease_trait"]}</td>
+                                            <td>
+                                                <a className="gene_external_link" href={`https://www.ncbi.nlm.nih.gov/snp/${disease["RSID"]}`}>
+                                                    {disease["RSID"]}
+                                                </a>
+                                            </td>
+                                            <td>{disease["P-value"]}</td>
+                                            <td>{disease["OR-Beta"]}</td>
+                                            <td>
+                                                <a className="gene_external_link" href={`http://pubmed.ncbi.nlm.nih.gov/${disease["Pubmed"]}/`} target="_blank">
+                                                    {disease["Pubmed"]}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a className="gene_external_link" href={`http://www.ebi.ac.uk/gwas/studies/${disease["STUDY_ACCESSION"]}`} target="_blank">
+                                                    {disease["STUDY_ACCESSION"]}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>  
+                            )
+                        })}
+                    </table>
+                </div>
+            </div>
+            
+            <div className="pagination-container">
+                    {diseases && <Pagination key={diseaseItemsPerPage} itemsPerPage={diseaseItemsPerPage} items={diseases} onPageChange={handleDiseasePageChange} />}
+                    {diseases && (
+                        <div className="items-per-page-options-container">
+                            <select onChange={handleDiseaseItemsPerPageChange}> 
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                            </select>
+                            <span> Showing {currentDiseaseItems.length > 0 ? `${(diseases.indexOf(currentDiseaseItems[0])) + 1} to ${(diseases.indexOf(currentDiseaseItems[currentDiseaseItems.length - 1])) + 1}` : '0'} of {diseases.length} Results</span>
+                        </div>
+                    )}
+            </div>
+            </>
+                
         </div>
     )
 }
