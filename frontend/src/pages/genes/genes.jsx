@@ -471,7 +471,7 @@ const Genes = () => {
                             <th>Hi-C Chromatin Interaction</th>
                         </tr>
                     </thead>
-                    {distalRegion && distalRegion.length > 0? (distalRegion.map((region) => {
+                    {distalRegion && distalRegion.length > 0? (currentDiseaseItems.map((region) => {
                         return (
                             <tbody key={region._id}>
                                 <tr>
@@ -541,6 +541,25 @@ const Genes = () => {
                     )}
                 </table>
                 )}
+            </div>
+
+            <div className="pagination-container">
+                    {distalRegion && <Pagination 
+                        key={distalItemsPerPage} 
+                        itemsPerPage={distalItemsPerPage} 
+                        items={distalRegion} 
+                        onPageChange={handleDistalPageChange} />}
+                    {distalRegion && (
+                        <div className="items-per-page-options-container">
+                            <select onChange={handleDistalItemsPerPageChange}> 
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                            </select>
+                            <span> Showing {currentDistalItems.length > 0? `${(distalRegion.indexOf(currentDistalItems[0])) + 1} to ${(distalRegion.indexOf(currentDistalItems[currentDistalItems.length - 1])) + 1}`: '0'} of {distalRegion.length} Results</span>
+                        </div>
+                    )
+                    }
             </div>
             </>
             )}
