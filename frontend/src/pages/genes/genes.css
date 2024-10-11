@@ -37,10 +37,19 @@
     box-shadow: 1px 1px 1px 2px lightgray;
     color: rgb(34, 78, 115);
     padding: 10px;
-    cursor: pointer;
+    cursor: pointer !important;
     display: flex;
     gap: 5px;
 }
+
+.csv-download-button:hover {
+    color: white;
+    background-color: #007bff;
+}
+
+
+
+
 
 .gene-page-tabs {
     display: flex;
@@ -69,10 +78,14 @@
     color: white;
     border: 1px solid #007bff;
     padding: 10px 20px;
-    cursor: default;
 
 }
 
 #gene-nest-table-container {
     padding: 0px;
 }
+
+.gene-disease-table-container {
+    margin-top: 50px;
+}
+

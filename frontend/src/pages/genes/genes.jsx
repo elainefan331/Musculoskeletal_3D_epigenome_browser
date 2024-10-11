@@ -33,6 +33,10 @@ const Genes = () => {
     const [currentProximalItems, setCurrentProximalItems] = useState([]);
     const [proximalItemsPerPage, setProximalItemsPerPage] = useState(10);
 
+    // pagination for distal region
+    const [currentDistalItems, setCurrentDistalItems] = useState([]);
+    const [distalItemsPerPage, setDistalItemsPerPage] = useState(10);
+
     useEffect(() => {
         async function fetchData() {
             const url = new URL(`${import.meta.env.VITE_EXPRESS_URL}/genes/${Id}`)
@@ -82,12 +86,15 @@ const Genes = () => {
         }
     }, [proximalRegion, proximalItemsPerPage]);
 
-    const downloadCSV = () => {
-        if (!diseases) return;
+    // useEffect for distal Results pagination
+    useEffect(() => {
+        if (distalRegion) {
+            setCurrentDistalItems(distalRegion.slice(0, distalItemsPerPage));
+        }
+    }, [distalRegion, distalItemsPerPage]);
 
-        // Define CSV column headers
-        const headers = ["Reported Gene", "Phenotype", "Variant", "P-value", "OR-Beta", "Pubmed", "Study Accession"];
-        
+    const downloadCSV = (type) => {
+        // if (!diseases) return;
         // Function to wrap a value in double quotes if it contains commas or newlines
         const escapeCSVValue = (value) => {
             if (typeof value === 'string' && (value.includes(',') || value.includes('\n'))) {
@@ -95,29 +102,50 @@ const Genes = () => {
             }
             return value;
         };
+        let headers;
+        let rows;
+        if (type === "GWAS" && diseases) {
+            // Define CSV column headers
+            headers = ["Reported Gene", "Phenotype", "Variant", "P-value", "OR-Beta", "Pubmed", "Study Accession"];
+            // Map through the diseases data to create rows
+            rows = diseases.map(disease => [
+                escapeCSVValue(disease["Reported_gene"]), // Escape commas in reported genes
+                escapeCSVValue(disease["Disease_trait"]),
+                escapeCSVValue(disease["RSID"]),
+                escapeCSVValue(disease["P-value"]),
+                escapeCSVValue(disease["OR-Beta"]),
+                escapeCSVValue(disease["Pubmed"]),
+                escapeCSVValue(disease["STUDY_ACCESSION"])
+            ]);
+        } else if (type === "codingRegion" && codingRegion) {
+            // Define CSV column headers
+            headers = ["RSID", "VariantID", "ExonicFunc_Ensembl", "AAChange_Ensembl"];
+            // Map through the diseases data to create rows
+            rows = codingRegion.map(region => [
+                escapeCSVValue(region["RSID"]), // Escape commas in reported genes
+                escapeCSVValue(region["variantID"]),
+                escapeCSVValue(region["ExonicFunc_Ensembl"]),
+                escapeCSVValue(region["AAChange_Ensembl"]),
+               
+            ]);
+        }
 
-        // Map through the diseases data to create rows
-        const rows = diseases.map(disease => [
-            escapeCSVValue(disease["Reported_gene"]), // Escape commas in reported genes
-            escapeCSVValue(disease["Disease_trait"]),
-            escapeCSVValue(disease["RSID"]),
-            escapeCSVValue(disease["P-value"]),
-            escapeCSVValue(disease["OR-Beta"]),
-            escapeCSVValue(disease["Pubmed"]),
-            escapeCSVValue(disease["STUDY_ACCESSION"])
-        ]);
         
-        // Create CSV content
-        const csvContent = [headers, ...rows].map(row => row.join(",")).join("\n");
-        
-        // Create a blob and download it
-        const blob = new Blob([csvContent], { type: "text/csv" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${Id}_GWAS_results.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
+        if (headers && rows) {
+            // Create CSV content
+            const csvContent = [headers, ...rows].map(row => row.join(",")).join("\n");
+            
+            // Create a blob and download it
+            const blob = new Blob([csvContent], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${Id}_${type}_results.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        } else {
+            console.error('No data available for download');
+        }
     };
 
     // coding region pagination
@@ -133,6 +161,11 @@ const Genes = () => {
     // proximal Results pagination
     const handleProximalPageChange = (offset) => {
         setCurrentProximalItems(proximalRegion.slice(offset, offset + proximalItemsPerPage));
+    }
+
+    // distal Results pagination
+    const handleDistalPageChange = (offset) => {
+        setCurrentDistalItems(distalRegion.slice(offset, offset + distalItemsPerPage));
     }
 
     // coding region pagination
@@ -151,6 +184,12 @@ const Genes = () => {
      const handleProximalItemsPerPageChange = (e) => {
         setProximalItemsPerPage(parseInt(e.target.value));
         handleProximalPageChange(0); // Reset to first page
+    };
+
+     // distal Results pagination
+     const handleDistalItemsPerPageChange = (e) => {
+        setDistalItemsPerPage(parseInt(e.target.value));
+        handleDistalPageChange(0); // Reset to first page
     };
 
     // proximal region request function
@@ -250,28 +289,21 @@ const Genes = () => {
                     className={activeTab === 1? "active-tab": "tab"}
                     onClick={() => setActiveTab(1)}
                 >
-                    GWAS Results
-                </button>
-
-                <button
-                    className={activeTab === 2? "active-tab": "tab"}
-                    onClick={() => setActiveTab(2)}
-                >
                     Coding Region
                 </button>
                 <button
-                    className={activeTab === 3? "active-tab": "tab"}
+                    className={activeTab === 2? "active-tab": "tab"}
                     onClick={() => {
-                        setActiveTab(3);
+                        setActiveTab(2);
                         fetchProximalRegion();
                     }}
                 >
                     Promotor Regulatory Region
                 </button>
                 <button
-                    className={activeTab === 4? "active-tab": "tab"}
+                    className={activeTab === 3? "active-tab": "tab"}
                     onClick={() => {
-                        setActiveTab(4);
+                        setActiveTab(3);
                         fetchDistalRegion();
                     }}
                 >
@@ -279,77 +311,13 @@ const Genes = () => {
                 </button>
             </div>
 
+
             {activeTab === 1 && (
-            <>
-            <div className="gene-disease-table-container">
-                <button onClick={downloadCSV} className="csv-download-button">
-                    <i className="fa-solid fa-download"></i>
-                    Download CSV
-                </button>
-                <div className="table-wrapper">
-                    <h3>GWAS Results</h3>
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Reported Gene</th>
-                                <th>Phenotype</th>
-                                <th>RSID</th>
-                                <th>P-value</th>
-                                <th>OR-Beta</th>
-                                <th>Pubmed</th>
-                                <th>Study Accession</th>
-                            </tr>
-                        </thead>
-
-                        {currentDiseaseItems?.map((disease) => {
-                            return (
-                                    <tbody key={disease._id} className="disease-row-tbody">
-                                        <tr>
-                                            <td>{disease["Reported_gene"]}</td>
-                                            <td>{disease["Disease_trait"]}</td>
-                                            <td>
-                                                <a className="gene_external_link" href={`https://www.ncbi.nlm.nih.gov/snp/${disease["RSID"]}`}>
-                                                    {disease["RSID"]}
-                                                </a>
-                                            </td>
-                                            <td>{disease["P-value"]}</td>
-                                            <td>{disease["OR-Beta"]}</td>
-                                            <td>
-                                                <a className="gene_external_link" href={`http://pubmed.ncbi.nlm.nih.gov/${disease["Pubmed"]}/`} target="_blank">
-                                                    {disease["Pubmed"]}
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a className="gene_external_link" href={`http://www.ebi.ac.uk/gwas/studies/${disease["STUDY_ACCESSION"]}`} target="_blank">
-                                                    {disease["STUDY_ACCESSION"]}
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>  
-                            )
-                        })}
-                    </table>
-                </div>
-            </div>
-            
-            <div className="pagination-container">
-                    {diseases && <Pagination key={diseaseItemsPerPage} itemsPerPage={diseaseItemsPerPage} items={diseases} onPageChange={handleDiseasePageChange} />}
-                    {diseases && (
-                        <div className="items-per-page-options-container">
-                            <select onChange={handleDiseaseItemsPerPageChange}> 
-                                <option value="10">10</option>
-                                <option value="20">20</option>
-                                <option value="30">30</option>
-                            </select>
-                            <span> Showing {currentDiseaseItems.length > 0 ? `${(diseases.indexOf(currentDiseaseItems[0])) + 1} to ${(diseases.indexOf(currentDiseaseItems[currentDiseaseItems.length - 1])) + 1}` : '0'} of {diseases.length} Results</span>
-                        </div>
-                    )}
-            </div>
-            </>
-            )}
-
-            {activeTab === 2 && (
-            <>
+            <div>
+            <button onClick={() => downloadCSV("codingRegion")} className="csv-download-button">
+                <i className="fa-solid fa-download"></i>
+                Download Coding Region CSV
+            </button>
             <div className="table-wrapper">
                 <h3>{`Coding Region of ${Id} in ${celltype} cell-type`}</h3>
                 <table className="table">
@@ -394,10 +362,10 @@ const Genes = () => {
                     )
                     }
             </div>
-            </>
+            </div>
             )}
 
-            {activeTab === 3 && (
+            {activeTab === 2 && (
                 <>
                 <div className="table-wrapper">
                     <h3>Promoter Regulatory Region</h3>
@@ -504,7 +472,7 @@ const Genes = () => {
                 </>
             )}
 
-            {activeTab === 4 && (
+            {activeTab === 3 && (
             <>
             <div className="table-wrapper">
                 <h3>Enhancer Regulatory Region</h3>
@@ -524,7 +492,7 @@ const Genes = () => {
                             <th>Hi-C Chromatin Interaction</th>
                         </tr>
                     </thead>
-                    {distalRegion && distalRegion.length > 0? (distalRegion.map((region) => {
+                    {distalRegion && distalRegion.length > 0? (currentDiseaseItems.map((region) => {
                         return (
                             <tbody key={region._id}>
                                 <tr>
@@ -595,9 +563,97 @@ const Genes = () => {
                 </table>
                 )}
             </div>
+
+            <div className="pagination-container">
+                    {distalRegion && <Pagination 
+                        key={distalItemsPerPage} 
+                        itemsPerPage={distalItemsPerPage} 
+                        items={distalRegion} 
+                        onPageChange={handleDistalPageChange} />}
+                    {distalRegion && (
+                        <div className="items-per-page-options-container">
+                            <select onChange={handleDistalItemsPerPageChange}> 
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                            </select>
+                            <span> Showing {currentDistalItems.length > 0? `${(distalRegion.indexOf(currentDistalItems[0])) + 1} to ${(distalRegion.indexOf(currentDistalItems[currentDistalItems.length - 1])) + 1}`: '0'} of {distalRegion.length} Results</span>
+                        </div>
+                    )
+                    }
+            </div>
             </>
             )}
 
+
+            
+            <>
+            <div className="gene-disease-table-container">
+                <button onClick={() => downloadCSV("GWAS")} className="csv-download-button">
+                    <i className="fa-solid fa-download"></i>
+                    Download GWAS CSV
+                </button>
+                <div className="table-wrapper">
+                    <h3>GWAS Results</h3>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Reported Gene</th>
+                                <th>Phenotype</th>
+                                <th>RSID</th>
+                                <th>P-value</th>
+                                <th>OR-Beta</th>
+                                <th>Pubmed</th>
+                                <th>Study Accession</th>
+                            </tr>
+                        </thead>
+
+                        {currentDiseaseItems?.map((disease) => {
+                            return (
+                                    <tbody key={disease._id} className="disease-row-tbody">
+                                        <tr>
+                                            <td>{disease["Reported_gene"]}</td>
+                                            <td>{disease["Disease_trait"]}</td>
+                                            <td>
+                                                <a className="gene_external_link" href={`https://www.ncbi.nlm.nih.gov/snp/${disease["RSID"]}`}>
+                                                    {disease["RSID"]}
+                                                </a>
+                                            </td>
+                                            <td>{disease["P-value"]}</td>
+                                            <td>{disease["OR-Beta"]}</td>
+                                            <td>
+                                                <a className="gene_external_link" href={`http://pubmed.ncbi.nlm.nih.gov/${disease["Pubmed"]}/`} target="_blank">
+                                                    {disease["Pubmed"]}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a className="gene_external_link" href={`http://www.ebi.ac.uk/gwas/studies/${disease["STUDY_ACCESSION"]}`} target="_blank">
+                                                    {disease["STUDY_ACCESSION"]}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>  
+                            )
+                        })}
+                    </table>
+                </div>
+            </div>
+            
+            <div className="pagination-container">
+                    {diseases && <Pagination key={diseaseItemsPerPage} itemsPerPage={diseaseItemsPerPage} items={diseases} onPageChange={handleDiseasePageChange} />}
+                    {diseases && (
+                        <div className="items-per-page-options-container">
+                            <select onChange={handleDiseaseItemsPerPageChange}> 
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                            </select>
+                            <span> Showing {currentDiseaseItems.length > 0 ? `${(diseases.indexOf(currentDiseaseItems[0])) + 1} to ${(diseases.indexOf(currentDiseaseItems[currentDiseaseItems.length - 1])) + 1}` : '0'} of {diseases.length} Results</span>
+                        </div>
+                    )}
+            </div>
+            </>
+                
         </div>
     )
 }

@@ -64,30 +64,37 @@ const IgvRangeCalculator = async(celltype, gene) => {
 
 // generate bedpe file
 const generateBedpeFile = async(genes, filePath) => {
-    const bedpeDataArray = genes.flatMap(gene => {
-        const geneDoc = gene._doc;
-        const HicBinArray = geneDoc.HiC_Promoter_bin.split(":")
-        const distalBinArray = geneDoc.HiC_Distal_bin.split(":")
-        const chr = `chr${HicBinArray[0]}`;
-        
-        return {
-            chr1: chr,
-            start1: distalBinArray[1],
-            end1: distalBinArray[2],
-            chr2: chr,
-            start2: HicBinArray[1],
-            end2: HicBinArray[2],
-            long: 10
-        }
-    });
-
-    const bedpeString = bedpeDataArray.map(item => `${item.chr1}\t${item.start1}\t${item.end1}\t${item.chr2}\t${item.start2}\t${item.end2}\t${item.long}`).join('\n');
+    if (fs.existsSync(filePath)) {
+        const existingFile = await fs.promises.readFile(filePath, 'utf8');
+        console.log(`BEDPE file already exists at ${filePath}, reading the file...`);
+        return existingFile;
+    } else {
+        const bedpeDataArray = genes.flatMap(gene => {
+            const geneDoc = gene._doc;
+            const HicBinArray = geneDoc.HiC_Promoter_bin.split(":")
+            const distalBinArray = geneDoc.HiC_Distal_bin.split(":")
+            const chr = `chr${HicBinArray[0]}`;
+            
+            return {
+                chr1: chr,
+                start1: distalBinArray[1],
+                end1: distalBinArray[2],
+                chr2: chr,
+                start2: HicBinArray[1],
+                end2: HicBinArray[2],
+                long: 10
+            }
+        });
     
-    // fs.writeFileSync(filePath, bedpeString, (err) => {
-    //     if (err) throw err;
-    // });
-    await fs.promises.writeFile(filePath, bedpeString);  
-    console.log(`BEDPE file has been generated and saved to ${filePath}.`);
+        const bedpeString = bedpeDataArray.map(item => `${item.chr1}\t${item.start1}\t${item.end1}\t${item.chr2}\t${item.start2}\t${item.end2}\t${item.long}`).join('\n');
+        
+        // fs.writeFileSync(filePath, bedpeString, (err) => {
+        //     if (err) throw err;
+        // });
+        await fs.promises.writeFile(filePath, bedpeString);  
+        console.log(`BEDPE file has been generated and saved to ${filePath}.`);
+        return bedpeString;
+    }
 
 }
 
