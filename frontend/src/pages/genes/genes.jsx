@@ -296,7 +296,12 @@ const Genes = () => {
 
 
             {activeTab === 1 && (
-            <>
+            <div>
+                <p>hihi</p>
+            <button onClick={downloadCSV} className="csv-download-button">
+                <i className="fa-solid fa-download"></i>
+                Download CSV
+            </button>
             <div className="table-wrapper">
                 <h3>{`Coding Region of ${Id} in ${celltype} cell-type`}</h3>
                 <table className="table">
@@ -341,7 +346,7 @@ const Genes = () => {
                     )
                     }
             </div>
-            </>
+            </div>
             )}
 
             {activeTab === 2 && (
