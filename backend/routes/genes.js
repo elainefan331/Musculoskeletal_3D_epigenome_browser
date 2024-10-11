@@ -67,7 +67,7 @@ const generateBedpeFile = async(genes, filePath) => {
     if (fs.existsSync(filePath)) {
         const existingFile = await fs.promises.readFile(filePath, 'utf8');
         console.log(`BEDPE file already exists at ${filePath}, reading the file...`);
-        // return existingFile;
+        return existingFile;
     } else {
         const bedpeDataArray = genes.flatMap(gene => {
             const geneDoc = gene._doc;
@@ -93,6 +93,7 @@ const generateBedpeFile = async(genes, filePath) => {
         // });
         await fs.promises.writeFile(filePath, bedpeString);  
         console.log(`BEDPE file has been generated and saved to ${filePath}.`);
+        return bedpeString;
     }
 
 }

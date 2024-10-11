@@ -109,13 +109,27 @@ router.get('/autocomplete', async (req, res) => {
         // }
 
         // original find method
-        const results = await Api_category.find({
-            $text: { $search: `"${query}"` }
-        }, {
-            score: { $meta: "textScore" }
-        }).sort({
-            score: { $meta: "textScore" }
-        }).limit(10).lean().exec()
+        // const results = await Api_category.find({
+        //     $text: { $search: `"${query}"` }
+        // }, {
+        //     score: { $meta: "textScore" }
+        // }).sort({
+        //     score: { $meta: "textScore" }
+        // }).limit(10).lean().exec()
+        const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+        // Create a regex pattern anchored at the beginning
+        const regex = new RegExp('^' + escapedQuery, 'i');
+
+        // Perform the regex search on the 'name' field
+        const results = await Api_category.find(
+            {
+                name: regex
+            }
+        )
+        .limit(10)
+        .lean()
+        .exec();
        
         
 

@@ -7,4 +7,10 @@ body {
     background-color: rgb(249, 251, 251);
 }
 
+button,
+a {
+  cursor: pointer !important;
+}
+
+
 

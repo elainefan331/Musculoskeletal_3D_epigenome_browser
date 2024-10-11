@@ -93,12 +93,8 @@ const Genes = () => {
         }
     }, [distalRegion, distalItemsPerPage]);
 
-    const downloadCSV = () => {
-        if (!diseases) return;
-
-        // Define CSV column headers
-        const headers = ["Reported Gene", "Phenotype", "Variant", "P-value", "OR-Beta", "Pubmed", "Study Accession"];
-        
+    const downloadCSV = (type) => {
+        // if (!diseases) return;
         // Function to wrap a value in double quotes if it contains commas or newlines
         const escapeCSVValue = (value) => {
             if (typeof value === 'string' && (value.includes(',') || value.includes('\n'))) {
@@ -106,29 +102,50 @@ const Genes = () => {
             }
             return value;
         };
+        let headers;
+        let rows;
+        if (type === "GWAS" && diseases) {
+            // Define CSV column headers
+            headers = ["Reported Gene", "Phenotype", "Variant", "P-value", "OR-Beta", "Pubmed", "Study Accession"];
+            // Map through the diseases data to create rows
+            rows = diseases.map(disease => [
+                escapeCSVValue(disease["Reported_gene"]), // Escape commas in reported genes
+                escapeCSVValue(disease["Disease_trait"]),
+                escapeCSVValue(disease["RSID"]),
+                escapeCSVValue(disease["P-value"]),
+                escapeCSVValue(disease["OR-Beta"]),
+                escapeCSVValue(disease["Pubmed"]),
+                escapeCSVValue(disease["STUDY_ACCESSION"])
+            ]);
+        } else if (type === "codingRegion" && codingRegion) {
+            // Define CSV column headers
+            headers = ["RSID", "VariantID", "ExonicFunc_Ensembl", "AAChange_Ensembl"];
+            // Map through the diseases data to create rows
+            rows = codingRegion.map(region => [
+                escapeCSVValue(region["RSID"]), // Escape commas in reported genes
+                escapeCSVValue(region["variantID"]),
+                escapeCSVValue(region["ExonicFunc_Ensembl"]),
+                escapeCSVValue(region["AAChange_Ensembl"]),
+               
+            ]);
+        }
 
-        // Map through the diseases data to create rows
-        const rows = diseases.map(disease => [
-            escapeCSVValue(disease["Reported_gene"]), // Escape commas in reported genes
-            escapeCSVValue(disease["Disease_trait"]),
-            escapeCSVValue(disease["RSID"]),
-            escapeCSVValue(disease["P-value"]),
-            escapeCSVValue(disease["OR-Beta"]),
-            escapeCSVValue(disease["Pubmed"]),
-            escapeCSVValue(disease["STUDY_ACCESSION"])
-        ]);
         
-        // Create CSV content
-        const csvContent = [headers, ...rows].map(row => row.join(",")).join("\n");
-        
-        // Create a blob and download it
-        const blob = new Blob([csvContent], { type: "text/csv" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${Id}_GWAS_results.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
+        if (headers && rows) {
+            // Create CSV content
+            const csvContent = [headers, ...rows].map(row => row.join(",")).join("\n");
+            
+            // Create a blob and download it
+            const blob = new Blob([csvContent], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${Id}_${type}_results.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        } else {
+            console.error('No data available for download');
+        }
     };
 
     // coding region pagination
@@ -297,10 +314,9 @@ const Genes = () => {
 
             {activeTab === 1 && (
             <div>
-                <p>hihi</p>
-            <button onClick={downloadCSV} className="csv-download-button">
+            <button onClick={() => downloadCSV("codingRegion")} className="csv-download-button">
                 <i className="fa-solid fa-download"></i>
-                Download CSV
+                Download Coding Region CSV
             </button>
             <div className="table-wrapper">
                 <h3>{`Coding Region of ${Id} in ${celltype} cell-type`}</h3>
@@ -573,9 +589,9 @@ const Genes = () => {
             
             <>
             <div className="gene-disease-table-container">
-                <button onClick={downloadCSV} className="csv-download-button">
+                <button onClick={() => downloadCSV("GWAS")} className="csv-download-button">
                     <i className="fa-solid fa-download"></i>
-                    Download CSV
+                    Download GWAS CSV
                 </button>
                 <div className="table-wrapper">
                     <h3>GWAS Results</h3>

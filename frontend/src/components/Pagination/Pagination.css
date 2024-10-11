@@ -30,5 +30,5 @@
 
 .pagination li.disabled a {
     color: #ddd;
-    cursor: default;
+    /* cursor: default; */
 }
