@@ -3,6 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 // import { useDisease } from "../../context/diseaseContext";
 import IgvDisease from "../../components/IgvDisease";
 import IgvDiseaseWithPromoter from "../../components/IgvDiseaseWithPromoter";
+import "./diseaseIndex.css"
 
 const DiseaseIndex = () => {
     // const {disease} = useDisease();
@@ -113,14 +114,21 @@ const DiseaseIndex = () => {
             </div>
             {selectedVariant && <p>{selectedVariant.Variant}</p>}
             {variantData? (promoterExist? (
-                <div>
-                    <IgvDiseaseWithPromoter IndexSNP={Id} celltype={celltype} range={IgvRange} diseasePosition={diseasePosition}/>
+                <div className="disease-igv-container">
+                    <div >
+                        <IgvDiseaseWithPromoter IndexSNP={Id} celltype={celltype} range={IgvRange} diseasePosition={diseasePosition}/>
+                    </div>
                 </div>
-            ) : <div>
-                    <IgvDisease IndexSNP={Id} celltype={celltype} range={IgvRange} diseasePosition={diseasePosition}/>
+            ) : <div className="disease-igv-container">
+                    <div>
+                        <IgvDisease IndexSNP={Id} celltype={celltype} range={IgvRange} diseasePosition={diseasePosition}/>
+                    </div>
                 </div>
             ) : null}
             
+            <div className="theEnd">
+
+            </div>
         </div>
     )
 }

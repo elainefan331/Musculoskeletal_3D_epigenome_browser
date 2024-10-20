@@ -121,15 +121,96 @@ router.get('/autocomplete', async (req, res) => {
         // Create a regex pattern anchored at the beginning
         const regex = new RegExp('^' + escapedQuery, 'i');
 
-        // Perform the regex search on the 'name' field
-        const results = await Api_category.find(
+        // Perform the regex search on the 'name' field, autocompleted even type only 1 letter
+        // const results = await Api_category.find(
+        //     {
+        //         name: regex
+        //     }
+        // )
+        // .limit(10)
+        // .lean()
+        // .exec();
+        // Use the aggregation pipeline to match and sort results
+        const results = await Api_category.aggregate([
             {
-                name: regex
+                $match: {
+                    name: { $regex: regex } // Use regex for initial match
+                }
+            },
+            {
+                $addFields: {
+                    isExactMatch: {
+                        $cond: [
+                            {
+                                // Use $eq with $toLower to ensure case-insensitive exact match
+                                $eq: [ { $toLower: "$name" }, query.toLowerCase() ]
+                            },
+                            1,
+                            0
+                        ]
+                    }
+                }
+            },
+            {
+                $sort: {
+                    isExactMatch: -1, // Exact matches first
+                    name: 1           // Then sort alphabetically
+                }
+            },
+            {
+                $limit: 10
+            },
+            {
+                // Optionally project only necessary fields
+                $project: {
+                    _id: 1,
+                    name: 1,
+                    category: 1
+                }
             }
-        )
-        .limit(10)
-        .lean()
-        .exec();
+        ]);
+        // const results = await Api_category.aggregate([
+        //     // Match names that start with the query, case-insensitive
+        //     {
+        //         $match: {
+        //             name: { $regex: regex }
+        //         }
+        //     },
+        //     // Add fields for trimmed name and exact match
+        //     {
+        //         $addFields: {
+        //             trimmedName: { $trim: { input: "$name" } },
+        //             isExactMatch: {
+        //                 $cond: [
+        //                     {
+        //                         $eq: [ { $toLower: "$trimmedName" }, query.toLowerCase() ]
+        //                     },
+        //                     1,
+        //                     0
+        //                 ]
+        //             }
+        //         }
+        //     },
+        //     // Sort with exact matches first
+        //     {
+        //         $sort: {
+        //             isExactMatch: -1, // Exact matches first
+        //             name: 1           // Then sort alphabetically
+        //         }
+        //     },
+        //     // Limit to top 10 results
+        //     {
+        //         $limit: 10
+        //     },
+        //     // Project the necessary fields
+        //     {
+        //         $project: {
+        //             _id: 1,
+        //             name: "$trimmedName"
+        //         }
+        //     }
+        // ]);
+
        
         
 
