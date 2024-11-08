@@ -5,6 +5,9 @@
 
 .about-content {
     color: rgb(94, 92, 92);
-    text-align: center;
     font-size: large;
+    display: flex;
+    justify-items: flex-start;
+    padding: 0% 10%;
+
 }

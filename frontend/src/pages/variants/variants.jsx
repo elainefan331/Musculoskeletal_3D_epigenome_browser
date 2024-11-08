@@ -120,7 +120,7 @@ const Variants = () => {
                                     {variantdata && variantdata.length > 1 && <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td>}
                                     {/* <td><input type="radio" name="selectVariant" value={variant} onChange={() => setShowallele(variant)}/></td> */}
                                     <td className="narrow-column">
-                                        <a href={`http://www.ncbi.nlm.nih.gov/snp/${variant.RSID}/`} target="_blank">
+                                        <a href={`http://www.ncbi.nlm.nih.gov/snp/${variant.RSID}/`} target="_blank" className="variant-external-links">
                                             {variant.RSID}
                                         </a>
                                     </td>

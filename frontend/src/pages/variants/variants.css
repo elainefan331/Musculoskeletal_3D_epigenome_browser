@@ -59,6 +59,7 @@
     width: 100px;
 }
 
-.narrow-column > a {
+.variant-external-links{
+    text-decoration: none;
     color: #007bff;
 }
