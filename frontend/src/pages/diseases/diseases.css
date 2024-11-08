@@ -2,6 +2,11 @@
     color: rgb(34, 78, 115);
 }
 
+.disease-external-links {
+    color: #007bff;
+    text-decoration: none;
+}
+
 .pagination-container {
     display: flex;
     justify-content: space-between;
