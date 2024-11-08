@@ -1,0 +1,13 @@
+.about-header {
+    color: rgb(34, 78, 115);
+    text-align: center;
+}
+
+.about-content {
+    color: rgb(94, 92, 92);
+    font-size: large;
+    display: flex;
+    justify-items: flex-start;
+    padding: 0% 10%;
+
+}

@@ -1,3 +1,7 @@
+.variant-h1 {
+    color: rgb(34, 78, 115);
+}
+
 .table-wrapper {
     border-radius: 8px; /* Adds rounded corners */
     overflow: hidden; /* Ensures the table content respects the border-radius */
@@ -55,6 +59,7 @@
     width: 100px;
 }
 
-.narrow-column > a {
+.variant-external-links{
+    text-decoration: none;
     color: #007bff;
 }

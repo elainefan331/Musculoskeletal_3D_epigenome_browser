@@ -4,7 +4,7 @@ const Navigation = () => {
     return (
         <div className="logo-nav-container">
             <div className="logo-home-container">
-                <img src="/public/dnalogo.png" alt="logo" style={{height: '50px', width: '50px'}}></img>
+                <img src="/dnalogo.png" alt="logo" style={{height: '50px', width: '50px'}}></img>
                 <NavLink to="/" className="home-link">
                     MSK 3D Epigenome Browser
                 </NavLink>

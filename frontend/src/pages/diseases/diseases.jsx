@@ -73,7 +73,7 @@ const Diseases = () => {
 
     return (
         <div>
-            <h1>Disease Search</h1>
+            <h1 className="disease-h1">Disease Search</h1>
                 <div className="table-wrapper">
                     <table className="table">
                         <thead>
@@ -123,7 +123,7 @@ const Diseases = () => {
                                                 }
                                             </td>
                                             <td id="disease-rsid-td">
-                                                <a href={`http://www.ncbi.nlm.nih.gov/snp/${disease.RSID}`} target="_blank">
+                                                <a href={`http://www.ncbi.nlm.nih.gov/snp/${disease.RSID}`} target="_blank" className="disease-external-links">
                                                     {disease.RSID}
                                                 </a>
                                             </td>
@@ -131,7 +131,7 @@ const Diseases = () => {
                                             <td>{disease.Risk_allele}</td>
                                             <td>{disease.Risk_allele_AF}</td>
                                             <td>
-                                                <a href={`https://pubmed.ncbi.nlm.nih.gov/${disease.Pubmed}/`} target="_blank">
+                                                <a href={`https://pubmed.ncbi.nlm.nih.gov/${disease.Pubmed}/`} target="_blank" className="disease-external-links">
                                                     {disease.Pubmed}
                                                 </a>
                                             </td>
@@ -139,7 +139,7 @@ const Diseases = () => {
                                             <td>{disease.Reported_gene}</td>
                                             <td>{disease["P-value"]}</td>
                                             <td id="disease-studyId-td">
-                                                <a href={`https://www.ebi.ac.uk/gwas/studies/${disease["STUDY_ACCESSION"]}/`} target="_blank">
+                                                <a href={`https://www.ebi.ac.uk/gwas/studies/${disease["STUDY_ACCESSION"]}/`} target="_blank" className="disease-external-links">
                                                     {disease["STUDY_ACCESSION"]}
                                                 </a>
                                             </td>
@@ -163,10 +163,7 @@ const Diseases = () => {
                     )
                     }
                 </div>
-                {selectedDiseaseId && <p>{`select disease id ${selectedDiseaseId}`}</p>}
-                {showDisease && <p>{`show disease id ${showDisease._id}`}</p>}
-                {cutoff && <p>{`cutoff is ${cutoff}`}</p>}
-                {celltype && <p>{`celltype is ${celltype}`}</p>}
+                
         </div>
     )
 }
