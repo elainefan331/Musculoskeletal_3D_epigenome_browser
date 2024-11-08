@@ -1,3 +1,7 @@
+.disease-h1 {
+    color: rgb(34, 78, 115);
+}
+
 .pagination-container {
     display: flex;
     justify-content: space-between;

@@ -242,7 +242,7 @@ const Genes = () => {
     return (
         <div>
         <div>
-            <h1>Gene Search</h1>
+            <h1 className="gene-h1">Gene Search</h1>
             <div className="gene_card">
                 <h2>{genedata["Gene_Name"]}</h2>
                 <div className="gene_info">

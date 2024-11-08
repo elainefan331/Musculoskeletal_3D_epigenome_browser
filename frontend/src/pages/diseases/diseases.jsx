@@ -73,7 +73,7 @@ const Diseases = () => {
 
     return (
         <div>
-            <h1>Disease Search</h1>
+            <h1 className="disease-h1">Disease Search</h1>
                 <div className="table-wrapper">
                     <table className="table">
                         <thead>
@@ -165,8 +165,6 @@ const Diseases = () => {
                 </div>
                 {selectedDiseaseId && <p>{`select disease id ${selectedDiseaseId}`}</p>}
                 {showDisease && <p>{`show disease id ${showDisease._id}`}</p>}
-                {cutoff && <p>{`cutoff is ${cutoff}`}</p>}
-                {celltype && <p>{`celltype is ${celltype}`}</p>}
         </div>
     )
 }
