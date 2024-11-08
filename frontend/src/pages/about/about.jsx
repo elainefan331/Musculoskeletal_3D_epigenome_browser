@@ -1,7 +1,9 @@
+import "./about.css"
+
 const About = () => {
     return (
         <div>
-            <p>hi, about page</p>
+            <h1 className="about-header">About Musculoskeletal 3D epigenome browser</h1>
         </div>
     )
 }
