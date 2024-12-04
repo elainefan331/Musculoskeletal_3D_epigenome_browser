@@ -258,7 +258,7 @@ const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, pro
 
     return (
         <div>
-            <div ref={igvDiv} style={{ height: '500px', width: '100%',  marginBottom: '800px' }}></div>
+            <div ref={igvDiv} style={{ height: '500px', width: '100%',  marginBottom: '700px' }}></div>
         </div>
     )
 };

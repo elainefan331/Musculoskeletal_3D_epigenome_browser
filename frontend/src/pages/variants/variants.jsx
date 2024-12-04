@@ -231,7 +231,6 @@ const Variants = () => {
                         <div>
                             <IgvVariant variant={showallele} celltype={celltype}/>
                         </div>
-                        <p>{`* use search icon to re-load the IGV again`}</p>
                     </div>
                 ):(
                     <div className="gap">
