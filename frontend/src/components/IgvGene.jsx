@@ -148,7 +148,8 @@ const IgvGene = ({gene, celltype, Igvrange}) => {
                 {
                     type: "annotation",
                     format: "bb",
-                    url: '/igv/encodeCcreCombined.bb',
+                    // url: '/igv/encodeCcreCombined.bb',
+                    url: `${import.meta.env.VITE_EXPRESS_URL}/public/igv/encodeCcreCombined.bb`,
                     height: 50,
                     name: "ENCODE-cCRE",
                     displayMode: "EXPANDED",
