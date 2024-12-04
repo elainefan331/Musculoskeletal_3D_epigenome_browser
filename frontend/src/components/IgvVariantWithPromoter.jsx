@@ -207,7 +207,8 @@ const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, pro
                     name: "RNA-seq",
                 },
                 {
-                    url: "/igv/GeneHancer.bb",
+                    // url: "/igv/GeneHancer.bb",
+                    url: `${import.meta.env.VITE_EXPRESS_URL}/public/igv/GeneHancer.bb`,
                     type: "annotation",
                     format: "bb",
                     name: "GeneHancer",
@@ -217,7 +218,8 @@ const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, pro
                 {
                     type: "annotation",
                     format: "bb",
-                    url: '/igv/encodeCcreCombined.bb',
+                    // url: '/igv/encodeCcreCombined.bb',
+                    url: `${import.meta.env.VITE_EXPRESS_URL}/public/igv/encodeCcreCombined.bb`,
                     height: 50,
                     name: "ENCODE-cCRE",
                     displayMode: "EXPANDED",
