@@ -176,17 +176,19 @@ const IgvDisease = ({IndexSNP, celltype, range, diseasePosition}) => {
                     name: "RNA-seq",
                 },
                 {
-                    url: "/igv/GeneHancer.bb",
+                    // url: "/igv/GeneHancer.bb",
+                    url: `${import.meta.env.VITE_EXPRESS_URL}/public/igv/GeneHancer.bb`,
                     type: "annotation",
                     format: "bb",
-                    name: "GeneHancerrrrrr",
+                    name: "GeneHancer",
                     showBlocks: true,
                     height: 50
                 },
                 {
                     type: "annotation",
                     format: "bb",
-                    url: '/igv/encodeCcreCombined.bb',
+                    // url: '/igv/encodeCcreCombined.bb',
+                    url: `${import.meta.env.VITE_EXPRESS_URL}/public/igv/encodeCcreCombined.bb`,
                     height: 50,
                     name: "ENCODE-cCRE",
                     displayMode: "EXPANDED",
