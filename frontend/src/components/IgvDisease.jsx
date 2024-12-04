@@ -179,7 +179,7 @@ const IgvDisease = ({IndexSNP, celltype, range, diseasePosition}) => {
                     url: "/igv/GeneHancer.bb",
                     type: "annotation",
                     format: "bb",
-                    name: "GeneHancer",
+                    name: "GeneHancerrrrrr",
                     showBlocks: true,
                     height: 50
                 },
