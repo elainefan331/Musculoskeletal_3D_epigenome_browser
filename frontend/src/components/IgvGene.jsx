@@ -33,7 +33,7 @@ const IgvGene = ({gene, celltype, Igvrange}) => {
         H3k4me1_name = "H3k4me1-Osteoblast";
         atac_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/ATAC_seq_Osteoblast_pvalue.bigwig`;
         dnase_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/DNase_seq_Osteoblast.bigWig`;
-        chromHMM_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/H3K27ac_Osteoblast_pvalue.bigWig`;
+        chromHMM_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/imputed12marks_hg38lift_dense.bed`;
         H3k27ac_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/H3K27ac_Osteoblast_pvalue.bigWig`;
         H3k4me3_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/H3K4me3_Osteoblast_pvalue.bigWig`;
         H3k4me1_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/H3K4me1_Osteoblast_pvalue.bigWig`;
