@@ -2,13 +2,13 @@ import { useEffect, useRef } from 'react';
 import igv from 'igv';
 
 const IgvGene = ({gene, celltype, Igvrange}) => {
-    console.log("Igvrange in IgvGene", Igvrange)
+    // console.log("Igvrange in IgvGene", Igvrange)
     const igvDiv = useRef(null);
     const igvBrowser = useRef(null);
     const locus = `chr${gene.Chr}:${Igvrange.locusStart}-${Igvrange.locusEnd}`
 
     let locus_hic_url = `/igv/temp/${gene["Gene_Name"]}_${celltype}.bedpe.txt`
-    console.log("url======>", locus_hic_url)
+    // console.log("url======>", locus_hic_url)
     let genecode_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz"
     let genecode_index_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi"
     let atac_url;
@@ -31,12 +31,18 @@ const IgvGene = ({gene, celltype, Igvrange}) => {
         H3k27ac_name = "H3k27ac-Osteoblast";
         H3k4me3_name = "H3k4me3-Osteoblast";
         H3k4me1_name = "H3k4me1-Osteoblast";
-        atac_url = `/igv/bigwig/Osteoblast/ATAC_seq_Osteoblast_pvalue.bigwig`;
-        dnase_url = `/igv/bigwig/Osteoblast/DNase_seq_Osteoblast.bigWig`;
-        chromHMM_url = `/igv/bigwig/Osteoblast/imputed12marks_hg38lift_dense.bed`;
-        H3k27ac_url = `/igv/bigwig/Osteoblast/H3K27ac_Osteoblast_pvalue.bigWig`;
-        H3k4me3_url = `/igv/bigwig/Osteoblast/H3K4me3_Osteoblast_pvalue.bigWig`;
-        H3k4me1_url = `/igv/bigwig/Osteoblast/H3K4me1_Osteoblast_pvalue.bigWig`;
+        atac_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/ATAC_seq_Osteoblast_pvalue.bigwig`;
+        dnase_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/DNase_seq_Osteoblast.bigWig`;
+        chromHMM_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/imputed12marks_hg38lift_dense.bed`;
+        H3k27ac_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/H3K27ac_Osteoblast_pvalue.bigWig`;
+        H3k4me3_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/H3K4me3_Osteoblast_pvalue.bigWig`;
+        H3k4me1_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/H3K4me1_Osteoblast_pvalue.bigWig`;
+        // atac_url = `/igv/bigwig/Osteoblast/ATAC_seq_Osteoblast_pvalue.bigwig`;
+        // dnase_url = `/igv/bigwig/Osteoblast/DNase_seq_Osteoblast.bigWig`;
+        // chromHMM_url = `/igv/bigwig/Osteoblast/imputed12marks_hg38lift_dense.bed`;
+        // H3k27ac_url = `/igv/bigwig/Osteoblast/H3K27ac_Osteoblast_pvalue.bigWig`;
+        // H3k4me3_url = `/igv/bigwig/Osteoblast/H3K4me3_Osteoblast_pvalue.bigWig`;
+        // H3k4me1_url = `/igv/bigwig/Osteoblast/H3K4me1_Osteoblast_pvalue.bigWig`;
     } else {
         atac_name = `ATAC-seq`;
         dnase_name = `DNase-seq`;
@@ -44,12 +50,18 @@ const IgvGene = ({gene, celltype, Igvrange}) => {
         H3k27ac_name = `H3k27ac`;
         H3k4me3_name = `H3k4me3`;
         H3k4me1_name = `H3k4me1`;
-        atac_url = `/igv/bigwig/${celltype}/ATAC_seq_${celltype}_pvalue.bigwig`;
-        dnase_url = `/igv/bigwig/${celltype}/DNase_seq_${celltype}.bigWig`;
-        chromHMM_url = `/igv/bigwig/${celltype}/imputed12marks_hg38lift_dense.bed`;
-        H3k27ac_url = `/igv/bigwig/${celltype}/H3K27ac_${celltype}_pvalue.bigWig`;
-        H3k4me3_url = `/igv/bigwig/${celltype}/H3K4me3_${celltype}_pvalue.bigWig`;
-        H3k4me1_url = `/igv/bigwig/${celltype}/H3K4me1_${celltype}_pvalue.bigWig`;
+        atac_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/ATAC_seq_${celltype}_pvalue.bigwig`;
+        dnase_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/DNase_seq_${celltype}.bigWig`;
+        chromHMM_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/imputed12marks_hg38lift_dense.bed`;
+        H3k27ac_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/H3K27ac_${celltype}_pvalue.bigWig`;
+        H3k4me3_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/H3K4me3_${celltype}_pvalue.bigWig`;
+        H3k4me1_url =`${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/H3K4me1_${celltype}_pvalue.bigWig`;
+        // atac_url = `/igv/bigwig/${celltype}/ATAC_seq_${celltype}_pvalue.bigwig`;
+        // dnase_url = `/igv/bigwig/${celltype}/DNase_seq_${celltype}.bigWig`;
+        // chromHMM_url = `/igv/bigwig/${celltype}/imputed12marks_hg38lift_dense.bed`;
+        // H3k27ac_url = `/igv/bigwig/${celltype}/H3K27ac_${celltype}_pvalue.bigWig`;
+        // H3k4me3_url = `/igv/bigwig/${celltype}/H3K4me3_${celltype}_pvalue.bigWig`;
+        // H3k4me1_url = `/igv/bigwig/${celltype}/H3K4me1_${celltype}_pvalue.bigWig`;
     }
 
 
@@ -148,7 +160,8 @@ const IgvGene = ({gene, celltype, Igvrange}) => {
                 {
                     type: "annotation",
                     format: "bb",
-                    url: '/igv/encodeCcreCombined.bb',
+                    // url: '/igv/encodeCcreCombined.bb',
+                    url: `${import.meta.env.VITE_EXPRESS_URL}/public/igv/encodeCcreCombined.bb`,
                     height: 50,
                     name: "ENCODE-cCRE",
                     displayMode: "EXPANDED",

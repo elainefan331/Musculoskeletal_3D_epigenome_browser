@@ -22,12 +22,14 @@ const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, pro
     const locus = `chr${variant.Chr}:${startMin}-${endMax}`;
 
     // define the path to target files
-    let promoter_like_url = "/igv/promoter/promoter_like_regions_annotation_sorted.bed";
+    let promoter_like_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/promoter/promoter_like_regions_annotation_sorted.bed`;
+    // let promoter_like_url = "/igv/promoter/promoter_like_regions_annotation_sorted.bed";
+    let genecode_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz";
     // let genecode_url = "/igv/gencode.v35.annotation.sort.gtf.gz";
+    let genecode_index_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi";
     // let genecode_index_url = "/igv/gencode.v35.annotation.sort.gtf.gz.tbi";
-    let genecode_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz"
-    let genecode_index_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi"
-    let rnaseq_url = `/igv/bigwig/${celltype}/${celltype}_rep1PE_stranded_genome_plusAll.bw`;
+    let rnaseq_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/${celltype}_rep1PE_stranded_genome_plusAll.bw`;
+    // let rnaseq_url = `/igv/bigwig/${celltype}/${celltype}_rep1PE_stranded_genome_plusAll.bw`;
     
     
     let atac_url;
@@ -50,12 +52,18 @@ const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, pro
         H3k27ac_name = "H3k27ac-Osteoblast";
         H3k4me3_name = "H3k4me3-Osteoblast";
         H3k4me1_name = "H3k4me1-Osteoblast";
-        atac_url = `/igv/bigwig/Osteoblast/ATAC_seq_Osteoblast_pvalue.bigwig`;
-        dnase_url = `/igv/bigwig/Osteoblast/DNase_seq_Osteoblast.bigWig`;
-        chromHMM_url = `/igv/bigwig/Osteoblast/imputed12marks_hg38lift_dense.bed`;
-        H3k27ac_url = `/igv/bigwig/Osteoblast/H3K27ac_Osteoblast_pvalue.bigWig`;
-        H3k4me3_url = `/igv/bigwig/Osteoblast/H3K4me3_Osteoblast_pvalue.bigWig`;
-        H3k4me1_url = `/igv/bigwig/Osteoblast/H3K4me1_Osteoblast_pvalue.bigWig`;
+        atac_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/ATAC_seq_Osteoblast_pvalue.bigwig`;
+        dnase_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/DNase_seq_Osteoblast.bigWig`;
+        chromHMM_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/imputed12marks_hg38lift_dense.bed`;
+        H3k27ac_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/H3K27ac_Osteoblast_pvalue.bigWig`;
+        H3k4me3_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/H3K4me3_Osteoblast_pvalue.bigWig`;
+        H3k4me1_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/Osteoblast/H3K4me1_Osteoblast_pvalue.bigWig`;
+        // atac_url = `/igv/bigwig/Osteoblast/ATAC_seq_Osteoblast_pvalue.bigwig`;
+        // dnase_url = `/igv/bigwig/Osteoblast/DNase_seq_Osteoblast.bigWig`;
+        // chromHMM_url = `/igv/bigwig/Osteoblast/imputed12marks_hg38lift_dense.bed`;
+        // H3k27ac_url = `/igv/bigwig/Osteoblast/H3K27ac_Osteoblast_pvalue.bigWig`;
+        // H3k4me3_url = `/igv/bigwig/Osteoblast/H3K4me3_Osteoblast_pvalue.bigWig`;
+        // H3k4me1_url = `/igv/bigwig/Osteoblast/H3K4me1_Osteoblast_pvalue.bigWig`;
     } else {
         atac_name = `ATAC-seq`;
         dnase_name = `DNase-seq`;
@@ -63,12 +71,18 @@ const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, pro
         H3k27ac_name = `H3k27ac`;
         H3k4me3_name = `H3k4me3`;
         H3k4me1_name = `H3k4me1`;
-        atac_url = `/igv/bigwig/${celltype}/ATAC_seq_${celltype}_pvalue.bigwig`;
-        dnase_url = `/igv/bigwig/${celltype}/DNase_seq_${celltype}.bigWig`;
-        chromHMM_url = `/igv/bigwig/${celltype}/imputed12marks_hg38lift_dense.bed`;
-        H3k27ac_url = `/igv/bigwig/${celltype}/H3K27ac_${celltype}_pvalue.bigWig`;
-        H3k4me3_url = `/igv/bigwig/${celltype}/H3K4me3_${celltype}_pvalue.bigWig`;
-        H3k4me1_url = `/igv/bigwig/${celltype}/H3K4me1_${celltype}_pvalue.bigWig`;
+        atac_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/ATAC_seq_${celltype}_pvalue.bigwig`;
+        dnase_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/DNase_seq_${celltype}.bigWig`;
+        chromHMM_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/imputed12marks_hg38lift_dense.bed`;
+        H3k27ac_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/H3K27ac_${celltype}_pvalue.bigWig`;
+        H3k4me3_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/H3K4me3_${celltype}_pvalue.bigWig`;
+        H3k4me1_url =`${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/H3K4me1_${celltype}_pvalue.bigWig`;
+        // atac_url = `/igv/bigwig/${celltype}/ATAC_seq_${celltype}_pvalue.bigwig`;
+        // dnase_url = `/igv/bigwig/${celltype}/DNase_seq_${celltype}.bigWig`;
+        // chromHMM_url = `/igv/bigwig/${celltype}/imputed12marks_hg38lift_dense.bed`;
+        // H3k27ac_url = `/igv/bigwig/${celltype}/H3K27ac_${celltype}_pvalue.bigWig`;
+        // H3k4me3_url = `/igv/bigwig/${celltype}/H3K4me3_${celltype}_pvalue.bigWig`;
+        // H3k4me1_url = `/igv/bigwig/${celltype}/H3K4me1_${celltype}_pvalue.bigWig`;
     }
 
     useEffect(() => {
@@ -207,7 +221,8 @@ const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, pro
                     name: "RNA-seq",
                 },
                 {
-                    url: "/igv/GeneHancer.bb",
+                    // url: "/igv/GeneHancer.bb",
+                    url: `${import.meta.env.VITE_EXPRESS_URL}/public/igv/GeneHancer.bb`,
                     type: "annotation",
                     format: "bb",
                     name: "GeneHancer",
@@ -217,7 +232,8 @@ const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, pro
                 {
                     type: "annotation",
                     format: "bb",
-                    url: '/igv/encodeCcreCombined.bb',
+                    // url: '/igv/encodeCcreCombined.bb',
+                    url: `${import.meta.env.VITE_EXPRESS_URL}/public/igv/encodeCcreCombined.bb`,
                     height: 50,
                     name: "ENCODE-cCRE",
                     displayMode: "EXPANDED",
@@ -258,7 +274,7 @@ const IgvVariantWithPromoter = ({variant, celltype, promoter, regulatoryBin, pro
 
     return (
         <div>
-            <div ref={igvDiv} style={{ height: '500px', width: '100%',  marginBottom: '800px' }}></div>
+            <div ref={igvDiv} style={{ height: '500px', width: '100%',  marginBottom: '700px' }}></div>
         </div>
     )
 };

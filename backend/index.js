@@ -10,7 +10,12 @@ import Api_category from "./models/api_category.js";
 import GwasLD from "./models/gwasLD.js";
 import VariantModel from "./models/variant.js";
 import geneModel from "./models/gene.js";
-// import path from "path"
+import path from "path";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 
@@ -18,7 +23,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static files from the "public" directory
-// app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, '../frontend/public')));
 
 
 // routes
