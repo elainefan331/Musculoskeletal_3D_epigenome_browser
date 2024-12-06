@@ -8,20 +8,16 @@ const IgvVariant = ({variant, celltype}) => {
   const start = variant.Start - 50000;
   const end = variant.End + 50000;
   const locus = `chr${variant.Chr}:${start}-${end}`;
-  console.log("celltype", celltype);
-  let promoter_like_url = "/igv/promoter/promoter_like_regions_annotation_sorted.bed";
-  // let genecode_url = "/igv/gencode.v35.annotation.sort.gtf.gz";
-  // let genecode_index_url = "/igv/gencode.v35.annotation.sort.gtf.gz.tbi";
+  
+
+  let promoter_like_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/promoter/promoter_like_regions_annotation_sorted.bed`;
   let genecode_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz"
+  // let genecode_url = "/igv/gencode.v35.annotation.sort.gtf.gz";
   let genecode_index_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi"
-  // let atac_url = `/igv/bigwig/${celltype}/ATAC_seq_${celltype}_pvalue.bigwig`;
-  // let dnase_url = `/igv/bigwig/${celltype}/DNase_seq_${celltype}.bigWig`;
-  // let chromHMM_url = `/igv/bigwig/${celltype}/imputed12marks_hg38lift_dense.bed`;
-  // let H3k27ac_url = `/igv/bigwig/${celltype}/H3K27ac_${celltype}_pvalue.bigWig`;
-  // let H3k4me3_url = `/igv/bigwig/${celltype}/H3K4me3_${celltype}_pvalue.bigWig`;
-  // let H3k4me1_url = `/igv/bigwig/${celltype}/H3K4me1_${celltype}_pvalue.bigWig`;
-  let rnaseq_url = `/igv/bigwig/${celltype}/${celltype}_rep1PE_stranded_genome_plusAll.bw`;
-  // console.log("locus", locus)
+  // let genecode_index_url = "/igv/gencode.v35.annotation.sort.gtf.gz.tbi";
+  let rnaseq_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/${celltype}_rep1PE_stranded_genome_plusAll.bw`;
+
+  
 
 
   let atac_url;
