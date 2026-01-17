@@ -10,6 +10,8 @@ import Api_category from "./models/api_category.js";
 import GwasLD from "./models/gwasLD.js";
 import VariantModel from "./models/variant.js";
 import geneModel from "./models/gene.js";
+import Promoter_MB from "./models/promoter_MB.js";
+import Promoter_MT from "./models/promoter_MT.js";
 import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -84,6 +86,14 @@ mongoose
   .then(() => {
     // Ensure indexes are created
     return geneModel.init();
+  })
+  .then(() => {
+    // Ensure indexes are created
+    return Promoter_MB.init();
+  })
+  .then(() => {
+    // Ensure indexes are created
+    return Promoter_MT.init();
   })
   .then(() => {
     console.log("Indexes ensured");
