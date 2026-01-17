@@ -13,17 +13,30 @@ import geneModel from "./models/gene.js";
 import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import https from 'https';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://3dgenome.hsl.harvard.edu', // frontend 的 public IP
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+  credentials: true 
+}));
+
+// app.use(cors());
 app.use(express.json());
 
 // Serve static files from the "public" directory
 app.use('/public', express.static(path.join(__dirname, '../frontend/public')));
+
+// test the connection between frontend and backend
+app.get('/health', (req, res) => {
+  res.send('Backend is running.');
+});
 
 
 // routes
@@ -79,9 +92,18 @@ mongoose
         console.log("Indexes ensured");
 
         // Start the app
-        app.listen(PORT, () => {
+	app.listen(PORT, () => {
             console.log(`APP is listening to port: ${PORT}`);
-        });
+	});
+	//    const sslOptions = {
+	//	key: fs.readFileSync('/home/techelainefan/ssl/hsl_wildcard.key'),
+	//	cert: fs.readFileSync('/home/techelainefan/ssl/hsl_wildcard.crt')
+	//    };
+
+	//   https.createServer(sslOptions, app).listen(PORT, () => {
+	//   	console.log(`🚀 HTTPS server is listening on port ${PORT}`);
+	//   });
+
     })
     .catch((error) => {
         console.error(error);
