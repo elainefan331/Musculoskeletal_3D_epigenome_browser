@@ -1,45 +1,54 @@
 .logo-nav-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px lightgray solid;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px lightgray solid;
+  /* ADD THESE: */
+  padding: 15px 5vw; /* Add padding inside navbar */
+  margin: 0; /* Remove any default margin */
+  background: rgba(255, 255, 255, 0.95); /* Slight white background */
+  backdrop-filter: blur(10px); /* Modern blur effect */
 }
 
 .logo-home-container {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .home-link {
-    text-decoration: none;
-    color: rgb(34, 78, 115);
-    font-weight: bold;
-    font-size: large;
-    cursor: pointer;
+  text-decoration: none;
+  color: rgb(34, 78, 115);
+  font-weight: bold;
+  font-size: large;
+  cursor: pointer;
 }
 
 .nav-bar {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    justify-content: end;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: end;
 }
 
 .nav-bar-link {
-    text-decoration: none;
-    color: rgb(105, 134, 184);
-    font-weight: bold;
-    font-size: large;
-    cursor: pointer;
-    
+  text-decoration: none;
+  color: rgb(105, 134, 184);
+  font-weight: bold;
+  font-size: large;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.nav-bar-link:hover {
+  color: rgb(34, 78, 115); /* ADD: hover color */
 }
 
 .nav-bar-link > a {
-    text-decoration: none;
-    color: rgb(105, 134, 184);
+  text-decoration: none;
+  color: rgb(105, 134, 184);
+  transition: color 0.2s ease;
 }
 
-
-
-
-
+.nav-bar-link > a:hover {
+  color: rgb(34, 78, 115);
+}

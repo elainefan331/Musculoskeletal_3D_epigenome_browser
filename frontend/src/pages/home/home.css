@@ -1,4 +1,4 @@
-.home-page-container {
+/* .home-page-container {
     margin-bottom: 300px;
 }
 .home-page-section {
@@ -57,4 +57,402 @@
 .home-examples-container {
     text-align: start;
 }
+ */
 
+/* Import a modern font */
+/* @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+.home-page-container {
+  margin-bottom: 100px;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.home-page-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-page-h1 {
+  color: #1a365d;
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-align: center;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.dna-img {
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  margin-bottom: 40px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  max-width: 300px;
+}
+
+.dna-img:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+.home-search-example-container {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.home-page-search-container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  height: 48px;
+  border: 2px solid #e2e8f0;
+  background-color: #ffffff;
+  padding: 0 16px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #224e73;
+  box-shadow: 0 0 0 3px rgba(34, 78, 115, 0.1);
+}
+
+.search-input::placeholder {
+  color: #a0aec0;
+}
+
+.home-page-select-container {
+  height: 48px;
+  border: 2px solid #e2e8f0;
+  background-color: #ffffff;
+  border-radius: 8px;
+  color: #2d3748;
+  padding: 0 16px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  min-width: 160px;
+}
+
+.home-page-select-container:focus {
+  outline: none;
+  border-color: #224e73;
+  box-shadow: 0 0 0 3px rgba(34, 78, 115, 0.1);
+}
+
+.home-page-search-button {
+  border: none;
+  border-radius: 8px;
+  padding: 14px 32px;
+  color: white;
+  background: linear-gradient(135deg, #224e73 0%, #2d5f8f 100%);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(34, 78, 115, 0.3);
+  font-family: inherit;
+}
+
+.home-page-search-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 78, 115, 0.4);
+  background: linear-gradient(135deg, #2d5f8f 0%, #224e73 100%);
+}
+
+.home-page-search-button:active {
+  transform: translateY(0);
+}
+
+.prompt-message {
+  color: #e53e3e;
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.home-examples-container {
+  text-align: left;
+  background: #f7fafc;
+  padding: 24px;
+  border-radius: 12px;
+  border-left: 4px solid #224e73;
+}
+
+.home-examples-container h3 {
+  color: #1a365d;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  margin-top: 0;
+}
+
+.home-examples-container p {
+  color: #4a5568;
+  font-size: 14px;
+  margin: 8px 0;
+  font-family: "Monaco", "Courier New", monospace;
+  background: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+} */
+
+/* Responsive Design */
+/* @media (max-width: 768px) {
+  .home-page-h1 {
+    font-size: 1.75rem;
+  }
+
+  .home-search-example-container {
+    padding: 24px;
+  }
+
+  .home-page-search-container {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .search-input,
+  .home-page-select-container {
+    width: 100%;
+    max-width: none;
+  }
+
+  .home-page-search-button {
+    width: 100%;
+  }
+} */
+
+/* Import a modern font */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* Reset body margins to allow full-width background */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.home-page-container {
+  /* margin: -5vh -5vw 0; */
+  margin: 0;
+  /* padding: 60px 20px 100px; */
+  padding: 0 20px 100px;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  width: 100%;
+  /* width: calc(100% + 10vw); */
+  box-sizing: border-box;
+}
+
+.home-page-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-page-h1 {
+  color: #1a365d;
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  text-align: center;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.dna-img {
+  border-radius: 20px;
+  box-shadow: none;
+  width: 700px;
+  max-width: 90vw;
+  height: auto;
+  margin-bottom: 50px;
+  transition: transform 0.3s ease;
+  background: transparent;
+}
+
+.dna-img:hover {
+  transform: scale(1.05);
+}
+
+.home-search-example-container {
+  /* background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); */
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.home-page-search-container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: nowrap;
+  width: 700px;
+  max-width: 90vw;
+}
+
+.search-input {
+  border-radius: 8px;
+  flex: 1;
+  /* width: 100%; */
+  /* max-width: 400px; */
+  height: 48px;
+  border: 2px solid #e2e8f0;
+  background-color: #ffffff;
+  padding: 0 16px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #224e73;
+  box-shadow: 0 0 0 3px rgba(34, 78, 115, 0.1);
+}
+
+.search-input::placeholder {
+  color: #a0aec0;
+}
+
+.home-page-select-container {
+  height: 48px;
+  border: 2px solid #e2e8f0;
+  background-color: #ffffff;
+  border-radius: 8px;
+  color: #2d3748;
+  padding: 0 16px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  min-width: 200px;
+}
+
+.home-page-select-container:focus {
+  outline: none;
+  border-color: #224e73;
+  box-shadow: 0 0 0 3px rgba(34, 78, 115, 0.1);
+}
+
+.home-page-search-button {
+  border: none;
+  border-radius: 8px;
+  padding: 14px 32px;
+  color: white;
+  background: linear-gradient(135deg, #224e73 0%, #2d5f8f 100%);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(34, 78, 115, 0.3);
+  font-family: inherit;
+}
+
+.home-page-search-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 78, 115, 0.4);
+  background: linear-gradient(135deg, #2d5f8f 0%, #224e73 100%);
+}
+
+.home-page-search-button:active {
+  transform: translateY(0);
+}
+
+.prompt-message {
+  color: #e53e3e;
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.home-examples-container {
+  text-align: left;
+  background: #f7fafc;
+  padding: 24px;
+  border-radius: 12px;
+  border-left: 4px solid #224e73;
+}
+
+.home-examples-container h3 {
+  color: #1a365d;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  margin-top: 0;
+}
+
+.home-examples-container p {
+  color: #4a5568;
+  font-size: 14px;
+  margin: 8px 0;
+  font-family: "Monaco", "Courier New", monospace;
+  background: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .home-page-h1 {
+    font-size: 1.75rem;
+  }
+
+  .dna-img {
+    width: 350px;
+  }
+
+  .home-search-example-container {
+    padding: 24px;
+  }
+
+  .home-page-search-container {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .search-input,
+  .home-page-select-container {
+    width: 100%;
+    max-width: none;
+  }
+
+  .home-page-search-button {
+    width: 100%;
+  }
+}

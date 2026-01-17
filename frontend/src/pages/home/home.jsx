@@ -95,7 +95,7 @@ const Home = () => {
       <section className="home-page-section">
         <h1 className="home-page-h1">Musculoskeletal 3D Epigenome Browser</h1>
         <div>
-          <img className="dna-img" src="/dna_whitesmoke_background.png" />
+          <img className="dna-img" src="/musc_logo.png" />
         </div>
         <div>
           <div className="home-search-example-container">
