@@ -258,16 +258,16 @@ body {
 }
 
 .home-page-container {
-  /* margin: -5vh -5vw 0; */
-  margin: 0;
-  /* padding: 60px 20px 100px; */
-  padding: 0 20px 100px;
+  margin: -5vh -5vw 0;
+  /* margin: 0; */
+  padding: 60px 20px 100px;
+  /* padding: 0 20px 100px; */
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
-  width: 100%;
-  /* width: calc(100% + 10vw); */
+  /* width: 100%; */
+  width: calc(100% + 10vw);
   box-sizing: border-box;
 }
 

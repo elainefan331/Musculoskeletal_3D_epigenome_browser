@@ -93,7 +93,7 @@ const Home = () => {
   return (
     <div className="home-page-container">
       <section className="home-page-section">
-        <h1 className="home-page-h1">Musculoskeletal 3D Epigenome Browser</h1>
+        <h1 className="home-page-h1">Musculoskeletal 3D Epigenome Atlas</h1>
         <div>
           <img className="dna-img" src="/musc_logo.png" />
         </div>

@@ -3,14 +3,11 @@
 /* @tailwind utilities; */
 
 body {
-    margin: 5vh 5vw;
-    background-color: rgb(249, 251, 251);
+  margin: 0 5vh 5vw;
+  background-color: rgb(249, 251, 251);
 }
 
 button,
 a {
   cursor: pointer !important;
 }
-
-
-
