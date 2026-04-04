@@ -12,10 +12,28 @@ const Variants = () => {
   const [regulatorybin, setRegulatorybin] = useState(null);
   const [promoterbin, setPromoterbin] = useState(null);
   const [showallele, setShowallele] = useState(null);
+  const [bedpeReady, setBedpeReady] = useState(false);
   const queryParams = new URLSearchParams(location.search);
   const celltype = queryParams.get("celltype");
 
   useEffect(() => {
+    async function waitForBedpe(fileName) {
+      const url = `/igv/temp/${fileName}`;
+      const maxAttempts = 10;
+      const delay = 500; // ms between attempts
+
+      for (let i = 0; i < maxAttempts; i++) {
+        try {
+          const res = await fetch(url, { method: "HEAD" });
+          if (res.ok) return; // file is ready
+        } catch (e) {
+          // not ready yet
+        }
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+      // proceed anyway after max attempts
+    }
+
     async function fetchData() {
       const url = new URL(`${import.meta.env.VITE_EXPRESS_URL}/variants/${Id}`);
       url.search = new URLSearchParams({ celltype: celltype }).toString();
@@ -30,6 +48,10 @@ const Variants = () => {
         setPromoterdata(result.promoter);
         setRegulatorybin(result.bin.regulatoryBin);
         setPromoterbin(result.bin.promoterBin);
+        if (result.variant[0]?.RSID) {
+          await waitForBedpe(`${result.variant[0].RSID}_${celltype}.bedpe.txt`);
+        }
+        setBedpeReady(true);
         console.log("result", result);
         console.log("promoterdata", promoterdata);
         if (result.variant.length === 1) {
@@ -309,7 +331,7 @@ const Variants = () => {
               <IgvVariant variant={showallele} celltype={celltype} />
             </div>
           </div>
-        ) : (
+        ) : bedpeReady ? (
           <div className="gap">
             <div>
               <IgvVariantWithPromoter
@@ -321,6 +343,8 @@ const Variants = () => {
               />
             </div>
           </div>
+        ) : (
+          <div>Loading IGV...</div>
         )
       ) : null}
 

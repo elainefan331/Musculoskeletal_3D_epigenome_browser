@@ -102,7 +102,7 @@ const Home = () => {
             <div className="home-page-search-container">
               <input
                 className="search-input"
-                placeholder="Search by Variant, RSID, Gene or Disease"
+                placeholder="Search by Variant, RSID, or Gene"
                 type="text"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
@@ -143,7 +143,7 @@ const Home = () => {
             <p>Variant: 7-121337680-G-A</p>
             <p>RSID: rs534962220</p>
             <p>Gene: SUN1</p>
-            <p>Disease: Bone mineral density</p>
+            {/* <p>Disease: Bone mineral density</p> */}
           </div>
         </div>
       </section>

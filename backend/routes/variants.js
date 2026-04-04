@@ -269,9 +269,10 @@ router.get("/:id", async (req, res) => {
     } else if (celltype === "Osteocyte") {
       SigHiCRowData = obj.SigHiC_OC;
     } else if (celltype === "Osteoblast") {
-      SigHiCRowData = obj.SigHiC_OB13;
+      SigHiCRowData = obj.SigHiC_OB;
     } else if (celltype === "Myoblast") {
       // ADD THIS
+      console.log("mbobj", obj);
       SigHiCRowData = obj.SigHiC_MB;
     } else if (celltype === "Myotube") {
       // ADD THIS
