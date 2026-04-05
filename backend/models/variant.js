@@ -7,7 +7,7 @@ const variantSchema = new Schema(
     RSID: { type: String, index: true },
     GeneName_ID_Ensembl: { type: String, index: true }, // Regular index, even if duplicates exist
     chromHMM_hMSC: { type: String, index: true }, // Regular index
-    chromHMM_osteoblast: { type: String, index: true },
+    chromHMM_OB: { type: String, index: true },
     chromHMM_MB: { type: String, index: true },
     chromHMM_MT: { type: String, index: true },
   },
