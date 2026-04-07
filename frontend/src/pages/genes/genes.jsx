@@ -482,7 +482,11 @@ const Genes = () => {
                             {celltype === "hMSC"
                               ? region.chromHMM_hMSC
                               : celltype === "Osteoblast"
-                              ? region.chromHMM_osteoblast
+                              ? region.chromHMM_OB
+                              : celltype === "Myoblast"
+                              ? region.chromHMM_MB
+                              : celltype === "Myotube"
+                              ? region.chromHMM_MT
                               : "NA"}
                           </td>
                           <td>
@@ -490,6 +494,12 @@ const Genes = () => {
                               ? region.OpenChromatin_hMSC
                               : celltype === "Osteoblast"
                               ? region.OpenChromatin_OB
+                              : celltype === "Osteocyte"
+                              ? region.OpenChromatin_OC
+                              : celltype === "Myoblast"
+                              ? region.OpenChromatin_MB
+                              : celltype === "Myotube"
+                              ? region.OpenChromatin_MT
                               : "NA"}
                           </td>
                           <td id="gene-nest-table-container">
@@ -503,36 +513,34 @@ const Genes = () => {
                               <tbody>
                                 <tr>
                                   <td>
-                                    {celltype === "hMSC"
-                                      ? region.SigHiC_hMSC.split(";")[0]
-                                          .split(":")
-                                          .slice(1)
-                                          .join(":")
-                                      : celltype === "Osteoblast"
-                                      ? region.SigHiC_OB13.split(";")[0]
-                                          .split(":")
-                                          .slice(1)
-                                          .join(":")
-                                      : region.SigHiC_OC.split(";")[0]
-                                          .split(":")
-                                          .slice(1)
-                                          .join(":")}
+                                    {(() => {
+                                      const sig = celltype === "hMSC"
+                                        ? region.SigHiC_hMSC
+                                        : celltype === "Osteoblast"
+                                        ? region.SigHiC_OB
+                                        : celltype === "Osteocyte"
+                                        ? region.SigHiC_OC
+                                        : celltype === "Myoblast"
+                                        ? region.SigHiC_MB
+                                        : region.SigHiC_MT;
+                                      const part = sig?.split(";")[0];
+                                      return part && part !== "NA" ? part.split(":").slice(1).join(":") : "NA";
+                                    })()}
                                   </td>
                                   <td>
-                                    {celltype === "hMSC"
-                                      ? region.SigHiC_hMSC.split(";")[1]
-                                          .split(":")
-                                          .slice(1)
-                                          .join(":")
-                                      : celltype === "Osteoblast"
-                                      ? region.SigHiC_OB13.split(";")[1]
-                                          .split(":")
-                                          .slice(1)
-                                          .join(":")
-                                      : region.SigHiC_OC.split(";")[1]
-                                          .split(":")
-                                          .slice(1)
-                                          .join(":")}
+                                    {(() => {
+                                      const sig = celltype === "hMSC"
+                                        ? region.SigHiC_hMSC
+                                        : celltype === "Osteoblast"
+                                        ? region.SigHiC_OB
+                                        : celltype === "Osteocyte"
+                                        ? region.SigHiC_OC
+                                        : celltype === "Myoblast"
+                                        ? region.SigHiC_MB
+                                        : region.SigHiC_MT;
+                                      const part = sig?.split(";")[1];
+                                      return part ? part.split(":").slice(1).join(":") : "NA";
+                                    })()}
                                   </td>
                                 </tr>
                               </tbody>
@@ -610,7 +618,7 @@ const Genes = () => {
                   </tr>
                 </thead>
                 {distalRegion && distalRegion.length > 0 ? (
-                  currentDiseaseItems.map((region) => {
+                  currentDistalItems.map((region) => {
                     return (
                       <tbody key={region._id}>
                         <tr>
@@ -631,7 +639,11 @@ const Genes = () => {
                             {celltype === "hMSC"
                               ? region.chromHMM_hMSC
                               : celltype === "Osteoblast"
-                              ? region.chromHMM_osteoblast
+                              ? region.chromHMM_OB
+                              : celltype === "Myoblast"
+                              ? region.chromHMM_MB
+                              : celltype === "Myotube"
+                              ? region.chromHMM_MT
                               : "NA"}
                           </td>
                           <td>
@@ -639,6 +651,12 @@ const Genes = () => {
                               ? region.OpenChromatin_hMSC
                               : celltype === "Osteoblast"
                               ? region.OpenChromatin_OB
+                              : celltype === "Osteocyte"
+                              ? region.OpenChromatin_OC
+                              : celltype === "Myoblast"
+                              ? region.OpenChromatin_MB
+                              : celltype === "Myotube"
+                              ? region.OpenChromatin_MT
                               : "NA"}
                           </td>
                           <td id="gene-nest-table-container">
@@ -652,36 +670,34 @@ const Genes = () => {
                               <tbody>
                                 <tr>
                                   <td>
-                                    {celltype === "hMSC"
-                                      ? region.SigHiC_hMSC.split(";")[0]
-                                          .split(":")
-                                          .slice(1)
-                                          .join(":")
-                                      : celltype === "Osteoblast"
-                                      ? region.SigHiC_OB13.split(";")[0]
-                                          .split(":")
-                                          .slice(1)
-                                          .join(":")
-                                      : region.SigHiC_OC.split(";")[0]
-                                          .split(":")
-                                          .slice(1)
-                                          .join(":")}
+                                    {(() => {
+                                      const sig = celltype === "hMSC"
+                                        ? region.SigHiC_hMSC
+                                        : celltype === "Osteoblast"
+                                        ? region.SigHiC_OB
+                                        : celltype === "Osteocyte"
+                                        ? region.SigHiC_OC
+                                        : celltype === "Myoblast"
+                                        ? region.SigHiC_MB
+                                        : region.SigHiC_MT;
+                                      const part = sig?.split(";")[0];
+                                      return part && part !== "NA" ? part.split(":").slice(1).join(":") : "NA";
+                                    })()}
                                   </td>
                                   <td>
-                                    {celltype === "hMSC"
-                                      ? region.SigHiC_hMSC.split(";")[1]
-                                          .split(":")
-                                          .slice(1)
-                                          .join(":")
-                                      : celltype === "Osteoblast"
-                                      ? region.SigHiC_OB13.split(";")[1]
-                                          .split(":")
-                                          .slice(1)
-                                          .join(":")
-                                      : region.SigHiC_OC.split(";")[1]
-                                          .split(":")
-                                          .slice(1)
-                                          .join(":")}
+                                    {(() => {
+                                      const sig = celltype === "hMSC"
+                                        ? region.SigHiC_hMSC
+                                        : celltype === "Osteoblast"
+                                        ? region.SigHiC_OB
+                                        : celltype === "Osteocyte"
+                                        ? region.SigHiC_OC
+                                        : celltype === "Myoblast"
+                                        ? region.SigHiC_MB
+                                        : region.SigHiC_MT;
+                                      const part = sig?.split(";")[1];
+                                      return part ? part.split(":").slice(1).join(":") : "NA";
+                                    })()}
                                   </td>
                                 </tr>
                               </tbody>
