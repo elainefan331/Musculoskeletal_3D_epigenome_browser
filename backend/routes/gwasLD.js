@@ -40,7 +40,7 @@ const variantBinFinder = async(variants, celltype) => {
         } else if (celltype === "Osteocyte") {
             SigHic = variant._doc.SigHiC_OC
         } else if (celltype === "Osteoblast") {
-            SigHic = variant._doc.SigHiC_OB13
+            SigHic = variant._doc.SigHiC_OB
         }
         variant._doc["SigHic"] = SigHic;
         // console.log("variant SigHic check", variant);

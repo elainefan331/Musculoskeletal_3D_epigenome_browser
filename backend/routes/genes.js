@@ -186,11 +186,11 @@ router.get("/:id/proximal_regulatory", async (req, res) => {
   //                 result.push(variant);
   //         }
   //     } else if (celltype == "Osteoblast") {
-  //         if (variant._doc.chromHMM_osteoblast &&
-  //             (variant._doc.chromHMM_osteoblast.startsWith("1_") ||
-  //              variant._doc.chromHMM_osteoblast.startsWith("2_") ||
-  //              variant._doc.chromHMM_osteoblast.startsWith("3_") ||
-  //              variant._doc.chromHMM_osteoblast.startsWith("4_")
+  //         if (variant._doc.chromHMM_OB &&
+  //             (variant._doc.chromHMM_OB.startsWith("1_") ||
+  //              variant._doc.chromHMM_OB.startsWith("2_") ||
+  //              variant._doc.chromHMM_OB.startsWith("3_") ||
+  //              variant._doc.chromHMM_OB.startsWith("4_")
   //             )) {
   //                 // console.log("variant", variant)
   //                 result.push(variant);
@@ -202,12 +202,12 @@ router.get("/:id/proximal_regulatory", async (req, res) => {
     // if (celltype === "hMSC") {
     //     cellTypeField = "chromHMM_hMSC";
     // } else if (celltype === "Osteoblast") {
-    //     cellTypeField = "chromHMM_osteoblast";
+    //     cellTypeField = "chromHMM_OB";
     // }
     if (celltype === "hMSC") {
       cellTypeField = "chromHMM_hMSC";
     } else if (celltype === "Osteoblast") {
-      cellTypeField = "chromHMM_osteoblast";
+      cellTypeField = "chromHMM_OB";
     } else if (celltype === "Osteocyte") {
       cellTypeField = "chromHMM_OC";
     } else if (celltype === "Myoblast") {
@@ -221,7 +221,7 @@ router.get("/:id/proximal_regulatory", async (req, res) => {
     const variants = await VariantModel.find(
       {
         GeneName_ID_Ensembl: { $regex: id, $options: "i" },
-        [cellTypeField]: { $regex: "^[1-4]_" },
+        [cellTypeField]: { $regex: ":[1-4]_" },
       },
       {
         _id: 1, // Include the _id field
@@ -232,7 +232,7 @@ router.get("/:id/proximal_regulatory", async (req, res) => {
         // Promoter_like_region: 1, // Include the Promoter_like_region field
 
         chromHMM_hMSC: 1, // Include the chromHMM_hMSC field
-        chromHMM_osteoblast: 1, // Include the chromHMM_osteoblast field
+        chromHMM_OB: 1, // Include the chromHMM_OB field
         OpenChromatin_hMSC: 1, // Include the OpenChromatin_hMSC field
         OpenChromatin_OB: 1, // Include the OpenChromatin_OB field
         // add
@@ -241,7 +241,7 @@ router.get("/:id/proximal_regulatory", async (req, res) => {
         chromHMM_MB: 1,
         chromHMM_MT: 1,
         SigHiC_hMSC: 1, // Include the SigHiC_hMSC field
-        SigHiC_OB13: 1, // Include the SigHiC_OB13 field
+        SigHiC_OB: 1, // Include the SigHiC_OB field
         SigHiC_OC: 1, // Include the SigHiC_OC field
         OpenChromatin_MB: 1,
         OpenChromatin_MT: 1,
@@ -267,12 +267,12 @@ const findDistalRegion = async (geneName, celltype) => {
   //   if (celltype === "hMSC") {
   //     cellTypeField = "chromHMM_hMSC";
   //   } else if (celltype === "Osteoblast") {
-  //     cellTypeField = "chromHMM_osteoblast";
+  //     cellTypeField = "chromHMM_OB";
   //   }
   if (celltype === "hMSC") {
     cellTypeField = "chromHMM_hMSC";
   } else if (celltype === "Osteoblast") {
-    cellTypeField = "chromHMM_osteoblast";
+    cellTypeField = "chromHMM_OB";
   } else if (celltype === "Osteocyte") {
     cellTypeField = "chromHMM_OC";
   } else if (celltype === "Myoblast") {
@@ -286,7 +286,7 @@ const findDistalRegion = async (geneName, celltype) => {
   const variants = await VariantModel.find(
     {
       GeneName_ID_Ensembl: { $regex: geneName, $options: "i" },
-      [cellTypeField]: { $regex: "^[1-4]_" },
+      [cellTypeField]: { $regex: ":[1-4]_" },
     },
     {
       _id: 1, // Include the _id field
@@ -296,7 +296,7 @@ const findDistalRegion = async (geneName, celltype) => {
       GeneInfo_DistNG_Ensembl: 1, // Include the GeneInfo_DistNG_Ensembl field
       //   Promoter_like_region: 1, // Include the Promoter_like_region field
       chromHMM_hMSC: 1, // Include the chromHMM_hMSC field
-      chromHMM_osteoblast: 1, // Include the chromHMM_osteoblast field
+      chromHMM_OB: 1, // Include the chromHMM_OB field
       chromHMM_OC: 1, //add
       chromHMM_MB: 1, //add
       chromHMM_MT: 1, //add
@@ -304,7 +304,7 @@ const findDistalRegion = async (geneName, celltype) => {
       OpenChromatin_OB: 1, // Include the OpenChromatin_OB field
       OpenChromatin_OC: 1, //add
       SigHiC_hMSC: 1, // Include the SigHiC_hMSC field
-      SigHiC_OB13: 1, // Include the SigHiC_OB13 field
+      SigHiC_OB: 1, // Include the SigHiC_OB field
       SigHiC_OC: 1, // Include the SigHiC_OC field
       OpenChromatin_MB: 1,
       OpenChromatin_MT: 1,
@@ -339,13 +339,13 @@ router.get("/:id/distal_regulatory", async (req, res) => {
   //                 result.push(variant);
   //         }
   //     } else if (celltype == "Osteoblast") {
-  //         if (variant._doc.chromHMM_osteoblast &&
-  //             (variant._doc.chromHMM_osteoblast.startsWith("13_") ||
-  //              variant._doc.chromHMM_osteoblast.startsWith("14_") ||
-  //              variant._doc.chromHMM_osteoblast.startsWith("15_") ||
-  //              variant._doc.chromHMM_osteoblast.startsWith("16_") ||
-  //              variant._doc.chromHMM_osteoblast.startsWith("17_") ||
-  //              variant._doc.chromHMM_osteoblast.startsWith("18_")
+  //         if (variant._doc.chromHMM_OB &&
+  //             (variant._doc.chromHMM_OB.startsWith("13_") ||
+  //              variant._doc.chromHMM_OB.startsWith("14_") ||
+  //              variant._doc.chromHMM_OB.startsWith("15_") ||
+  //              variant._doc.chromHMM_OB.startsWith("16_") ||
+  //              variant._doc.chromHMM_OB.startsWith("17_") ||
+  //              variant._doc.chromHMM_OB.startsWith("18_")
   //             )) {
   //                 // console.log("variant", variant)
   //                 result.push(variant);
@@ -359,12 +359,12 @@ router.get("/:id/distal_regulatory", async (req, res) => {
     // if (celltype === "hMSC") {
     //   cellTypeField = "chromHMM_hMSC";
     // } else if (celltype === "Osteoblast") {
-    //   cellTypeField = "chromHMM_osteoblast";
+    //   cellTypeField = "chromHMM_OB";
     // }
     if (celltype === "hMSC") {
       cellTypeField = "chromHMM_hMSC";
     } else if (celltype === "Osteoblast") {
-      cellTypeField = "chromHMM_osteoblast";
+      cellTypeField = "chromHMM_OB";
     } else if (celltype === "Osteocyte") {
       cellTypeField = "chromHMM_OC";
     } else if (celltype === "Myoblast") {
@@ -380,7 +380,7 @@ router.get("/:id/distal_regulatory", async (req, res) => {
     const variants = await VariantModel.find(
       {
         GeneName_ID_Ensembl: { $regex: id, $options: "i" },
-        [cellTypeField]: { $regex: "^1[3-8]_" },
+        [cellTypeField]: { $regex: ":1[3-8]_" },
       },
       {
         _id: 1, // Include the _id field
@@ -393,12 +393,12 @@ router.get("/:id/distal_regulatory", async (req, res) => {
         chromHMM_MB: 1,
         chromHMM_MT: 1,
         chromHMM_hMSC: 1, // Include the chromHMM_hMSC field
-        chromHMM_osteoblast: 1, // Include the chromHMM_osteoblast field
+        chromHMM_OB: 1, // Include the chromHMM_OB field
         OpenChromatin_hMSC: 1, // Include the OpenChromatin_hMSC field
         OpenChromatin_OB: 1, // Include the OpenChromatin_OB field
         OpenChromatin_OC: 1, // add
         SigHiC_hMSC: 1, // Include the SigHiC_hMSC field
-        SigHiC_OB13: 1, // Include the SigHiC_OB13 field
+        SigHiC_OB: 1, // Include the SigHiC_OB field
         SigHiC_OC: 1, // Include the SigHiC_OC field
         OpenChromatin_MB: 1,
         OpenChromatin_MT: 1,
