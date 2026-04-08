@@ -28,10 +28,6 @@ const IgvVariantWithPromoter = ({
   const locus = `chr${variant.Chr}:${startMin}-${endMax}`;
 
   // define the path to target files
-  let promoter_like_url = `${
-    import.meta.env.VITE_EXPRESS_URL
-  }/public/igv/promoter/promoter_like_regions_annotation_sorted.bed`;
-  // let promoter_like_url = "/igv/promoter/promoter_like_regions_annotation_sorted.bed";
   let genecode_url =
     "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz";
   // let genecode_url = "/igv/gencode.v35.annotation.sort.gtf.gz";
@@ -160,14 +156,6 @@ const IgvVariantWithPromoter = ({
           ],
           name: `${variant.RSID}`,
           height: 50,
-        },
-        {
-          type: "annotation",
-          format: "bed",
-          url: promoter_like_url,
-          height: 50,
-          name: "Promoter-like-region",
-          displayMode: "EXPANDED",
         },
         {
           type: "annotation",

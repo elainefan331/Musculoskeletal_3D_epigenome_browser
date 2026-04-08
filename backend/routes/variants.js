@@ -283,7 +283,7 @@ router.get("/:id", async (req, res) => {
     let extractedPart = "";
     let promoterBin = "";
     let promoterBinArray = [];
-    if (SigHiCRowData !== "NA") {
+    if (SigHiCRowData && SigHiCRowData !== "NA") {
       const regex =
         /RegulatoryBin:(\d+:\d+:\d+);PromoterBin:((?:\d+:\d+:\d+,?)+)/;
       const match = SigHiCRowData.match(regex);

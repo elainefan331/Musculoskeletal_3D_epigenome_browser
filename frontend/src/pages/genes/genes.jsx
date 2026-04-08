@@ -454,7 +454,7 @@ const Genes = () => {
                     <th>VariantID</th>
                     <th>Region</th>
                     <th>Distance with gene</th>
-                    <th>Promoter-like</th>
+
                     <th>Chromhmm</th>
                     <th>Open Chromatin</th>
                     <th>Hi-C Chromatin Interaction</th>
@@ -477,7 +477,7 @@ const Genes = () => {
                           <td>{region.variantID}</td>
                           <td>{region["Region_Ensembl"]}</td>
                           <td>{region.GeneInfo_DistNG_Ensembl}</td>
-                          <td>{region.Promoter_like_region}</td>
+
                           <td>
                             {celltype === "hMSC"
                               ? region.chromHMM_hMSC
@@ -611,7 +611,7 @@ const Genes = () => {
                     <th>VariantID</th>
                     <th>Region</th>
                     <th>Distance with gene</th>
-                    <th>Promoter-like</th>
+
                     <th>Chromhmm</th>
                     <th>Open Chromatin</th>
                     <th>Hi-C Chromatin Interaction</th>
@@ -634,7 +634,7 @@ const Genes = () => {
                           <td>{region.variantID}</td>
                           <td>{region["Region_Ensembl"]}</td>
                           <td>{region.GeneInfo_DistNG_Ensembl}</td>
-                          <td>{region.Promoter_like_region}</td>
+
                           <td>
                             {celltype === "hMSC"
                               ? region.chromHMM_hMSC

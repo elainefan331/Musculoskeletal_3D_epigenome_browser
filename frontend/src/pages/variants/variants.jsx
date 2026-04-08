@@ -202,12 +202,12 @@ const Variants = () => {
                       {/* {celltype === "hMSC" 
                                         ? variant.chromHMM_hMSC 
                                         : celltype === "Osteoblast"
-                                        ? variant.chromHMM_osteoblast
+                                        ? variant.chromHMM_OB
                                         : "NA"} */}
                       {celltype === "hMSC"
                         ? variant.chromHMM_hMSC
                         : celltype === "Osteoblast"
-                        ? variant.chromHMM_osteoblast
+                        ? variant.chromHMM_OB
                         : celltype === "Osteocyte"
                         ? variant.chromHMM_OC
                         : celltype === "Myoblast" // ADD
