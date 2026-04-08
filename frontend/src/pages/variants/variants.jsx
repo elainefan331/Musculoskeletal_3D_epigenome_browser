@@ -48,7 +48,7 @@ const Variants = () => {
         setPromoterdata(result.promoter);
         setRegulatorybin(result.bin.regulatoryBin);
         setPromoterbin(result.bin.promoterBin);
-        if (result.variant[0]?.RSID) {
+        if (result.variant[0]?.RSID && result.promoter.length > 0) {
           await waitForBedpe(`${result.variant[0].RSID}_${celltype}.bedpe.txt`);
         }
         setBedpeReady(true);

@@ -5,8 +5,8 @@ const IgvVariant = ({variant, celltype}) => {
   const igvDiv = useRef(null);
   const igvBrowser = useRef(null);
   // const [browser, setBrowser] = useState(null);
-  const start = variant.Start - 50000;
-  const end = variant.End + 50000;
+  const start = parseInt(variant.Start) - 50000;
+  const end = parseInt(variant.End) + 50000;
   const locus = `chr${variant.Chr}:${start}-${end}`;
   
 
