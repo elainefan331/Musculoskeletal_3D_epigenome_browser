@@ -28,6 +28,9 @@ const geneListRegex = (gene) =>
     "i"
   );
 
+// a field counts as missing when it is "NA" or left out of the document
+const isPresent = (value) => Boolean(value) && value !== "NA";
+
 // find the relative promoter based on the celltype
 const getPromoterData = async (celltype, gene) => {
   let genes;
@@ -53,6 +56,11 @@ const getPromoterData = async (celltype, gene) => {
     // ADD THIS
     genes = await Promoter_MT.find({ Gene: `${gene[0]["Gene_Name"]}` });
   }
+
+  // skip promoter records without Hi-C bins, which would give NaN IGV ranges and chrNA BEDPE rows
+  genes = genes?.filter(
+    (g) => isPresent(g._doc.HiC_Promoter_bin) && isPresent(g._doc.HiC_Distal_bin)
+  );
 
   const publicFolderPath = path.resolve(
     __dirname,

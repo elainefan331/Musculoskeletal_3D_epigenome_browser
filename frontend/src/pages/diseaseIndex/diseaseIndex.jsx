@@ -5,6 +5,9 @@ import IgvDisease from "../../components/IgvDisease";
 import IgvDiseaseWithPromoter from "../../components/IgvDiseaseWithPromoter";
 import "./diseaseIndex.css"
 
+// Show "NA" for fields that are missing from the database document
+const na = (value) => value ?? "NA";
+
 const DiseaseIndex = () => {
     // const {disease} = useDisease();
     const { Id } = useParams();
@@ -94,17 +97,17 @@ const DiseaseIndex = () => {
                                             value={variant._id} 
                                             onChange={(e)=> handleSelectVariant(e, variant)}/>
                                     </td>
-                                    <td>{variant.Variant}</td>
-                                    <td>{variant.RSID}</td>
-                                    <td>{variant.R_square}</td>
-                                    <td>{variant.BETA_GEFOS2018_Bmd}</td>
-                                    <td>{variant.P_GEFOS2018_Bmd}</td>
-                                    <td>{variant.OR_GEFOS2018_FracA}</td>
-                                    <td>{variant.P_GEFOS2018_FracA}</td>
-                                    <td>{variant.FNBMD_Effect}</td>
-                                    <td>{variant.FNBMD_pvalue}</td>
-                                    <td>{variant.LSBMD_Effect}</td>
-                                    <td>{variant.LSBMD_pvalue}</td>
+                                    <td>{na(variant.Variant)}</td>
+                                    <td>{na(variant.RSID)}</td>
+                                    <td>{na(variant.R_square)}</td>
+                                    <td>{na(variant.BETA_GEFOS2018_Bmd)}</td>
+                                    <td>{na(variant.P_GEFOS2018_Bmd)}</td>
+                                    <td>{na(variant.OR_GEFOS2018_FracA)}</td>
+                                    <td>{na(variant.P_GEFOS2018_FracA)}</td>
+                                    <td>{na(variant.FNBMD_Effect)}</td>
+                                    <td>{na(variant.FNBMD_pvalue)}</td>
+                                    <td>{na(variant.LSBMD_Effect)}</td>
+                                    <td>{na(variant.LSBMD_pvalue)}</td>
                                 </tr>
                             )
                         })}

@@ -9,7 +9,6 @@ const IgvDisease = ({IndexSNP, celltype, range, diseasePosition}) => {
     const chr = IndexSNP.split("-")[0];
     const locus = `chr${chr}:${range.Start}-${range.End}`;
 
-    let promoter_like_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/promoter/promoter_like_regions_annotation_sorted.bed`;
     let genecode_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz"
     // let genecode_url = "/igv/gencode.v35.annotation.sort.gtf.gz";
     let genecode_index_url = "https://s3.amazonaws.com/igv.org.genomes/hg38/Homo_sapiens.GRCh38.94.chr.gff3.gz.tbi"
@@ -97,13 +96,6 @@ const IgvDisease = ({IndexSNP, celltype, range, diseasePosition}) => {
                     url: `/igv/temp/${IndexSNP}_LD.bed`,
                     height: 50,
                     name: "LD SNP",
-                    displayMode: "EXPANDED",
-                },
-                {
-                    type: "annotation",
-                    format: "bed",
-                    url: promoter_like_url,
-                    name: "Promoter-like-region",
                     displayMode: "EXPANDED",
                 },
                 {

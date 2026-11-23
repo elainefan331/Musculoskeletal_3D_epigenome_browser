@@ -51,7 +51,7 @@ const variantBinFinder = async(variants, celltype) => {
         let promoterBin = "";
         let promoterBinArray = [];
         let promoters=[];
-        if (variant._doc.SigHic !== "NA") {
+        if (variant._doc.SigHic && variant._doc.SigHic !== "NA") {
             const regex = /RegulatoryBin:(\d+:\d+:\d+);PromoterBin:((?:\d+:\d+:\d+,?)+)/;
             const match = variant._doc.SigHic.match(regex)
             if (match) {
@@ -73,7 +73,7 @@ const variantBinFinder = async(variants, celltype) => {
 const promoterBinExist = (variants) => {
     let result = false;
     for (let variant of variants) {
-        if (variant._doc.SigHic !== "NA") result = true;
+        if (variant._doc.SigHic && variant._doc.SigHic !== "NA") result = true;
     }
     return result;
 }
