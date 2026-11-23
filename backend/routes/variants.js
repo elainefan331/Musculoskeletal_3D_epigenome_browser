@@ -60,6 +60,13 @@ const generateBedpeFile = (promoter, filePath) => {
   const bedpeDataArray = promoter.flatMap((data) => {
     console.log("data", data);
     const promoterDoc = data._doc;
+    // skip records without Hi-C bins or q-values ("NA" or left out of the document)
+    const hasHiC = [
+      promoterDoc.HiC_Distal_bin,
+      promoterDoc.HiC_Promoter_bin,
+      promoterDoc.HiC_info,
+    ].every((value) => value && value !== "NA");
+    if (!hasHiC) return [];
     const distalBin = parseBin(promoterDoc.HiC_Distal_bin);
     const promoterBin = parseBin(promoterDoc.HiC_Promoter_bin);
 

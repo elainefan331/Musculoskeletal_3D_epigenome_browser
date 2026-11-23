@@ -4,6 +4,9 @@ import Pagination from "../../components/Pagination/Pagination";
 import { useDisease } from "../../context/diseaseContext";
 import "./diseases.css";
 
+// Show "NA" for fields that are missing from the database document
+const na = (value) => value ?? "NA";
+
 const Diseases = () => {
     const {disease, setDisease} = useDisease();
     const { Id } = useParams();
@@ -128,16 +131,16 @@ const Diseases = () => {
                                                 </a>
                                             </td>
                                             <td id="disease-variantId-td">{`${disease["#Chr"]}-${disease.Start}-${disease.Ref}-${disease.Alt}`}</td>
-                                            <td>{disease.Risk_allele}</td>
-                                            <td>{disease.Risk_allele_AF}</td>
+                                            <td>{na(disease.Risk_allele)}</td>
+                                            <td>{na(disease.Risk_allele_AF)}</td>
                                             <td>
                                                 <a href={`https://pubmed.ncbi.nlm.nih.gov/${disease.Pubmed}/`} target="_blank" className="disease-external-links">
                                                     {disease.Pubmed}
                                                 </a>
                                             </td>
-                                            <td>{disease.GeneName_ID_Ensembl}</td>
-                                            <td>{disease.Reported_gene}</td>
-                                            <td>{disease["P-value"]}</td>
+                                            <td>{na(disease.GeneName_ID_Ensembl)}</td>
+                                            <td>{na(disease.Reported_gene)}</td>
+                                            <td>{na(disease["P-value"])}</td>
                                             <td id="disease-studyId-td">
                                                 <a href={`https://www.ebi.ac.uk/gwas/studies/${disease["STUDY_ACCESSION"]}/`} target="_blank" className="disease-external-links">
                                                     {disease["STUDY_ACCESSION"]}

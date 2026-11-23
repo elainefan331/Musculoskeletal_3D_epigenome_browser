@@ -4,6 +4,9 @@ import IgvVariant from "../../components/IgvVariant";
 import IgvVariantWithPromoter from "../../components/IgvVariantWithPromoter";
 import "./variants.css";
 
+// Show "NA" for fields that are missing from the database document
+const na = (value) => value ?? "NA";
+
 const Variants = () => {
   const { Id } = useParams();
   const location = useLocation();
@@ -89,6 +92,7 @@ const Variants = () => {
 
     // Function to wrap a value in double quotes if it contains commas or newlines
     const escapeCSVValue = (value) => {
+      if (value === undefined || value === null) return "NA";
       if (
         typeof value === "string" &&
         (value.includes(",") || value.includes("\n"))
@@ -158,7 +162,6 @@ const Variants = () => {
                 <th className="narrow-column">Region</th>
                 <th className="narrow-column">Gene</th>
                 <th>Distance with gene</th>
-                {/* <th>Promoter-like</th> */}
                 <th className="narrow-column">Chromhmm</th>
                 <th>Open Chromatin</th>
                 <th>Hi-C Chromatin Interaction</th>
@@ -192,19 +195,18 @@ const Variants = () => {
                       {`Chr${variant.Chr}:${variant.Start}:${variant.Ref}:`}
                       <span style={{ color: "red" }}>{variant.Alt}</span>
                     </td>
-                    <td className="narrow-column">{variant.Region_Ensembl}</td>
+                    <td className="narrow-column">{na(variant.Region_Ensembl)}</td>
                     <td className="narrow-column">
                       {variant.GeneName_ID_Ensembl}
                     </td>
-                    <td>{variant.GeneInfo_DistNG_Ensembl}</td>
-                    {/* <td>{variant.Promoter_like_region}</td> */}
+                    <td>{na(variant.GeneInfo_DistNG_Ensembl)}</td>
                     <td className="narrow-column">
                       {/* {celltype === "hMSC" 
                                         ? variant.chromHMM_hMSC 
                                         : celltype === "Osteoblast"
                                         ? variant.chromHMM_OB
                                         : "NA"} */}
-                      {celltype === "hMSC"
+                      {na(celltype === "hMSC"
                         ? variant.chromHMM_hMSC
                         : celltype === "Osteoblast"
                         ? variant.chromHMM_OB
@@ -214,7 +216,7 @@ const Variants = () => {
                         ? variant.chromHMM_MB
                         : celltype === "Myotube" // ADD
                         ? variant.chromHMM_MT
-                        : "NA"}
+                        : "NA")}
                     </td>
                     <td>
                       {/* {celltype === "hMSC"
@@ -222,7 +224,7 @@ const Variants = () => {
                                         : celltype === "Osteoblast"
                                         ? variant.OpenChromatin_OB
                                         : "NA"} */}
-                      {celltype === "hMSC"
+                      {na(celltype === "hMSC"
                         ? variant.OpenChromatin_hMSC
                         : celltype === "Osteoblast"
                         ? variant.OpenChromatin_OB
@@ -232,7 +234,7 @@ const Variants = () => {
                         ? variant.OpenChromatin_MB
                         : celltype === "Myotube" // ADD
                         ? variant.OpenChromatin_MT
-                        : "NA"}
+                        : "NA")}
                     </td>
                     <td id="nest-table-container">
                       <table className="nest-table">
@@ -291,33 +293,33 @@ const Variants = () => {
             <tbody>
               <tr>
                 <td>ALL</td>
-                <td>{showallele["1000g_ALL"]}</td>
-                <td>{showallele["gnomAD_All"]}</td>
+                <td>{na(showallele["1000g_ALL"])}</td>
+                <td>{na(showallele["gnomAD_All"])}</td>
               </tr>
               <tr>
                 <td>AFR</td>
-                <td>{showallele["1000g_AFR"]}</td>
-                <td>{showallele["gnomAD_AFR"]}</td>
+                <td>{na(showallele["1000g_AFR"])}</td>
+                <td>{na(showallele["gnomAD_AFR"])}</td>
               </tr>
               <tr>
                 <td>AMR</td>
-                <td>{showallele["1000g_AMR"]}</td>
-                <td>{showallele["gnomAD_AMR"]}</td>
+                <td>{na(showallele["1000g_AMR"])}</td>
+                <td>{na(showallele["gnomAD_AMR"])}</td>
               </tr>
               <tr>
                 <td>EAS</td>
-                <td>{showallele["1000g_EAS"]}</td>
-                <td>{showallele["gnomAD_EAS"]}</td>
+                <td>{na(showallele["1000g_EAS"])}</td>
+                <td>{na(showallele["gnomAD_EAS"])}</td>
               </tr>
               <tr>
                 <td>EUR</td>
-                <td>{showallele["1000g_EUR"]}</td>
-                <td>{showallele["gnomAD_NFE"]}</td>
+                <td>{na(showallele["1000g_EUR"])}</td>
+                <td>{na(showallele["gnomAD_NFE"])}</td>
               </tr>
               <tr>
                 <td>SAS</td>
-                <td>{showallele["1000g_SAS"]}</td>
-                <td>{showallele["gnomAD_SAS"]}</td>
+                <td>{na(showallele["1000g_SAS"])}</td>
+                <td>{na(showallele["gnomAD_SAS"])}</td>
               </tr>
             </tbody>
           </table>
@@ -384,21 +386,21 @@ const Variants = () => {
                   <tbody key={promoter._id}>
                     <tr>
                       <td>{`${promoter.Chr}:${promoter.Start}-${promoter.End}`}</td>
-                      <td>{promoter.Gene}</td>
+                      <td>{na(promoter.Gene)}</td>
                       {/* <td>{promoter.Gene_TPM}</td> */}
-                      <td>{promoter.GeneTPM}</td> {/* CHANGE */}
+                      <td>{na(promoter.GeneTPM)}</td> {/* CHANGE */}
                       <td>{`${promoter.Chr}:${promoter.TSS}`}</td>
-                      <td>{promoter.Transcript}</td>
+                      <td>{na(promoter.Transcript)}</td>
                       {/* <td>{promoter.Transcript_TPM}</td> */}
-                      <td>{promoter.TranscriptTPM}</td> {/* CHANGE */}
-                      <td>{promoter.Transcript_support_level}</td> {/* ADD */}
+                      <td>{na(promoter.TranscriptTPM)}</td> {/* CHANGE */}
+                      <td>{na(promoter.Transcript_support_level)}</td> {/* ADD */}
                       <td>{`chr${promoter.HiC_Promoter_bin}`}</td>
-                      <td>{promoter.HiC_info}</td>
-                      <td>{promoter.OpenChromatin}</td>
-                      <td>{promoter.ChromHMM}</td>
-                      <td>{promoter.Type}</td> {/* ADD */}
-                      <td>{promoter.Score}</td> {/* ADD */}
-                      <td>{promoter.Score_source}</td> {/* ADD */}
+                      <td>{na(promoter.HiC_info)}</td>
+                      <td>{na(promoter.OpenChromatin)}</td>
+                      <td>{na(promoter.ChromHMM)}</td>
+                      <td>{na(promoter.Type)}</td> {/* ADD */}
+                      <td>{na(promoter.Score)}</td> {/* ADD */}
+                      <td>{na(promoter.Score_source)}</td> {/* ADD */}
                       {/* <td>{promoter.RefTSS}</td> */}
                       {/* <td>{promoter["ENCODE-cCRE-PLS"]}</td> */}
                     </tr>

@@ -5,6 +5,9 @@ import "./genes.css";
 // pagination
 import Pagination from "../../components/Pagination/Pagination";
 
+// Show "NA" for fields that are missing from the database document
+const na = (value) => value ?? "NA";
+
 const Genes = () => {
   const { Id } = useParams();
   const location = useLocation();
@@ -115,6 +118,7 @@ const Genes = () => {
     // if (!diseases) return;
     // Function to wrap a value in double quotes if it contains commas or newlines
     const escapeCSVValue = (value) => {
+      if (value === undefined || value === null) return "NA";
       if (
         typeof value === "string" &&
         (value.includes(",") || value.includes("\n"))
@@ -396,9 +400,9 @@ const Genes = () => {
                           {region.RSID}
                         </a>
                       </td>
-                      <td>{region.variantID}</td>
-                      <td>{region["ExonicFunc_Ensembl"]}</td>
-                      <td>{region["AAChange_Ensembl"]}</td>
+                      <td>{na(region.variantID)}</td>
+                      <td>{na(region["ExonicFunc_Ensembl"])}</td>
+                      <td>{na(region["AAChange_Ensembl"])}</td>
                     </tr>
                   </tbody>
                 );
@@ -454,7 +458,6 @@ const Genes = () => {
                     <th>VariantID</th>
                     <th>Region</th>
                     <th>Distance with gene</th>
-
                     <th>Chromhmm</th>
                     <th>Open Chromatin</th>
                     <th>Hi-C Chromatin Interaction</th>
@@ -474,12 +477,11 @@ const Genes = () => {
                               {region.RSID}
                             </a>
                           </td>
-                          <td>{region.variantID}</td>
-                          <td>{region["Region_Ensembl"]}</td>
-                          <td>{region.GeneInfo_DistNG_Ensembl}</td>
-
+                          <td>{na(region.variantID)}</td>
+                          <td>{na(region["Region_Ensembl"])}</td>
+                          <td>{na(region.GeneInfo_DistNG_Ensembl)}</td>
                           <td>
-                            {celltype === "hMSC"
+                            {na(celltype === "hMSC"
                               ? region.chromHMM_hMSC
                               : celltype === "Osteoblast"
                               ? region.chromHMM_OB
@@ -487,10 +489,10 @@ const Genes = () => {
                               ? region.chromHMM_MB
                               : celltype === "Myotube"
                               ? region.chromHMM_MT
-                              : "NA"}
+                              : "NA")}
                           </td>
                           <td>
-                            {celltype === "hMSC"
+                            {na(celltype === "hMSC"
                               ? region.OpenChromatin_hMSC
                               : celltype === "Osteoblast"
                               ? region.OpenChromatin_OB
@@ -500,7 +502,7 @@ const Genes = () => {
                               ? region.OpenChromatin_MB
                               : celltype === "Myotube"
                               ? region.OpenChromatin_MT
-                              : "NA"}
+                              : "NA")}
                           </td>
                           <td id="gene-nest-table-container">
                             <table className="nest-table">
@@ -611,7 +613,6 @@ const Genes = () => {
                     <th>VariantID</th>
                     <th>Region</th>
                     <th>Distance with gene</th>
-
                     <th>Chromhmm</th>
                     <th>Open Chromatin</th>
                     <th>Hi-C Chromatin Interaction</th>
@@ -631,12 +632,11 @@ const Genes = () => {
                               {region.RSID}
                             </a>
                           </td>
-                          <td>{region.variantID}</td>
-                          <td>{region["Region_Ensembl"]}</td>
-                          <td>{region.GeneInfo_DistNG_Ensembl}</td>
-
+                          <td>{na(region.variantID)}</td>
+                          <td>{na(region["Region_Ensembl"])}</td>
+                          <td>{na(region.GeneInfo_DistNG_Ensembl)}</td>
                           <td>
-                            {celltype === "hMSC"
+                            {na(celltype === "hMSC"
                               ? region.chromHMM_hMSC
                               : celltype === "Osteoblast"
                               ? region.chromHMM_OB
@@ -644,10 +644,10 @@ const Genes = () => {
                               ? region.chromHMM_MB
                               : celltype === "Myotube"
                               ? region.chromHMM_MT
-                              : "NA"}
+                              : "NA")}
                           </td>
                           <td>
-                            {celltype === "hMSC"
+                            {na(celltype === "hMSC"
                               ? region.OpenChromatin_hMSC
                               : celltype === "Osteoblast"
                               ? region.OpenChromatin_OB
@@ -657,7 +657,7 @@ const Genes = () => {
                               ? region.OpenChromatin_MB
                               : celltype === "Myotube"
                               ? region.OpenChromatin_MT
-                              : "NA"}
+                              : "NA")}
                           </td>
                           <td id="gene-nest-table-container">
                             <table className="nest-table">
@@ -780,8 +780,8 @@ const Genes = () => {
                 return (
                   <tbody key={disease._id} className="disease-row-tbody">
                     <tr>
-                      <td>{disease["Reported_gene"]}</td>
-                      <td>{disease["Disease_trait"]}</td>
+                      <td>{na(disease["Reported_gene"])}</td>
+                      <td>{na(disease["Disease_trait"])}</td>
                       <td>
                         <a
                           className="gene_external_link"
@@ -790,8 +790,8 @@ const Genes = () => {
                           {disease["RSID"]}
                         </a>
                       </td>
-                      <td>{disease["P-value"]}</td>
-                      <td>{disease["OR-Beta"]}</td>
+                      <td>{na(disease["P-value"])}</td>
+                      <td>{na(disease["OR-Beta"])}</td>
                       <td>
                         <a
                           className="gene_external_link"
