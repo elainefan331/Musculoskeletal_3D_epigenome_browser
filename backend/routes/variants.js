@@ -255,6 +255,9 @@ router.get("/:id", async (req, res) => {
   try {
     let SigHiCRowData = "";
     let variant = await VariantModel.find(variantQuery);
+    if (variant.length === 0) {
+      return res.status(404).send("Variant not found");
+    }
     const obj = variant[0]._doc;
 
     // if (celltype === "hMSC") {

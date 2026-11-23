@@ -18,6 +18,16 @@ const router = express.Router();
 
 // helper function
 
+const CELLTYPES = ["hMSC", "Osteoblast", "Osteocyte", "Myoblast", "Myotube"];
+
+// match a gene symbol as a whole entry of a gene list separated by commas, semicolons or
+// slashes, so that e.g. "ST7" doesn't also match "ST7-AS1", "ST7L" or "CST7"
+const geneListRegex = (gene) =>
+  new RegExp(
+    `(^|[,;/]\\s*)${gene.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?=\\s*[,;/]|$)`,
+    "i"
+  );
+
 // find the relative promoter based on the celltype
 const getPromoterData = async (celltype, gene) => {
   let genes;
@@ -169,6 +179,9 @@ router.get("/:id/proximal_regulatory", async (req, res) => {
   console.log("proximal regulatory =============");
   const id = req.params.id;
   const { celltype } = req.query;
+  if (!CELLTYPES.includes(celltype)) {
+    return res.status(400).send("Unknown celltype");
+  }
   // const gene = await geneModel.find({Gene_Name: id});
   // const variants = await VariantModel.find({GeneName_ID_Ensembl: { $regex: id, $options: 'i' }});
 
@@ -220,7 +233,7 @@ router.get("/:id/proximal_regulatory", async (req, res) => {
 
     const variants = await VariantModel.find(
       {
-        GeneName_ID_Ensembl: { $regex: id, $options: "i" },
+        GeneName_ID_Ensembl: geneListRegex(id),
         [cellTypeField]: { $regex: ":[1-4]_" },
       },
       {
@@ -285,7 +298,7 @@ const findDistalRegion = async (geneName, celltype) => {
 
   const variants = await VariantModel.find(
     {
-      GeneName_ID_Ensembl: { $regex: geneName, $options: "i" },
+      GeneName_ID_Ensembl: geneListRegex(geneName),
       [cellTypeField]: { $regex: ":[1-4]_" },
     },
     {
@@ -320,6 +333,9 @@ router.get("/:id/distal_regulatory", async (req, res) => {
   console.log("distal regulatory =============");
   const id = req.params.id;
   const { celltype } = req.query;
+  if (!CELLTYPES.includes(celltype)) {
+    return res.status(400).send("Unknown celltype");
+  }
   // const variants = await VariantModel.find({GeneName_ID_Ensembl: { $regex: id, $options: 'i' }});
   // console.log("celltype in distal regulatory", celltype)
 
@@ -379,7 +395,7 @@ router.get("/:id/distal_regulatory", async (req, res) => {
     // console.log("celltypefield", cellTypeField)
     const variants = await VariantModel.find(
       {
-        GeneName_ID_Ensembl: { $regex: id, $options: "i" },
+        GeneName_ID_Ensembl: geneListRegex(id),
         [cellTypeField]: { $regex: ":1[3-8]_" },
       },
       {
@@ -422,6 +438,9 @@ router.get("/:id/distal_regulatory", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const id = req.params.id;
   const { celltype } = req.query;
+  if (!CELLTYPES.includes(celltype)) {
+    return res.status(400).send("Unknown celltype");
+  }
 
   // console.log("id in gene route", id)
   // console.log("celltype in gene route", celltype)
@@ -429,7 +448,7 @@ router.get("/:id", async (req, res) => {
   try {
     const gene = await geneModel.find({ Gene_Name: id });
     const diseases = await Disease2variant.find({
-      Reported_gene: { $regex: id, $options: "i" },
+      Reported_gene: geneListRegex(id),
     }).sort({ "P-value": 1 });
     const codingRegion = await VariantModel.find({
       GeneName_ID_Ensembl: id,
