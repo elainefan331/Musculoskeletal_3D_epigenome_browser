@@ -117,7 +117,7 @@ const IgvVariantWithPromoter = ({
   }
 
   useEffect(() => {
-    const bedpeUrl = `/igv/temp/${variant.RSID}_${celltype}.bedpe.txt`;
+    const bedpeUrl = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/temp/${variant.RSID}_${celltype}.bedpe.txt`;
     const options = {
       genome: "hg38",
       locus: locus,

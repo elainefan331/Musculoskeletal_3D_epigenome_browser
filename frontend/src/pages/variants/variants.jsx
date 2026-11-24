@@ -21,7 +21,7 @@ const Variants = () => {
 
   useEffect(() => {
     async function waitForBedpe(fileName) {
-      const url = `/igv/temp/${fileName}`;
+      const url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/temp/${fileName}`;
       const maxAttempts = 10;
       const delay = 500; // ms between attempts
 

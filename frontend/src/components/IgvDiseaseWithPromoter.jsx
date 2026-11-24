@@ -14,7 +14,7 @@ const IgvDiseaseWithPromoter = ({IndexSNP, celltype, range, diseasePosition}) =>
     let rnaseq_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/bigwig/${celltype}/${celltype}_rep1PE_stranded_genome_plusAll.bw`;
     
     // for promoter exist
-    let locus_hic_url = `/igv/temp/IndexSNP_${IndexSNP}_${celltype}.bedpe.txt`
+    let locus_hic_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/temp/IndexSNP_${IndexSNP}_${celltype}.bedpe.txt`
 
     let atac_url;
     let dnase_url;
@@ -102,7 +102,7 @@ const IgvDiseaseWithPromoter = ({IndexSNP, celltype, range, diseasePosition}) =>
                 {
                     type: "annotation",
                     format: "bed",
-                    url: `/igv/temp/${IndexSNP}_LD.bed`,
+                    url: `${import.meta.env.VITE_EXPRESS_URL}/public/igv/temp/${IndexSNP}_LD.bed`,
                     height: 50,
                     name: "LD SNP",
                     displayMode: "EXPANDED",
