@@ -32,6 +32,13 @@
   padding: 12px 16px; /* More padding for better click target */
 }
 
+.autocomplete-category {
+  float: right;
+  color: #a0aec0;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
 .autocomplete-list li:hover {
   background-color: #f7fafc; /* Lighter hover color */
 }
