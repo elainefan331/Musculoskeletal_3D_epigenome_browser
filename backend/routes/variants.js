@@ -110,6 +110,50 @@ const generateBedpeFile = (promoter, filePath) => {
   console.log(`BEDPE file has been generated and saved to ${filePath}.`);
 };
 
+// Variant suggestions for the search box. They use a case-sensitive prefix anchored at the
+// start of an indexed field, sorted by that field and limited, so MongoDB reads only a few
+// index keys however many variants are loaded. (A case-insensitive regex would scan the
+// whole index: about 37 s on the chr7 test load.)
+const VARIANT_SUGGESTION_LIMIT = 10;
+
+// Turn the search text into a prefix of an indexed field, or null if it doesn't look like
+// a variant. rsIDs need at least 3 digits and positions at least 4, so a short entry such
+// as "rs1" or "7-1" doesn't list arbitrary variants.
+const variantPrefix = (query) => {
+  const text = query.trim();
+  const rsid = text.match(/^rs(\d{3,})$/i);
+  if (rsid) return { field: "RSID", prefix: `rs${rsid[1]}` };
+
+  // variantID is "chr-pos-ref-alt", e.g. 7-121337680-G-A; also accept chr7:121337680:G>A
+  const id = text
+    .toUpperCase()
+    .replace(/^CHR/, "")
+    .replace(/[:_>/]/g, "-");
+  if (/^([0-9]{1,2}|X|Y|MT?)-\d{4,}(-[ACGT]*(-[ACGT]*)?)?$/.test(id)) {
+    return { field: "variantID", prefix: id };
+  }
+  return null;
+};
+
+const findVariantSuggestions = async (query) => {
+  const p = variantPrefix(query);
+  if (!p) return [];
+  const escaped = p.prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  // read a few extra rows: one rsID can have several alleles, listed once below
+  const docs = await VariantModel.find(
+    { [p.field]: { $regex: `^${escaped}` } },
+    { [p.field]: 1, _id: 0 }
+  )
+    .sort({ [p.field]: 1 })
+    .limit(VARIANT_SUGGESTION_LIMIT * 3)
+    .lean();
+  const names = [...new Set(docs.map((d) => d[p.field]))].slice(
+    0,
+    VARIANT_SUGGESTION_LIMIT
+  );
+  return names.map((name) => ({ _id: `variant:${name}`, name, category: "variant" }));
+};
+
 router.get("/autocomplete", async (req, res) => {
   let { query } = req.query;
 
@@ -238,8 +282,10 @@ router.get("/autocomplete", async (req, res) => {
     //     }
     // ]);
 
-    console.log(`Search results for "${query}":`, results);
-    return res.status(200).json(results);
+    const variants = await findVariantSuggestions(query);
+    const suggestions = [...results, ...variants].slice(0, VARIANT_SUGGESTION_LIMIT);
+    console.log(`Search results for "${query}":`, suggestions);
+    return res.status(200).json(suggestions);
   } catch (error) {
     console.log(`Error: ${error.message}`);
     return res.status(500).send("Server error");

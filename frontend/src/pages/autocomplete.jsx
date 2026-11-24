@@ -16,7 +16,7 @@ const Autocomplete = ({ query, onSelect, setParentSuggestions }) => {
         const fetchSuggestions = async () => {
             setLoading(true);
             try {
-                const res = await fetch(`${import.meta.env.VITE_EXPRESS_URL}/variants/autocomplete?query=${query}`);
+                const res = await fetch(`${import.meta.env.VITE_EXPRESS_URL}/variants/autocomplete?query=${encodeURIComponent(query)}`);
                 const data = await res.json();
                 console.log(data)
                 setSuggestions(data);
@@ -44,6 +44,7 @@ const Autocomplete = ({ query, onSelect, setParentSuggestions }) => {
                 {suggestions.map((suggestion) => (
                     <li key={suggestion._id} onClick={() => onSelect(suggestion.name, suggestion.category)}>
                         {suggestion.name}
+                        <span className="autocomplete-category">{suggestion.category}</span>
                     </li>
                 ))}
             </ul>
