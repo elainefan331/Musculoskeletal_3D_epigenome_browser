@@ -17,7 +17,7 @@ const IgvDisease = ({IndexSNP, celltype, range, diseasePosition}) => {
    
     
     // for promoter exist
-    let locus_hic_url = `/igv/temp/${IndexSNP}_${celltype}.bedpe.txt`
+    let locus_hic_url = `${import.meta.env.VITE_EXPRESS_URL}/public/igv/temp/${IndexSNP}_${celltype}.bedpe.txt`
     let atac_url;
     let dnase_url;
     let chromHMM_url;
@@ -93,7 +93,7 @@ const IgvDisease = ({IndexSNP, celltype, range, diseasePosition}) => {
                 {
                     type: "annotation",
                     format: "bed",
-                    url: `/igv/temp/${IndexSNP}_LD.bed`,
+                    url: `${import.meta.env.VITE_EXPRESS_URL}/public/igv/temp/${IndexSNP}_LD.bed`,
                     height: 50,
                     name: "LD SNP",
                     displayMode: "EXPANDED",
