@@ -24,3 +24,5 @@ loci → 95% credible sets → predicted target genes (CisLink-Base) in the five
   The exports are made by the atlas analysis pipeline (`MSK_browser/data/phenotype_search/scripts/`). One phenotype is
   about 100 MB in MongoDB, most of it the locus-plot data.
 - The locus plot uses LocusZoom.js; its gene track is fetched from the University of Michigan LocusZoom API.
+- The locus page's IGV view reads its gene track from `frontend/public/igv/annotation/gencode_v29_protein_coding_genes.bed.gz`
+  on the server (one row per protein-coding gene, GENCODE v29; made by `phenotype_search/scripts/gene_track_bed.py`).
