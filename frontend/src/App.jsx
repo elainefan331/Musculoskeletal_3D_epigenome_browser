@@ -7,6 +7,9 @@ import Diseases from "./pages/diseases/diseases.jsx";
 import DiseaseIndex from "./pages/diseaseIndex/diseaseIndex.jsx";
 import About from "./pages/about/about.jsx";
 import Team from "./pages/contact/team.jsx";
+import PhenotypeList from "./pages/phenotypes/phenotypeList.jsx";
+import Phenotype from "./pages/phenotypes/phenotype.jsx";
+import Locus from "./pages/phenotypes/locus.jsx";
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
       <Route path="/genes/:Id" element={<Genes />} />
       <Route path="/diseases/:Id" element={<Diseases />} />
       <Route path="/indexSNP/:Id" element={<DiseaseIndex />} />
+      <Route path="/phenotypes" element={<PhenotypeList />} />
+      <Route path="/phenotypes/:Id" element={<Phenotype />} />
+      <Route path="/loci/:Id" element={<Locus />} />
       <Route path="/about" element={<About />} />
       <Route path="/team" element={<Team />} />
     </Routes>

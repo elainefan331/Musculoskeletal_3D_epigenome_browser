@@ -6,6 +6,7 @@ import "./home.css";
 const Home = () => {
   const [text, setText] = useState("");
   const [category, setCategory] = useState("");
+  const [phenotypeId, setPhenotypeId] = useState("");
   const [celltype, setCelltype] = useState("");
   const [cellTypePrompt, setCellTypePrompt] = useState("");
   const [inputPrompt, setInputPrompt] = useState("");
@@ -20,7 +21,22 @@ const Home = () => {
     setInputPrompt("");
   }, [celltype, text]);
 
+  // a phenotype found among the suggestions (picked, or typed in full); phenotype pages compare all cell types, so
+  // they need no cell type
+  const phenotypeMatch = () => {
+    if (category === "phenotype") return phenotypeId;
+    const s = suggestions.find(
+      (s) => s.category === "phenotype" && s.name.toLowerCase() === text.toLowerCase().trim()
+    );
+    return s ? s.phenotype_id : "";
+  };
+
   const search = () => {
+    const phenotype = phenotypeMatch();
+    if (phenotype) {
+      navigate(`/phenotypes/${phenotype}`);
+      return;
+    }
     if (celltype === "") {
       // setPrompt("Please select a cell type");
       setCellTypePrompt("Please select a cell type");
@@ -84,9 +100,10 @@ const Home = () => {
     }
   };
 
-  const handleSelect = (value, category) => {
+  const handleSelect = (value, category, suggestion) => {
     setText(value);
     setCategory(category);
+    setPhenotypeId(category === "phenotype" ? suggestion.phenotype_id : "");
   };
 
   return (
@@ -101,14 +118,20 @@ const Home = () => {
             <div className="home-page-search-container">
               <input
                 className="search-input"
-                placeholder="Search by Variant, RSID, Gene, or Disease"
+                placeholder="Search by Variant, RSID, Gene, or Phenotype"
                 type="text"
                 value={text}
-                onChange={(e) => setText(e.target.value)}
+                onChange={(e) => {
+                  setText(e.target.value);
+                  setCategory("");
+                  setPhenotypeId("");
+                }}
               />
               <select
                 className="home-page-select-container"
                 defaultValue=""
+                disabled={category === "phenotype"}
+                title={category === "phenotype" ? "Phenotype pages compare all five cell types" : ""}
                 onChange={(e) => setCelltype(e.target.value)}
               >
                 <option value="" disabled hidden>
@@ -131,6 +154,11 @@ const Home = () => {
               <div className="prompt-message">{cellTypePrompt}</div>
             )}
             {inputPrompt && <div className="prompt-message">{inputPrompt}</div>}
+            {category === "phenotype" && (
+              <div className="phenotype-hint">
+                No cell type needed: phenotype pages compare all five cell types.
+              </div>
+            )}
             <Autocomplete
               query={text}
               onSelect={handleSelect}
@@ -142,7 +170,7 @@ const Home = () => {
             <p>Variant: 7-121337680-G-A</p>
             <p>RSID: rs534962220</p>
             <p>Gene: SUN1</p>
-            <p>Disease: Heel bone mineral density</p>
+            <p>Phenotype: Heel bone mineral density (eBMD)</p>
           </div>
         </div>
       </section>
