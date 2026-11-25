@@ -3,6 +3,8 @@ import igv from "igv";
 
 // 3D view of a locus in one cell type: the cell's accessibility and H3K27ac, credible-set variants (shaded by PIP) and
 // CisLink-Base links from each credible set's driving variant to the TSS of its candidate genes (arc height = score).
+// Genes: one row per protein-coding gene (GENCODE v29, as CisLink), instead of IGV's default "Refseq All", which puts
+// every transcript on its own row so most genes and their names fall outside the track.
 const IgvLocus = ({ chrom, start, end, variants, genes, cell }) => {
     const igvDiv = useRef(null);
 
@@ -48,9 +50,16 @@ const IgvLocus = ({ chrom, start, end, variants, genes, cell }) => {
                         { name: "Credible-set variants (PIP)", type: "annotation", displayMode: "EXPANDED", features: csFeatures, height: 60 },
                         { name: `CisLink-Base links (${cell.label})`, type: "interact", features: arcs, arcType: "proportional",
                           useScore: true, min: 0, max: 1, color: "rgb(34, 78, 140)", height: 120 },
+                        { name: "Genes (GENCODE v29, protein-coding)", type: "annotation", format: "bed",
+                          url: `${import.meta.env.VITE_EXPRESS_URL}/public/igv/annotation/gencode_v29_protein_coding_genes.bed.gz`,
+                          displayMode: "EXPANDED", color: "rgb(0, 0, 150)", height: 90 },
                     ],
                 };
                 return igv.createBrowser(igvDiv.current, options);
+            })
+            .then((b) => {
+                if (b) b.removeTrackByName("Refseq All");
+                return b;
             })
             .then((b) => {
                 if (b && cancelled) igv.removeBrowser(b);
