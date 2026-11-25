@@ -101,6 +101,9 @@
     text-align: left;
 }
 
-.locuszoom-container {
+/* LocusZoom makes its container inline-block, which would keep the plot at the left edge */
+.locuszoom-container.lz-container-responsive {
+    display: block;
     max-width: 1100px;
+    margin: 0 auto;
 }
