@@ -87,13 +87,13 @@ const Locus = () => {
                         <option value="all">All credible sets</option>
                         {locus.credible_sets.map((s, i) => (
                             <option key={s.cs_uid} value={s.cs_uid}>
-                                {`#${i + 1}: lead ${s.lead_rsid}, ${s.n_variants} variants, max PIP ${s.max_pip.toFixed(2)}`}
+                                {`#${i + 1}: lead ${s.lead_rsid}, ${s.n_variants} variant${s.n_variants === 1 ? "" : "s"}, max PIP ${s.max_pip.toFixed(2)}`}
                             </option>
                         ))}
                     </select>
                 </label>
             </div>
-            <div className="table-wrapper">
+            <div className="table-wrapper phenotype-table-wrapper">
                 <table className="table phenotype-table">
                     <thead>
                         <tr>
@@ -141,7 +141,7 @@ const Locus = () => {
                     <div key={s.cs_uid} className="credible-set">
                         <button className="credible-set-toggle"
                             onClick={() => setOpenSets({ ...openSets, [s.cs_uid]: !open })}>
-                            {open ? "▾" : "▸"} #{i + 1}: lead {s.lead_rsid} · {s.n_variants} variants · max PIP {s.max_pip.toFixed(3)}
+                            {open ? "▾" : "▸"} #{i + 1}: lead {s.lead_rsid} · {s.n_variants} variant{s.n_variants === 1 ? "" : "s"} · max PIP {s.max_pip.toFixed(3)}
                             {" "}· span {s.span_kb.toFixed(1)} kb{s.nearest_gene ? ` · nearest gene ${s.nearest_gene}` : ""}
                         </button>
                         {open && (

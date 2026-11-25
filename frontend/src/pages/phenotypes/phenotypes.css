@@ -55,13 +55,29 @@
     width: 260px;
 }
 
+/* the shared .table is fixed-layout, which squeezes long coordinates into overlapping columns */
+.phenotype-table {
+    table-layout: auto;
+}
+
+.phenotype-table th,
+.phenotype-table td {
+    padding: 6px;
+    font-size: 13px;
+}
+
 .phenotype-table td {
     white-space: nowrap;
 }
 
+/* the shared .table-wrapper hides overflow; wide tables scroll instead of being cut off */
+.phenotype-table-wrapper {
+    overflow-x: auto;
+}
+
 .heat-cell {
     text-align: center;
-    min-width: 90px;
+    min-width: 80px;
 }
 
 .phenotype-pager {

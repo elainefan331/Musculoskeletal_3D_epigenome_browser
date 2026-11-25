@@ -54,7 +54,7 @@ const Phenotype = () => {
                     onChange={(e) => { setFilter(e.target.value); setPage(0); }} />
                 <span>{loci.length} loci</span>
             </div>
-            <div className="table-wrapper">
+            <div className="table-wrapper phenotype-table-wrapper">
                 <table className="table phenotype-table">
                     <thead>
                         <tr>
