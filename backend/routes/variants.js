@@ -237,6 +237,7 @@ router.get("/autocomplete", async (req, res) => {
           _id: 1,
           name: 1,
           category: 1,
+          phenotype_id: 1,
         },
       },
     ]);

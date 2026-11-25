@@ -5,6 +5,7 @@ import variantRouter from "./routes/variants.js";
 import diseaseRouter from "./routes/diseases.js";
 import geneRouter from "./routes/genes.js";
 import gwasLDRouter from "./routes/gwasLD.js";
+import phenotypeRouter from "./routes/phenotypes.js";
 import cors from "cors";
 import Api_category from "./models/api_category.js";
 import GwasLD from "./models/gwasLD.js";
@@ -48,6 +49,7 @@ app.use("/variants", variantRouter);
 app.use("/diseases", diseaseRouter);
 app.use("/genes", geneRouter);
 app.use("/gwasLD", gwasLDRouter);
+app.use("/phenotypes", phenotypeRouter);
 
 // connect app to mongoDB database
 // mongoose

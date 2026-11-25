@@ -1,0 +1,106 @@
+.phenotype-page {
+    padding: 0 24px 40px;
+}
+
+.phenotype-h1 {
+    color: rgb(34, 78, 115);
+}
+
+.phenotype-h2 {
+    color: rgb(34, 78, 115);
+    margin-top: 28px;
+}
+
+.phenotype-note {
+    max-width: 1100px;
+    color: #444;
+    font-size: 14px;
+}
+
+.phenotype-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.phenotype-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.phenotype-list li {
+    padding: 6px 0;
+}
+
+.phenotype-meta {
+    margin-left: 12px;
+    color: #666;
+    font-size: 13px;
+}
+
+.phenotype-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 10px 0;
+}
+
+.phenotype-toolbar select,
+.phenotype-filter {
+    padding: 6px 8px;
+    border: 1px #ddd solid;
+    border-radius: 5px;
+}
+
+.phenotype-filter {
+    width: 260px;
+}
+
+/* the shared .table is fixed-layout, which squeezes long coordinates into overlapping columns */
+.phenotype-table {
+    table-layout: auto;
+}
+
+.phenotype-table th,
+.phenotype-table td {
+    padding: 6px;
+    font-size: 13px;
+}
+
+.phenotype-table td {
+    white-space: nowrap;
+}
+
+/* the shared .table-wrapper hides overflow; wide tables scroll instead of being cut off */
+.phenotype-table-wrapper {
+    overflow-x: auto;
+}
+
+.heat-cell {
+    text-align: center;
+    min-width: 80px;
+}
+
+.phenotype-pager {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.credible-set {
+    margin: 6px 0;
+}
+
+.credible-set-toggle {
+    background: none;
+    border: none;
+    color: rgb(34, 78, 115);
+    cursor: pointer;
+    font-size: 15px;
+    padding: 4px 0;
+    text-align: left;
+}
+
+.locuszoom-container {
+    max-width: 1100px;
+}

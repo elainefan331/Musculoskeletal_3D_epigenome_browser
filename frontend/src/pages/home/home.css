@@ -456,3 +456,14 @@ body {
     width: 100%;
   }
 }
+
+.phenotype-hint {
+  color: rgb(34, 78, 115);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.home-page-select-container:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

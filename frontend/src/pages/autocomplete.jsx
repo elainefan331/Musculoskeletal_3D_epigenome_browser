@@ -42,7 +42,7 @@ const Autocomplete = ({ query, onSelect, setParentSuggestions }) => {
             {loading && <div>Loading...</div>}
             <ul className="autocomplete-list">
                 {suggestions.map((suggestion) => (
-                    <li key={suggestion._id} onClick={() => onSelect(suggestion.name, suggestion.category)}>
+                    <li key={suggestion._id} onClick={() => onSelect(suggestion.name, suggestion.category, suggestion)}>
                         {suggestion.name}
                         <span className="autocomplete-category">{suggestion.category}</span>
                     </li>
